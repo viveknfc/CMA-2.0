@@ -13,8 +13,8 @@ enum AppRoute: Hashable {
     case codeScreen
     case newPassword
     case divisionList
-    case dashboard(contactID: Int)
-    case webView(apiKey: String)
+    case dashboard(division: DivisionList)
+    case webView(apiKey: String, division: DivisionList)
 }
 
 // AppRoute+ViewFactory.swift
@@ -32,10 +32,10 @@ extension AppRoute {
             NewPassword_Screen(path: path)
         case .divisionList:
             DivisionList_View(path: path, viewModal: DivisionList_VM())
-        case .dashboard(let contactID):
-            DashboardWrapper_View(contactID: contactID, path: path)
-        case .webView(let apiKey):
-            WebView_Screen(urlKey: apiKey)
+        case .dashboard(let division):
+            DashboardWrapper_View(division: division, path: path)
+        case .webView(let apiKey, let division):
+            WebView_Screen(urlKey: apiKey, division: division)
         }
     }
 }

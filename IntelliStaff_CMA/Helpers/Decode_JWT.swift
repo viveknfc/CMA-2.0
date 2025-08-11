@@ -34,3 +34,10 @@ func decodeUserIdFromJWT(_ token: String) -> Int? {
     return nil
 }
 
+func escapeForJavaScript(_ string: String) -> String {
+    string
+        .replacingOccurrences(of: "\\", with: "\\\\") // ✅ keep this to double-escape
+        .replacingOccurrences(of: "`", with: "\\`")   // ✅ escape JS backticks
+        .replacingOccurrences(of: "$", with: "\\$")   // ✅ escape JS string interpolation
+}
+

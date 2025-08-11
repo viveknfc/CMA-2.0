@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DivisionList: Codable, Identifiable {
+struct DivisionList: Codable, Identifiable, Hashable {
     var id: Int {
         contactID ?? -1  // or use a fallback like clientID or throw fatalError if you must
     }

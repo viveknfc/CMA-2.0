@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DashboardWrapper_View: View {
-    let contactID: Int
+    let division: DivisionList
     @Binding var path: [AppRoute]
 
     @State private var dashboardVM = DashboardViewModel()
@@ -17,11 +17,14 @@ struct DashboardWrapper_View: View {
 
             CurveConcavePreview(
                 path: $path,
-                dashboardViewModel: dashboardVM
+                dashboardViewModel: dashboardVM,
+                division: division
             )
             
             .onAppear {
-                dashboardVM.fetchDashboard(contactID: contactID)
+                if let contactID = division.contactID {
+                    dashboardVM.fetchDashboard(contactID: contactID)
+                }
             }
         
     }
@@ -29,5 +32,17 @@ struct DashboardWrapper_View: View {
 
 #Preview {
     @Previewable @State var path: [AppRoute] = []
-    DashboardWrapper_View(contactID: 123, path: $path)
+    DashboardWrapper_View(            division: DivisionList(
+        clientName: "Acme Corp",
+        clientID: 101,
+        contactID: 202,
+        divisionName: "Sales Division",
+        pendingTS: 3,
+        divisionId: 301,
+        showLogin: 1,
+        showBreakminutes: 0,
+        name: "John Doe",
+        master: 1,
+        clientContactInfoId: 404
+    ), path: $path)
 }

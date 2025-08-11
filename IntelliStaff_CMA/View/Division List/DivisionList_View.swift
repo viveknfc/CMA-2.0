@@ -32,9 +32,9 @@ struct DivisionList_View: View {
                 VStack(spacing: 12) {
                     ForEach(filteredItems) { item in
                         Button(action: {
-                            if let contactID = item.contactID {
-                                path.append(.dashboard(contactID: contactID))
-                        }
+
+                            path.append(.dashboard(division: item))
+                        
                             
                         }) {
                             DivisionRow_View(item: item)

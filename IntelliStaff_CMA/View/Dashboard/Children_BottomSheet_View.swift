@@ -10,6 +10,7 @@ import SwiftUI
 struct Children_BottomSheet_View: View {
     let parentTitle: String
     let children: [ChildItem]
+    let division: DivisionList
     let onDismiss: () -> Void
     @Binding var path: [AppRoute]
 
@@ -69,7 +70,7 @@ struct Children_BottomSheet_View: View {
                         }
                         .onTapGesture {
                             print("the api key is \(child.apiKey)")
-                            path.append(.webView(apiKey: child.apiKey))
+                            path.append(.webView(apiKey: child.apiKey, division: division))
                         }
                     }
                 }
@@ -90,7 +91,19 @@ struct Children_BottomSheet_View: View {
                     ChildItem(name: "Algebra", apiKey: "algebra123"),
                     ChildItem(name: "Geometry", apiKey: "geometry456"),
                     ChildItem(name: "Trigonometry", apiKey: "trig789")
-                ],
+                ],             division: DivisionList(
+                    clientName: "Acme Corp",
+                    clientID: 101,
+                    contactID: 202,
+                    divisionName: "Sales Division",
+                    pendingTS: 3,
+                    divisionId: 301,
+                    showLogin: 1,
+                    showBreakminutes: 0,
+                    name: "John Doe",
+                    master: 1,
+                    clientContactInfoId: 404
+                ),
                 onDismiss: { print("Dismissed") },
                 path: $dummyPath
             )

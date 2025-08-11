@@ -22,6 +22,7 @@ import SwiftUI
         @State private var selectedAssignment: Dashboard_Menu_Items? = nil
 
         @State var dashboardViewModel: DashboardViewModel
+        let division: DivisionList
         @State private var showSheet = false
         @State private var isDashboardReady = false
        
@@ -56,7 +57,7 @@ import SwiftUI
                         systemName: "note.text",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Text("Yadhu")
+                            Text("Second")
                         }
                        )
                        
@@ -70,7 +71,7 @@ import SwiftUI
                         systemName: "plus.circle.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Text("Papu")
+                            Text("Third")
                         }
                        )
                        
@@ -139,6 +140,7 @@ import SwiftUI
                                    Children_BottomSheet_View(
                                        parentTitle: item.title,
                                        children: item.children ?? [],
+                                       division: division,
                                        onDismiss: {
                                            withAnimation {
                                                showSheet = false
@@ -232,7 +234,19 @@ import SwiftUI
 
             let viewModel = DashboardViewModel()
 
-            return CurveConcavePreview(path: $path, dashboardViewModel: viewModel)
+            return CurveConcavePreview(path: $path, dashboardViewModel: viewModel,             division: DivisionList(
+                clientName: "Acme Corp",
+                clientID: 101,
+                contactID: 202,
+                divisionName: "Sales Division",
+                pendingTS: 3,
+                divisionId: 301,
+                showLogin: 1,
+                showBreakminutes: 0,
+                name: "John Doe",
+                master: 1,
+                clientContactInfoId: 404
+            ))
         }
     }
 
