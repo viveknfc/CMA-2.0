@@ -25,6 +25,8 @@ import SwiftUI
         let division: DivisionList
         @State private var showSheet = false
         @State private var isDashboardReady = false
+        
+        @State private var profileVM = ProfileList_VM()
        
        var body: some View {
            GeometryReader { proxy in
@@ -71,7 +73,7 @@ import SwiftUI
                         systemName: "plus.circle.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Text("Third")
+                            Top_TabView()
                         }
                        )
                        
@@ -99,7 +101,7 @@ import SwiftUI
                         systemName: "person.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Text("Other Content")
+                            Profile_Screen(viewModal: profileVM, showLogoutAlert: $showLogoutAlert)
                         }
                        )
                        

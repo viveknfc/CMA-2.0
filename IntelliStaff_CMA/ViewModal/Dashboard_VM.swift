@@ -46,7 +46,7 @@ class DashboardViewModel {
 
                 self.menuGroups = groupMenus(from: result)
                 
-                print("the menu group is \(self.menuGroups)")
+//                print("the menu group is \(self.menuGroups)")
 
                 self.isLoading = false
             } catch {

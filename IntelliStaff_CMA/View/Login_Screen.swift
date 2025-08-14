@@ -29,15 +29,15 @@ struct Login_Screen: View {
                 
                 VStack {
                     
-                    Image("Splash")
+                    Image("CMA icon")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 300, height: 150)
+                        .frame(width: 250, height: 125)
                     
                     Text("Hello there, login to continue")
                         .font(.titleFont)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 20)
+                        .padding(.top, 30)
                     
                     VStack(spacing: 20) {
                         UnderlinedTF(title: "Username", text: $username)

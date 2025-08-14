@@ -25,7 +25,9 @@ struct WebView_Screen: View {
     var fullURL: URL {
         let base = APIConstants.baseURL
         let support = "Cwa2dev"
-        let combined =  "\(base)\(support)/\(cleanedURLKey)"
+        let combined = "\(base)\(support)/\(cleanedURLKey)"
+        
+        print("the combined url is \(combined)")
 
         return URL(string: combined) ?? URL(string: "https://example.com")!
     }

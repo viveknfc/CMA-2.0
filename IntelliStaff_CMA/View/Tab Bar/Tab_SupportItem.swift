@@ -32,10 +32,17 @@ struct ControlView<Content: View>: View {
                    Color.white.ignoresSafeArea()
                }
                
-                   content()
-                       .padding()
-                       .padding(.top, getTopPadding())
-                       .padding(.bottom, getBottomPadding())
+               Group {
+                   if tag == 2 {
+                       content() // No padding
+                   } else {
+                       content()
+                           .padding()
+                           .padding(.top, getTopPadding())
+                           .padding(.bottom, getBottomPadding())
+                   }
+               }
+
            }
        }
        .tabItem(tag: tag, normal: {

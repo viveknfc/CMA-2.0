@@ -1,0 +1,15 @@
+{
+  "originHash" : "3981845648d57972aacccd5ae7fd66ebe7a609ea58907e3f1affd13bf979d988",
+  "pins" : [
+    {
+      "identity" : "ssdatetimepicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimformSolutionsPvtLtd/SSDateTimePicker",
+      "state" : {
+        "revision" : "286fbbfd3b33e809f66dff57258cb6b3c507b2af",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

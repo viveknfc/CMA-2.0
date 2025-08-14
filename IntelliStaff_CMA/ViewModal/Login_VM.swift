@@ -66,6 +66,8 @@ class LoginViewModel {
             UserDefaults.standard.set(username, forKey: "Username")
             UserDefaults.standard.set(password, forKey: "Password")
             
+//            print("the response access tokem is \n \(response.accessToken)")
+            
             if let userId = decodeUserIdFromJWT(response.accessToken) {
                 UserDefaults.standard.set(userId, forKey: "userId")
                 print("Decoded User ID: \(userId)")

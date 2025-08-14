@@ -73,11 +73,24 @@
 		33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3335097F2E3CD1BE007FFAE8 /* NetworkError.swift */; };
 		33350A1B2E3CF8AB007FFAE8 /* DivisionList_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33350A1A2E3CF8AB007FFAE8 /* DivisionList_View.swift */; };
 		33350A1D2E3CFB6F007FFAE8 /* Logout_Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33350A1C2E3CFB6A007FFAE8 /* Logout_Support.swift */; };
+		336CBFA42E4B0ABC00EF9AF0 /* Profile_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */; };
+		336CBFA62E4B0CAC00EF9AF0 /* Profile_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */; };
+		336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */; };
+		336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFAA2E4B17FA00EF9AF0 /* Profile_Row.swift */; };
 		336E279F2E40782400EF8B44 /* DivisionList_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E279E2E40781C00EF8B44 /* DivisionList_Modal.swift */; };
 		336E27A12E407A2A00EF8B44 /* DivisionList_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */; };
 		336E284B2E4089D200EF8B44 /* DivisionRow_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E284A2E4089D200EF8B44 /* DivisionRow_View.swift */; };
 		336E299D2E40C54000EF8B44 /* DashboardWrapper_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336E299C2E40C54000EF8B44 /* DashboardWrapper_View.swift */; };
 		338315732E41C7AA0060C0CF /* UserJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338315722E41C7A50060C0CF /* UserJson.swift */; };
+		33B292212E4C71D80062696B /* Top_TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B292202E4C71D80062696B /* Top_TabView.swift */; };
+		33B292232E4C7A690062696B /* Check-In.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B292222E4C7A690062696B /* Check-In.swift */; };
+		33B292D52E4C85D90062696B /* Custom_Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B292D42E4C85C10062696B /* Custom_Calendar.swift */; };
+		33B292D82E4C86A70062696B /* SSDateTimePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 33B292D72E4C86A70062696B /* SSDateTimePicker */; };
+		33B292DB2E4C982E0062696B /* CheckInItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B292DA2E4C982E0062696B /* CheckInItem.swift */; };
+		33B2938D2E4C9D800062696B /* Rectangular_Rounded_Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B2938C2E4C9D800062696B /* Rectangular_Rounded_Button.swift */; };
+		33B2938F2E4CC7AA0062696B /* Custom_Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B2938E2E4CC7AA0062696B /* Custom_Timer.swift */; };
+		33B293912E4CD8C80062696B /* E-Checkin_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */; };
+		33B293932E4CD9280062696B /* E-Checkin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B293922E4CD91F0062696B /* E-Checkin_VM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -148,11 +161,23 @@
 		333509D22E3CD1BE007FFAE8 /* IntelliStaff-CMA-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IntelliStaff-CMA-Info.plist"; sourceTree = "<group>"; };
 		33350A1A2E3CF8AB007FFAE8 /* DivisionList_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionList_View.swift; sourceTree = "<group>"; };
 		33350A1C2E3CFB6A007FFAE8 /* Logout_Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logout_Support.swift; sourceTree = "<group>"; };
+		336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Screen.swift; sourceTree = "<group>"; };
+		336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Modal.swift; sourceTree = "<group>"; };
+		336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_VM.swift; sourceTree = "<group>"; };
+		336CBFAA2E4B17FA00EF9AF0 /* Profile_Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Row.swift; sourceTree = "<group>"; };
 		336E279E2E40781C00EF8B44 /* DivisionList_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionList_Modal.swift; sourceTree = "<group>"; };
 		336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionList_VM.swift; sourceTree = "<group>"; };
 		336E284A2E4089D200EF8B44 /* DivisionRow_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionRow_View.swift; sourceTree = "<group>"; };
 		336E299C2E40C54000EF8B44 /* DashboardWrapper_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWrapper_View.swift; sourceTree = "<group>"; };
 		338315722E41C7A50060C0CF /* UserJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserJson.swift; sourceTree = "<group>"; };
+		33B292202E4C71D80062696B /* Top_TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Top_TabView.swift; sourceTree = "<group>"; };
+		33B292222E4C7A690062696B /* Check-In.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Check-In.swift"; sourceTree = "<group>"; };
+		33B292D42E4C85C10062696B /* Custom_Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom_Calendar.swift; sourceTree = "<group>"; };
+		33B292DA2E4C982E0062696B /* CheckInItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInItem.swift; sourceTree = "<group>"; };
+		33B2938C2E4C9D800062696B /* Rectangular_Rounded_Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rectangular_Rounded_Button.swift; sourceTree = "<group>"; };
+		33B2938E2E4CC7AA0062696B /* Custom_Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom_Timer.swift; sourceTree = "<group>"; };
+		33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "E-Checkin_Modal.swift"; sourceTree = "<group>"; };
+		33B293922E4CD91F0062696B /* E-Checkin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "E-Checkin_VM.swift"; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -161,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33B292D82E4C86A70062696B /* SSDateTimePicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +246,8 @@
 		333509992E3CD1BE007FFAE8 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */,
+				336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */,
 				336E279E2E40781C00EF8B44 /* DivisionList_Modal.swift */,
 				333509942E3CD1BE007FFAE8 /* App_Route.swift */,
 				333509952E3CD1BE007FFAE8 /* Candidate_Modal.swift */,
@@ -256,12 +284,15 @@
 			isa = PBXGroup;
 			children = (
 				333509A52E3CD1BE007FFAE8 /* AlertView.swift */,
+				33B292D42E4C85C10062696B /* Custom_Calendar.swift */,
 				333509A62E3CD1BE007FFAE8 /* Capsule_Button.swift */,
 				333509A72E3CD1BE007FFAE8 /* Rectangle_Container.swift */,
 				333509A82E3CD1BE007FFAE8 /* RememberMe_Button.swift */,
 				333509A92E3CD1BE007FFAE8 /* Spinner_Triangle.swift */,
 				333509AA2E3CD1BE007FFAE8 /* Toast_View.swift */,
 				333509AB2E3CD1BE007FFAE8 /* UnderlinedTF.swift */,
+				33B2938C2E4C9D800062696B /* Rectangular_Rounded_Button.swift */,
+				33B2938E2E4CC7AA0062696B /* Custom_Timer.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -351,6 +382,8 @@
 		333509CB2E3CD1BE007FFAE8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				33B2921F2E4C714F0062696B /* E-Checkin */,
+				336CBFA92E4B17E400EF9AF0 /* Profile */,
 				33350A172E3CF3B6007FFAE8 /* Division List */,
 				3335099F2E3CD1BE007FFAE8 /* Dashboard */,
 				333509A42E3CD1BE007FFAE8 /* Forgot Screen */,
@@ -367,6 +400,8 @@
 		333509CE2E3CD1BE007FFAE8 /* ViewModal */ = {
 			isa = PBXGroup;
 			children = (
+				33B293922E4CD91F0062696B /* E-Checkin_VM.swift */,
+				336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */,
 				336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */,
 				333509CC2E3CD1BE007FFAE8 /* Dashboard_VM.swift */,
 				333509CD2E3CD1BE007FFAE8 /* Login_VM.swift */,
@@ -399,6 +434,33 @@
 				336E284A2E4089D200EF8B44 /* DivisionRow_View.swift */,
 			);
 			path = "Division List";
+			sourceTree = "<group>";
+		};
+		336CBFA92E4B17E400EF9AF0 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */,
+				336CBFAA2E4B17FA00EF9AF0 /* Profile_Row.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		33B2921F2E4C714F0062696B /* E-Checkin */ = {
+			isa = PBXGroup;
+			children = (
+				33B292D92E4C97C20062696B /* Check-In */,
+				33B292202E4C71D80062696B /* Top_TabView.swift */,
+			);
+			path = "E-Checkin";
+			sourceTree = "<group>";
+		};
+		33B292D92E4C97C20062696B /* Check-In */ = {
+			isa = PBXGroup;
+			children = (
+				33B292222E4C7A690062696B /* Check-In.swift */,
+				33B292DA2E4C982E0062696B /* CheckInItem.swift */,
+			);
+			path = "Check-In";
 			sourceTree = "<group>";
 		};
 		F567CF9D2E24CC3800A05CE7 = {
@@ -436,6 +498,7 @@
 			);
 			name = IntelliStaff_CMA;
 			packageProductDependencies = (
+				33B292D72E4C86A70062696B /* SSDateTimePicker */,
 			);
 			productName = IntelliStaff_EMA;
 			productReference = F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */;
@@ -465,6 +528,9 @@
 			);
 			mainGroup = F567CF9D2E24CC3800A05CE7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				33B292D62E4C86A70062696B /* XCRemoteSwiftPackageReference "SSDateTimePicker" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F567CFA72E24CC3800A05CE7 /* Products */;
 			projectDirPath = "";
@@ -514,12 +580,15 @@
 				33350A1B2E3CF8AB007FFAE8 /* DivisionList_View.swift in Sources */,
 				33350A1D2E3CFB6F007FFAE8 /* Logout_Support.swift in Sources */,
 				333509E42E3CD1BE007FFAE8 /* ATScreenConstant.swift in Sources */,
+				33B292D52E4C85D90062696B /* Custom_Calendar.swift in Sources */,
 				333509E52E3CD1BE007FFAE8 /* NewPassword_Screen.swift in Sources */,
 				333509E62E3CD1BE007FFAE8 /* Children_BottomSheet_View.swift in Sources */,
 				333509E72E3CD1BE007FFAE8 /* Toast_View.swift in Sources */,
 				333509E82E3CD1BE007FFAE8 /* CountdonwTimer.swift in Sources */,
+				336CBFA42E4B0ABC00EF9AF0 /* Profile_Screen.swift in Sources */,
 				333509E92E3CD1BE007FFAE8 /* AxisTabView.swift in Sources */,
 				333509EA2E3CD1BE007FFAE8 /* Login_Screen.swift in Sources */,
+				336CBFA62E4B0CAC00EF9AF0 /* Profile_Modal.swift in Sources */,
 				336E279F2E40782400EF8B44 /* DivisionList_Modal.swift in Sources */,
 				333509EB2E3CD1BE007FFAE8 /* ATCurveStyle.swift in Sources */,
 				336E27A12E407A2A00EF8B44 /* DivisionList_VM.swift in Sources */,
@@ -533,13 +602,19 @@
 				333509F42E3CD1BE007FFAE8 /* Color+Extension.swift in Sources */,
 				333509F52E3CD1BE007FFAE8 /* Candidate_Modal.swift in Sources */,
 				333509F62E3CD1BE007FFAE8 /* NavBar_Appearence.swift in Sources */,
+				33B2938D2E4C9D800062696B /* Rectangular_Rounded_Button.swift in Sources */,
+				33B2938F2E4CC7AA0062696B /* Custom_Timer.swift in Sources */,
 				333509F72E3CD1BE007FFAE8 /* ContentView.swift in Sources */,
 				333509F82E3CD1BE007FFAE8 /* ATStateViewModel.swift in Sources */,
 				333509F92E3CD1BE007FFAE8 /* Decode_JWT.swift in Sources */,
 				333509FA2E3CD1BE007FFAE8 /* Dashboard_VM.swift in Sources */,
+				33B292212E4C71D80062696B /* Top_TabView.swift in Sources */,
 				338315732E41C7AA0060C0CF /* UserJson.swift in Sources */,
+				336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */,
+				33B293932E4CD9280062696B /* E-Checkin_VM.swift in Sources */,
 				333509FB2E3CD1BE007FFAE8 /* API_Constants.swift in Sources */,
 				333509FC2E3CD1BE007FFAE8 /* AlertView.swift in Sources */,
+				33B292232E4C7A690062696B /* Check-In.swift in Sources */,
 				333509FD2E3CD1BE007FFAE8 /* Dashboard_Menu_Card.swift in Sources */,
 				333509FE2E3CD1BE007FFAE8 /* ATTabItemModifier.swift in Sources */,
 				333509FF2E3CD1BE007FFAE8 /* Tab_SupportItem.swift in Sources */,
@@ -548,6 +623,7 @@
 				33350A012E3CD1BE007FFAE8 /* Dashboard_Menu_Collection.swift in Sources */,
 				33350A022E3CD1BE007FFAE8 /* Network_Monitor.swift in Sources */,
 				336E299D2E40C54000EF8B44 /* DashboardWrapper_View.swift in Sources */,
+				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
 				33350A042E3CD1BE007FFAE8 /* Extensions.swift in Sources */,
 				33350A052E3CD1BE007FFAE8 /* CurveConcavePreview.swift in Sources */,
@@ -558,8 +634,10 @@
 				33350A0A2E3CD1BE007FFAE8 /* Spinner_Triangle.swift in Sources */,
 				33350A0B2E3CD1BE007FFAE8 /* Input_View.swift in Sources */,
 				33350A0C2E3CD1BE007FFAE8 /* Login_VM.swift in Sources */,
+				33B293912E4CD8C80062696B /* E-Checkin_Modal.swift in Sources */,
 				33350A0D2E3CD1BE007FFAE8 /* IntelliStaff_CMAApp.swift in Sources */,
 				33350A0E2E3CD1BE007FFAE8 /* ATCurveShape.swift in Sources */,
+				33B292DB2E4C982E0062696B /* CheckInItem.swift in Sources */,
 				33350A0F2E3CD1BE007FFAE8 /* ATShadowConstant.swift in Sources */,
 				33350A112E3CD1BE007FFAE8 /* Spalsh_Screen.swift in Sources */,
 				33350A122E3CD1BE007FFAE8 /* GlobalErrorOverlay.swift in Sources */,
@@ -698,7 +776,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = F7P87PL667;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -728,7 +806,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = F7P87PL667;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -774,6 +852,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33B292D62E4C86A70062696B /* XCRemoteSwiftPackageReference "SSDateTimePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimformSolutionsPvtLtd/SSDateTimePicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33B292D72E4C86A70062696B /* SSDateTimePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33B292D62E4C86A70062696B /* XCRemoteSwiftPackageReference "SSDateTimePicker" */;
+			productName = SSDateTimePicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F567CF9E2E24CC3800A05CE7 /* Project object */;
 }

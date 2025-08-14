@@ -26,7 +26,12 @@ struct WebView: UIViewRepresentable {
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
         if uiView.url != url {
-            uiView.load(URLRequest(url: url))
+            let request = URLRequest(
+                url: url,
+                cachePolicy: .reloadIgnoringLocalCacheData,
+                timeoutInterval: 30
+            )
+            uiView.load(request)
         }
     }
 
@@ -52,6 +57,13 @@ struct WebView: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             parent.isLoading = false
             
+            // Add a small delay to ensure the page is fully ready
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.injectJavaScript(into: webView)
+            }
+        }
+
+        private func injectJavaScript(into webView: WKWebView) {
             func escapeForJS(_ json: String) -> String {
                 let trimmed = json.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
                 return trimmed
@@ -66,7 +78,7 @@ struct WebView: UIViewRepresentable {
             
             let js = """
             const cwaDetails = JSON.parse("\(escapedCwaDetails)");
-            localStorage.setItem("cwaDetails", JSON.stringify(cwaDetails));
+            sessionStorage.setItem("cwaDetails", JSON.stringify(cwaDetails));
             
             const currentUser = JSON.parse("\(escapedCurrentUser)");
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
@@ -76,6 +88,8 @@ struct WebView: UIViewRepresentable {
             localStorage.setItem("isHeadless", "true");
             """
             
+//            print("===== Injected JavaScript =====")
+//            print(js)
             webView.evaluateJavaScript(js) { result, error in
                 if let error = error {
                     print("❌ JavaScript injection failed: \(error)")
@@ -86,4 +100,5 @@ struct WebView: UIViewRepresentable {
         }
     }
 }
+
 
