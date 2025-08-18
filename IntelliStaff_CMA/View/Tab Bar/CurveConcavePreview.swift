@@ -45,7 +45,7 @@ import SwiftUI
                         systemName: "house.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet)
+                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet, path: $path)
                         }
                        )
                        
@@ -192,7 +192,6 @@ import SwiftUI
                                UserDefaults.standard.removeObject(forKey: "userId")
                                
                                path.append(.login)
-//                               SessionManager.performLogout(path: $path)
                            }),
                            secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
                            dismiss: {
@@ -238,26 +237,6 @@ import SwiftUI
                    }
                }
            }
-//           .overlay(
-//               Group {
-//                   if showLogoutAlert {
-//                       AlertView(
-//                           image: Image(systemName: "exclamationmark.circle.fill"),
-//                           title: "Logout",
-//                           message: "Are you sure you want to logout?",
-//                           primaryButton: AlertButtonConfig(title: "OK", action: {
-//                               print("logout tapped")
-//                               SessionManager.performLogout(path: &path)
-//                           }),
-//                           secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
-//                           dismiss: {
-//                               showLogoutAlert = false
-//                           }
-//                       )
-//                       .transition(.opacity)
-//                   }
-//               }
-//           )
        }
     }
 

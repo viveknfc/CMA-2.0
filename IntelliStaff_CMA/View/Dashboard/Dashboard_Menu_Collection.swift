@@ -14,6 +14,8 @@ struct Dashboard_Menu_Collection: View {
     @Binding var toastMessage: String
     @Binding var selectedAssignment: Dashboard_Menu_Items?
     @Binding var showSheet: Bool
+    
+    @Binding var path: [AppRoute]
 
     let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 3)
 
@@ -22,7 +24,11 @@ struct Dashboard_Menu_Collection: View {
             LazyVGrid(columns: columns, spacing: 6) {
                 ForEach(assignments) { assignment in
                     Button {
-                        if let children = assignment.children, !children.isEmpty {
+                        
+                        if assignment.title == "Site" {
+                            path.append(.divisionList)
+                        }
+                        else if let children = assignment.children, !children.isEmpty {
                             withAnimation {
                                 selectedAssignment = assignment
                             }
@@ -66,6 +72,7 @@ struct DashboardMenuCollectionPreviewWrapper: View {
     @State private var toastMessage = ""
     @State private var selectedAssignment: Dashboard_Menu_Items? = nil
     @State private var showSheet = false
+    @State private var dummyPath: [AppRoute] = []
 
     var body: some View {
         
@@ -89,7 +96,8 @@ struct DashboardMenuCollectionPreviewWrapper: View {
             showToast: $showToast,
             toastMessage: $toastMessage,
             selectedAssignment: $selectedAssignment,
-            showSheet: $showSheet
+            showSheet: $showSheet,
+            path: $dummyPath
         )
     }
 }

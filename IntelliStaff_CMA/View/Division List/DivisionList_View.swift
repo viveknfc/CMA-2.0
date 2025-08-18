@@ -81,7 +81,15 @@ struct DivisionList_View: View {
                     title: "Logout",
                     message: "Are you sure you want to logout?",
                     primaryButton: AlertButtonConfig(title: "OK", action: {
-                        SessionManager.performLogout(path: $path)
+                        // Clear stored tokens
+                        UserDefaults.standard.removeObject(forKey: "Username")
+                        UserDefaults.standard.removeObject(forKey: "Password")
+                        UserDefaults.standard.removeObject(forKey: "refreshToken")
+                        UserDefaults.standard.removeObject(forKey: "accessToken")
+                        UserDefaults.standard.removeObject(forKey: "expiresIn")
+                        UserDefaults.standard.removeObject(forKey: "userId")
+                        
+                        path.append(.login)
                     }),
                     secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
                     dismiss: {

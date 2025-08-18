@@ -14,6 +14,7 @@ struct Dashboard_Screen: View {
     @State private var toastMessage = ""
     @Binding var selectedAssignment: Dashboard_Menu_Items?
     @Binding var showSheet: Bool
+    @Binding var path: [AppRoute]
     
     var body: some View {
         GeometryReader { geo in
@@ -32,7 +33,9 @@ struct Dashboard_Screen: View {
                                     assignments: viewModel.dashboardMenuItems,
                                     showToast: $showToast,
                                     toastMessage: $toastMessage,
-                                    selectedAssignment: $selectedAssignment, showSheet: $showSheet
+                                    selectedAssignment: $selectedAssignment,
+                                    showSheet: $showSheet,
+                                    path: $path
                                 )
                             }
                         }
@@ -55,6 +58,7 @@ struct Dashboard_Screen: View {
     struct DashboardScreenPreviewWrapper: View {
         @State private var selectedAssignment: Dashboard_Menu_Items? = nil
         @State private var showSheet: Bool = false
+        @State private var path: [AppRoute] = []
 
         var body: some View {
 
@@ -63,7 +67,8 @@ struct Dashboard_Screen: View {
             return Dashboard_Screen(
                 viewModel: viewModel,
                 selectedAssignment: $selectedAssignment,
-                showSheet: $showSheet
+                showSheet: $showSheet,
+                path: $path
             )
         }
     }
