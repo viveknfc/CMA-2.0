@@ -15,7 +15,7 @@ struct Rectangular_Rounded_Button: View {
    
     var backgroundColor: Color = .white
     var textColor: Color = .theme
-    var font: Font = .buttonFont
+    var font: Font = .bodyFont
     var cornerRadius: CGFloat = 8
     
     var borderColor: Color = .theme

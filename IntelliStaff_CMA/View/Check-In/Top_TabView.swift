@@ -62,10 +62,10 @@ struct Top_TabView: View {
                     Check_In()
                     
                 case .second:
-                    Text("Second Tab Content")
+                    Check_Out()
                     
                 case .third:
-                    Text("Third Tab Content")
+                    Break_Min()
                     
                 case .fourth:
                     Text("Fourth Tab Content")

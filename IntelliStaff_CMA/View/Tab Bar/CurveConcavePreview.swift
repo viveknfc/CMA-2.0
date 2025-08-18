@@ -170,6 +170,39 @@ import SwiftUI
                            .ignoresSafeArea()
                        TriangleLoader()
                    }
+                   
+                   if showLogoutAlert {
+                       Color.black.opacity(0.4)
+                           .ignoresSafeArea()
+                           .transition(.opacity)
+                       
+                       AlertView(
+                           image: Image(systemName: "exclamationmark.circle.fill"),
+                           title: "Logout",
+                           message: "Are you sure you want to logout?",
+                           primaryButton: AlertButtonConfig(title: "OK", action: {
+                               print("logout tapped")
+                               
+                               // Clear stored tokens
+                               UserDefaults.standard.removeObject(forKey: "Username")
+                               UserDefaults.standard.removeObject(forKey: "Password")
+                               UserDefaults.standard.removeObject(forKey: "refreshToken")
+                               UserDefaults.standard.removeObject(forKey: "accessToken")
+                               UserDefaults.standard.removeObject(forKey: "expiresIn")
+                               UserDefaults.standard.removeObject(forKey: "userId")
+                               
+                               path.append(.login)
+//                               SessionManager.performLogout(path: $path)
+                           }),
+                           secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
+                           dismiss: {
+                               showLogoutAlert = false
+                           }
+                       )
+                       .transition(.opacity)
+                       .zIndex(999) // Ensure it's on top
+                   }
+
 
                }
            }
@@ -196,7 +229,7 @@ import SwiftUI
            .toolbar {
                ToolbarItem(placement: .navigationBarTrailing) {
                    Button(action: {
-                       print("Global right button tapped")
+                       print("Global right button tapped from main tab")
                        showLogoutAlert = true
                    }) {
                        Image(systemName: "rectangle.portrait.and.arrow.forward")
@@ -205,25 +238,26 @@ import SwiftUI
                    }
                }
            }
-           .overlay(
-               Group {
-                   if showLogoutAlert {
-                       AlertView(
-                           image: Image(systemName: "exclamationmark.circle.fill"),
-                           title: "Logout",
-                           message: "Are you sure you want to logout?",
-                           primaryButton: AlertButtonConfig(title: "OK", action: {
-                               SessionManager.performLogout(path: &path)
-                           }),
-                           secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
-                           dismiss: {
-                               showLogoutAlert = false
-                           }
-                       )
-                       .transition(.opacity)
-                   }
-               }
-           )
+//           .overlay(
+//               Group {
+//                   if showLogoutAlert {
+//                       AlertView(
+//                           image: Image(systemName: "exclamationmark.circle.fill"),
+//                           title: "Logout",
+//                           message: "Are you sure you want to logout?",
+//                           primaryButton: AlertButtonConfig(title: "OK", action: {
+//                               print("logout tapped")
+//                               SessionManager.performLogout(path: &path)
+//                           }),
+//                           secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
+//                           dismiss: {
+//                               showLogoutAlert = false
+//                           }
+//                       )
+//                       .transition(.opacity)
+//                   }
+//               }
+//           )
        }
     }
 

@@ -12,6 +12,7 @@ struct DivisionList_View: View {
     @Binding var path: [AppRoute]
     @State private var searchText = ""
     @Bindable var viewModal: DivisionList_VM
+    @EnvironmentObject var errorHandler: GlobalErrorHandler
 
     var filteredItems: [DivisionList] {
         if searchText.isEmpty {
@@ -66,27 +67,29 @@ struct DivisionList_View: View {
                     }
                 }
             }
-            .overlay(
-                Group {
-                    if showLogoutAlert {
-                        AlertView(
-                            image: Image(systemName: "exclamationmark.circle.fill"),
-                            title: "Logout",
-                            message: "Are you sure you want to logout?",
-                            primaryButton: AlertButtonConfig(title: "OK", action: {
-                                SessionManager.performLogout(path: &path)
-                            }),
-                            secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
-                            dismiss: {
-                                showLogoutAlert = false
-                            }
-                        )
-                        .transition(.opacity)
-                    }
-                }
-            )
             .onAppear {
-                viewModal.fetchDivisions()
+                viewModal.fetchDivisions(errorHandler: errorHandler)
+            }
+            
+            if showLogoutAlert {
+                Color.black.opacity(0.4) // dim background
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+
+                AlertView(
+                    image: Image(systemName: "exclamationmark.circle.fill"),
+                    title: "Logout",
+                    message: "Are you sure you want to logout?",
+                    primaryButton: AlertButtonConfig(title: "OK", action: {
+                        SessionManager.performLogout(path: $path)
+                    }),
+                    secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
+                    dismiss: {
+                        showLogoutAlert = false
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // ensures full screen
+                .transition(.opacity)
             }
             
             if viewModal.isLoading {

@@ -32,7 +32,7 @@ struct Check_In: View {
                             showDatePicker = true
                         }) {
                             HStack {
-                                Text(startDate != nil ? formattedDate(startDate!) : "Enter Date")
+                                Text(startDate != nil ? Date_Time_Formatter.formattedDate(startDate!) : "Enter Date")
                                     .foregroundColor(startDate == nil ? .gray : .black)
                                     .font(.buttonFont)
                                     .lineLimit(1)
@@ -61,7 +61,7 @@ struct Check_In: View {
                                             showTimePicker = true
                                         },
                                     onCheckIn: { id, time in
-                                        print("Checked in for \(id) at \(formatTime(time))")
+                                        print("Checked in for \(id) at \(Date_Time_Formatter.formatTime(time))")
                                     }
                                     )
                                 
@@ -76,6 +76,7 @@ struct Check_In: View {
                             
                             
                         }
+                        .padding(.bottom, 100)
                     }
 
                 }
@@ -100,7 +101,7 @@ struct Check_In: View {
                                 onDateSelection: { date in
                                     selectedDate = date
                                     startDate = date
-                                    print("Start Date Selected: \(formattedDate(date))")
+                                    print("Start Date Selected: \(Date_Time_Formatter.formattedDate(date))")
                                     showDatePicker = false
                                 }
                             )
@@ -137,18 +138,6 @@ struct Check_In: View {
         .onAppear {
             viewModel.fetchCheckinData()
         }
-    }
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
-    
-    private func formatTime(_ time: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm a"
-        return formatter.string(from: time)
     }
     
 }

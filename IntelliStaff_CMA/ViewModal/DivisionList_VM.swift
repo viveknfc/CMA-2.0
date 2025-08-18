@@ -15,7 +15,7 @@ class DivisionList_VM {
     var isLoading: Bool = false
     var errorMessage: String?
     
-    func fetchDivisions() {
+    func fetchDivisions(errorHandler: GlobalErrorHandler) {
         Task {
             isLoading = true
             do {
@@ -33,6 +33,7 @@ class DivisionList_VM {
                 print("🔥 API Failed: \(error)")
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false
+                errorHandler.showError(message: error.localizedDescription, mode: .alert)
             }
         }
     }

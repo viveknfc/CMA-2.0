@@ -73,6 +73,11 @@
 		33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3335097F2E3CD1BE007FFAE8 /* NetworkError.swift */; };
 		33350A1B2E3CF8AB007FFAE8 /* DivisionList_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33350A1A2E3CF8AB007FFAE8 /* DivisionList_View.swift */; };
 		33350A1D2E3CFB6F007FFAE8 /* Logout_Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33350A1C2E3CFB6A007FFAE8 /* Logout_Support.swift */; };
+		333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800C62E50A37E007F19E3 /* ECheckoutModal.swift */; };
+		333800C92E50A3C1007F19E3 /* E-Checkout_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800C82E50A3BB007F19E3 /* E-Checkout_VM.swift */; };
+		333800CD2E50A5FC007F19E3 /* CheckoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800CC2E50A5FC007F19E3 /* CheckoutItem.swift */; };
+		333800CF2E50A6C5007F19E3 /* Date_Time_Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */; };
+		333800D12E50CEE3007F19E3 /* Check-Out.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800D02E50CEE3007F19E3 /* Check-Out.swift */; };
 		336CBFA42E4B0ABC00EF9AF0 /* Profile_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */; };
 		336CBFA62E4B0CAC00EF9AF0 /* Profile_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */; };
 		336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */; };
@@ -91,6 +96,10 @@
 		33B2938F2E4CC7AA0062696B /* Custom_Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B2938E2E4CC7AA0062696B /* Custom_Timer.swift */; };
 		33B293912E4CD8C80062696B /* E-Checkin_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */; };
 		33B293932E4CD9280062696B /* E-Checkin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B293922E4CD91F0062696B /* E-Checkin_VM.swift */; };
+		33CC1E322E520EC700380806 /* BreakMin_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E312E520EBF00380806 /* BreakMin_Modal.swift */; };
+		33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E332E520F7F00380806 /* BreakMin_VM.swift */; };
+		33CC1E362E52201600380806 /* BreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E352E52201600380806 /* BreakItem.swift */; };
+		33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E372E5230AE00380806 /* Break_Min.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -161,6 +170,11 @@
 		333509D22E3CD1BE007FFAE8 /* IntelliStaff-CMA-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IntelliStaff-CMA-Info.plist"; sourceTree = "<group>"; };
 		33350A1A2E3CF8AB007FFAE8 /* DivisionList_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionList_View.swift; sourceTree = "<group>"; };
 		33350A1C2E3CFB6A007FFAE8 /* Logout_Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logout_Support.swift; sourceTree = "<group>"; };
+		333800C62E50A37E007F19E3 /* ECheckoutModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECheckoutModal.swift; sourceTree = "<group>"; };
+		333800C82E50A3BB007F19E3 /* E-Checkout_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "E-Checkout_VM.swift"; sourceTree = "<group>"; };
+		333800CC2E50A5FC007F19E3 /* CheckoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutItem.swift; sourceTree = "<group>"; };
+		333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_Time_Formatter.swift; sourceTree = "<group>"; };
+		333800D02E50CEE3007F19E3 /* Check-Out.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Check-Out.swift"; sourceTree = "<group>"; };
 		336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Screen.swift; sourceTree = "<group>"; };
 		336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Modal.swift; sourceTree = "<group>"; };
 		336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_VM.swift; sourceTree = "<group>"; };
@@ -178,6 +192,10 @@
 		33B2938E2E4CC7AA0062696B /* Custom_Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom_Timer.swift; sourceTree = "<group>"; };
 		33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "E-Checkin_Modal.swift"; sourceTree = "<group>"; };
 		33B293922E4CD91F0062696B /* E-Checkin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "E-Checkin_VM.swift"; sourceTree = "<group>"; };
+		33CC1E312E520EBF00380806 /* BreakMin_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_Modal.swift; sourceTree = "<group>"; };
+		33CC1E332E520F7F00380806 /* BreakMin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_VM.swift; sourceTree = "<group>"; };
+		33CC1E352E52201600380806 /* BreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakItem.swift; sourceTree = "<group>"; };
+		33CC1E372E5230AE00380806 /* Break_Min.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Break_Min.swift; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -229,6 +247,7 @@
 		333509932E3CD1BE007FFAE8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */,
 				33350A1C2E3CFB6A007FFAE8 /* Logout_Support.swift */,
 				3335098A2E3CD1BE007FFAE8 /* Poppins_Font */,
 				3335098B2E3CD1BE007FFAE8 /* Assets.xcassets */,
@@ -246,6 +265,8 @@
 		333509992E3CD1BE007FFAE8 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				33CC1E312E520EBF00380806 /* BreakMin_Modal.swift */,
+				333800C62E50A37E007F19E3 /* ECheckoutModal.swift */,
 				33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */,
 				336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */,
 				336E279E2E40781C00EF8B44 /* DivisionList_Modal.swift */,
@@ -382,7 +403,7 @@
 		333509CB2E3CD1BE007FFAE8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				33B2921F2E4C714F0062696B /* E-Checkin */,
+				333800CB2E50A58A007F19E3 /* Check-In */,
 				336CBFA92E4B17E400EF9AF0 /* Profile */,
 				33350A172E3CF3B6007FFAE8 /* Division List */,
 				3335099F2E3CD1BE007FFAE8 /* Dashboard */,
@@ -400,6 +421,8 @@
 		333509CE2E3CD1BE007FFAE8 /* ViewModal */ = {
 			isa = PBXGroup;
 			children = (
+				33CC1E332E520F7F00380806 /* BreakMin_VM.swift */,
+				333800C82E50A3BB007F19E3 /* E-Checkout_VM.swift */,
 				33B293922E4CD91F0062696B /* E-Checkin_VM.swift */,
 				336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */,
 				336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */,
@@ -436,6 +459,26 @@
 			path = "Division List";
 			sourceTree = "<group>";
 		};
+		333800CA2E50A574007F19E3 /* E-Checkout */ = {
+			isa = PBXGroup;
+			children = (
+				333800CC2E50A5FC007F19E3 /* CheckoutItem.swift */,
+				333800D02E50CEE3007F19E3 /* Check-Out.swift */,
+			);
+			path = "E-Checkout";
+			sourceTree = "<group>";
+		};
+		333800CB2E50A58A007F19E3 /* Check-In */ = {
+			isa = PBXGroup;
+			children = (
+				33CC1E302E520E2E00380806 /* Break Minutes */,
+				33B2921F2E4C714F0062696B /* E-Checkin */,
+				333800CA2E50A574007F19E3 /* E-Checkout */,
+				33B292202E4C71D80062696B /* Top_TabView.swift */,
+			);
+			path = "Check-In";
+			sourceTree = "<group>";
+		};
 		336CBFA92E4B17E400EF9AF0 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -448,19 +491,19 @@
 		33B2921F2E4C714F0062696B /* E-Checkin */ = {
 			isa = PBXGroup;
 			children = (
-				33B292D92E4C97C20062696B /* Check-In */,
-				33B292202E4C71D80062696B /* Top_TabView.swift */,
+				33B292222E4C7A690062696B /* Check-In.swift */,
+				33B292DA2E4C982E0062696B /* CheckInItem.swift */,
 			);
 			path = "E-Checkin";
 			sourceTree = "<group>";
 		};
-		33B292D92E4C97C20062696B /* Check-In */ = {
+		33CC1E302E520E2E00380806 /* Break Minutes */ = {
 			isa = PBXGroup;
 			children = (
-				33B292222E4C7A690062696B /* Check-In.swift */,
-				33B292DA2E4C982E0062696B /* CheckInItem.swift */,
+				33CC1E352E52201600380806 /* BreakItem.swift */,
+				33CC1E372E5230AE00380806 /* Break_Min.swift */,
 			);
-			path = "Check-In";
+			path = "Break Minutes";
 			sourceTree = "<group>";
 		};
 		F567CF9D2E24CC3800A05CE7 = {
@@ -588,6 +631,7 @@
 				336CBFA42E4B0ABC00EF9AF0 /* Profile_Screen.swift in Sources */,
 				333509E92E3CD1BE007FFAE8 /* AxisTabView.swift in Sources */,
 				333509EA2E3CD1BE007FFAE8 /* Login_Screen.swift in Sources */,
+				333800CF2E50A6C5007F19E3 /* Date_Time_Formatter.swift in Sources */,
 				336CBFA62E4B0CAC00EF9AF0 /* Profile_Modal.swift in Sources */,
 				336E279F2E40782400EF8B44 /* DivisionList_Modal.swift in Sources */,
 				333509EB2E3CD1BE007FFAE8 /* ATCurveStyle.swift in Sources */,
@@ -595,6 +639,7 @@
 				333509EC2E3CD1BE007FFAE8 /* GlobalErroHandler.swift in Sources */,
 				333509ED2E3CD1BE007FFAE8 /* WebView_Support.swift in Sources */,
 				333509EE2E3CD1BE007FFAE8 /* API_Function.swift in Sources */,
+				333800D12E50CEE3007F19E3 /* Check-Out.swift in Sources */,
 				333509EF2E3CD1BE007FFAE8 /* RememberMe_Button.swift in Sources */,
 				333509F02E3CD1BE007FFAE8 /* ATBackgroundStyle.swift in Sources */,
 				333509F12E3CD1BE007FFAE8 /* Code_Screen.swift in Sources */,
@@ -611,16 +656,22 @@
 				33B292212E4C71D80062696B /* Top_TabView.swift in Sources */,
 				338315732E41C7AA0060C0CF /* UserJson.swift in Sources */,
 				336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */,
+				33CC1E322E520EC700380806 /* BreakMin_Modal.swift in Sources */,
 				33B293932E4CD9280062696B /* E-Checkin_VM.swift in Sources */,
 				333509FB2E3CD1BE007FFAE8 /* API_Constants.swift in Sources */,
 				333509FC2E3CD1BE007FFAE8 /* AlertView.swift in Sources */,
 				33B292232E4C7A690062696B /* Check-In.swift in Sources */,
 				333509FD2E3CD1BE007FFAE8 /* Dashboard_Menu_Card.swift in Sources */,
 				333509FE2E3CD1BE007FFAE8 /* ATTabItemModifier.swift in Sources */,
+				33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */,
+				333800C92E50A3C1007F19E3 /* E-Checkout_VM.swift in Sources */,
 				333509FF2E3CD1BE007FFAE8 /* Tab_SupportItem.swift in Sources */,
+				33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */,
 				336E284B2E4089D200EF8B44 /* DivisionRow_View.swift in Sources */,
 				33350A002E3CD1BE007FFAE8 /* ATConstant.swift in Sources */,
 				33350A012E3CD1BE007FFAE8 /* Dashboard_Menu_Collection.swift in Sources */,
+				33CC1E362E52201600380806 /* BreakItem.swift in Sources */,
+				333800CD2E50A5FC007F19E3 /* CheckoutItem.swift in Sources */,
 				33350A022E3CD1BE007FFAE8 /* Network_Monitor.swift in Sources */,
 				336E299D2E40C54000EF8B44 /* DashboardWrapper_View.swift in Sources */,
 				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
@@ -644,6 +695,7 @@
 				33350A132E3CD1BE007FFAE8 /* ATViewModel.swift in Sources */,
 				33350A142E3CD1BE007FFAE8 /* App_Route.swift in Sources */,
 				33350A152E3CD1BE007FFAE8 /* ATTabItem.swift in Sources */,
+				333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */,
 				33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

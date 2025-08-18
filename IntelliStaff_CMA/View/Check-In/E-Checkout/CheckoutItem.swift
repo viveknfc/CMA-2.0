@@ -1,15 +1,14 @@
 //
-//  CheckInItem.swift
+//  CheckoutItem.swift
 //  IntelliStaff_CMA
 //
-//  Created by NFC Solutions on 13/08/25.
+//  Created by NFC Solutions on 16/08/25.
 //
 
 import SwiftUI
 import SSDateTimePicker
 
-struct CheckInItem: View {
-
+struct CheckoutItem: View {
     let id: UUID
     let firstName: String
     let position: String
@@ -18,7 +17,7 @@ struct CheckInItem: View {
     var selectedTime: Time
     
     var onTimeTap: (UUID, Time) -> Void
-    var onCheckIn: (UUID, Time) -> Void
+    var onCheckOut: (UUID, Time) -> Void
     
     var body: some View {
         
@@ -30,7 +29,7 @@ struct CheckInItem: View {
                 Text("Position: \(position)")
                     .font(.bodyFont)
                 
-                Text("Scheduled Time: \(formatDate(schTime))")
+                Text("Scheduled Time: \(Date_Time_Formatter.formatDate(schTime))")
                     .font(.bodyFont)
                 
                 GeometryReader { geo in
@@ -39,9 +38,9 @@ struct CheckInItem: View {
                             onTimeTap(id, selectedTime)
                         }) {
                             HStack {
-                                Text(formatTime(selectedTime))
+                                Text(Date_Time_Formatter.formatTime(selectedTime))
                                     .foregroundColor(.theme)
-                                    .font(.buttonFont)
+                                    .font(.bodyFont)
                                     .lineLimit(1)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 Image(systemName: "clock")
@@ -53,8 +52,8 @@ struct CheckInItem: View {
                         }
                         .frame(width: geo.size.width * 0.75)
                         
-                        Rectangular_Rounded_Button(title: "Check In") {
-                            onCheckIn(id, selectedTime)
+                        Rectangular_Rounded_Button(title: "Check Out") {
+                            onCheckOut(id, selectedTime)
                         }
                         .frame(width: geo.size.width * 0.25)
                     }
@@ -63,28 +62,12 @@ struct CheckInItem: View {
             }
             .padding(.horizontal)
         }
-        .onTapGesture {
-            print("Tap reached CheckInItem")
-        }
     }
-    
-    private func formatTime(_ time: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm a"
-        return formatter.string(from: time)
-    }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm a"
-        return formatter.string(from: date)
-    }
-
 }
 
-struct CheckInItem_Previews: PreviewProvider {
+struct CheckOutItem_Previews: PreviewProvider {
     static var previews: some View {
-        CheckInItem(
+        CheckoutItem(
             id: UUID(),
             firstName: "John Doe",
             position: "Manager",
@@ -93,7 +76,7 @@ struct CheckInItem_Previews: PreviewProvider {
             onTimeTap: { id, time in
                 print("Time tapped: \(time)")
             },
-            onCheckIn: { id, time in
+            onCheckOut: { id, time in
                 print("Checked in at \(time)")
             }
         )
@@ -101,6 +84,3 @@ struct CheckInItem_Previews: PreviewProvider {
         .padding()
     }
 }
-
-
-
