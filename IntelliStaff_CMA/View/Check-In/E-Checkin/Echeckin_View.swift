@@ -31,11 +31,7 @@ struct ECheckin_View: View {
     @State private var showFeedBackAlert = false
     @State private var activeAlert: ActiveAlert?
     @State private var showLogoutAlert = false
-//    @State private var checkInRecords: [CheckInRecord] = [
-//        CheckInRecord(name: "Cano, Reyna", position: "Shift Supervisor- Day Shift", scheduleTime: "9:00 AM – 5:00 PM", totalHours: "8 H : 0 M", breakMinutes: "0", startTime: "9:00 AM", endTime: "5:00 PM"),
-//        CheckInRecord(name: "Smith, John", position: "Technician", scheduleTime: "10:00 AM – 6:00 PM", totalHours: "8 H : 0 M", breakMinutes: "30", startTime: "10:00 AM", endTime: "6:00 PM"),
-//        CheckInRecord(name: "Doe, Jane", position: "Operator", scheduleTime: "8:00 AM – 4:00 PM", totalHours: "8 H : 0 M", breakMinutes: "15", startTime: "8:00 AM", endTime: "4:00 PM")
-//    ]
+    @State private var savedRemark: String = ""    // Persisted remark
     @State var viewModel = ECheckVM()
     var isSubmitEnabled: Bool {
         viewModel.checkinData.contains(where: { $0.isChecked })
@@ -118,7 +114,7 @@ struct ECheckin_View: View {
                     
                     ScrollView {
                         ForEach($viewModel.checkinData) { $record in
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Text(record.name)
                                         .font(.headline)
@@ -147,7 +143,7 @@ struct ECheckin_View: View {
                                             showFeedbackAlert = true
                                         }
                                     }
-
+                                    
                                     Button {
                                         activeAlert = .info
                                         showFeedbackAlert = true
@@ -156,22 +152,26 @@ struct ECheckin_View: View {
                                             .foregroundColor(.gray)
                                             .padding(.leading, 4)
                                     }
+                                    
+                                    
                                 }
                                 .alert("Enter Remark", isPresented: $showFeedbackAlert, presenting: activeAlert) { alertType in
-                                    if alertType == .feedback {
-                                        TextField("Enter your remark", text: $feedbackText)
-                                        Button("Submit") {
-                                            print("User feedback: \(feedbackText)")
-                                            feedbackText = ""
+                                            if alertType == .feedback {
+                                                TextField("Enter your remark", text: $feedbackText)
+                                                Button("Submit") {
+                                                    savedRemark = feedbackText   // ✅ Save the remark
+                                                    print("User feedback: \(savedRemark)")
+                                                    feedbackText = ""            // Clear after saving (optional)
+                                                }
+                                            } else if alertType == .info {
+                                                Button("OK", role: .cancel) { }
+                                            }
+                                        } message: { alertType in
+                                            if alertType == .info {
+                                                Text(savedRemark.isEmpty ? "No feedback yet" : savedRemark)
+                                            }
                                         }
-                                    } else if alertType == .info {
-                                        Button("OK", role: .cancel) { }
-                                    }
-                                } message: { alertType in
-                                    if alertType == .info {
-                                        Text("\(feedbackText)")
-                                    }
-                                }
+                                    
                                 
 
                                 
@@ -253,22 +253,29 @@ struct ECheckin_View: View {
                                                 Button(action: commonAction) {
                                                     Text("Save")
                                                         .foregroundColor(.white)
-                                                        .padding()
-                                                        .frame(maxWidth: 120)
+                                                        .frame(width: 90, height: 40)
                                                         .background(Color(hex: "#111184"))
                                                         .cornerRadius(8)
                                                 }
+                                                .padding(.top, 15)
                                             }
                                 }
                                 
-                                
+                                DottedLine()
+                                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [2, 8]))
+                                    .foregroundColor(.gray)
+                                    .frame(height: 1)
+                                    .padding(.horizontal, 15)
+                                    .padding(.bottom, 3)
+                                    .padding(.top, 9)
                             }
                             .padding()
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(12)
-                            .shadow(radius: 2)
+                            .background(Color(UIColor.white))
+                           // .cornerRadius(12)
+                           // .shadow(radius: 2)
                             .padding(.horizontal)
                             .padding(.bottom, 8)
+                            .padding(.top, 8)
                         }
                     }
                     
@@ -276,7 +283,7 @@ struct ECheckin_View: View {
                     VStack {
                            
                         }
-                    .frame(maxWidth: .infinity, maxHeight: 8)
+                    .frame(maxWidth: .infinity, maxHeight: 28)
                         .padding()
                    
                 }
