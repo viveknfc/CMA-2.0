@@ -26,9 +26,7 @@ struct Login_Screen: View {
                     .onTapGesture {
                         UIApplication.shared.endEditing()
                     }
-                
                 VStack {
-                    
                     Image("CMA icon")
                         .resizable()
                         .scaledToFit()

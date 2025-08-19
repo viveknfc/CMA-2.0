@@ -14,3 +14,19 @@ struct ECheckinModal: Codable, Identifiable {
     var scheduledTime: Date
     var selectedTime: Date
 }
+
+
+struct CheckInRecord: Identifiable {
+    let id = UUID()
+    let name: String
+    let position: String
+    let scheduleTime: String
+    let totalHours: String
+    let breakMinutes: String
+    let startTime: String
+    let endTime: String
+    var isChecked: Bool = false  // <-- Add this
+}
+
+
+

@@ -100,6 +100,10 @@
 		33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E332E520F7F00380806 /* BreakMin_VM.swift */; };
 		33CC1E362E52201600380806 /* BreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E352E52201600380806 /* BreakItem.swift */; };
 		33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E372E5230AE00380806 /* Break_Min.swift */; };
+		44B3DB9E2E5456B400E5CA70 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B3DB9D2E5456B400E5CA70 /* CustomAlertView.swift */; };
+		44B3DBA32E547EEA00E5CA70 /* EcheckViewIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B3DBA22E547EDA00E5CA70 /* EcheckViewIn.swift */; };
+		44BE35612E5324B400EB51A7 /* Echeckin_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BE35602E5324B400EB51A7 /* Echeckin_View.swift */; };
+		44BE35632E5324D000EB51A7 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BE35622E5324D000EB51A7 /* StarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +200,10 @@
 		33CC1E332E520F7F00380806 /* BreakMin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_VM.swift; sourceTree = "<group>"; };
 		33CC1E352E52201600380806 /* BreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakItem.swift; sourceTree = "<group>"; };
 		33CC1E372E5230AE00380806 /* Break_Min.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Break_Min.swift; sourceTree = "<group>"; };
+		44B3DB9D2E5456B400E5CA70 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
+		44B3DBA22E547EDA00E5CA70 /* EcheckViewIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcheckViewIn.swift; sourceTree = "<group>"; };
+		44BE35602E5324B400EB51A7 /* Echeckin_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Echeckin_View.swift; sourceTree = "<group>"; };
+		44BE35622E5324D000EB51A7 /* StarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -307,6 +315,8 @@
 				333509A52E3CD1BE007FFAE8 /* AlertView.swift */,
 				33B292D42E4C85C10062696B /* Custom_Calendar.swift */,
 				333509A62E3CD1BE007FFAE8 /* Capsule_Button.swift */,
+				44B3DB9D2E5456B400E5CA70 /* CustomAlertView.swift */,
+				44BE35622E5324D000EB51A7 /* StarView.swift */,
 				333509A72E3CD1BE007FFAE8 /* Rectangle_Container.swift */,
 				333509A82E3CD1BE007FFAE8 /* RememberMe_Button.swift */,
 				333509A92E3CD1BE007FFAE8 /* Spinner_Triangle.swift */,
@@ -424,6 +434,7 @@
 				33CC1E332E520F7F00380806 /* BreakMin_VM.swift */,
 				333800C82E50A3BB007F19E3 /* E-Checkout_VM.swift */,
 				33B293922E4CD91F0062696B /* E-Checkin_VM.swift */,
+				44B3DBA22E547EDA00E5CA70 /* EcheckViewIn.swift */,
 				336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */,
 				336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */,
 				333509CC2E3CD1BE007FFAE8 /* Dashboard_VM.swift */,
@@ -491,6 +502,7 @@
 		33B2921F2E4C714F0062696B /* E-Checkin */ = {
 			isa = PBXGroup;
 			children = (
+				44BE35602E5324B400EB51A7 /* Echeckin_View.swift */,
 				33B292222E4C7A690062696B /* Check-In.swift */,
 				33B292DA2E4C982E0062696B /* CheckInItem.swift */,
 			);
@@ -636,6 +648,7 @@
 				336E279F2E40782400EF8B44 /* DivisionList_Modal.swift in Sources */,
 				333509EB2E3CD1BE007FFAE8 /* ATCurveStyle.swift in Sources */,
 				336E27A12E407A2A00EF8B44 /* DivisionList_VM.swift in Sources */,
+				44B3DBA32E547EEA00E5CA70 /* EcheckViewIn.swift in Sources */,
 				333509EC2E3CD1BE007FFAE8 /* GlobalErroHandler.swift in Sources */,
 				333509ED2E3CD1BE007FFAE8 /* WebView_Support.swift in Sources */,
 				333509EE2E3CD1BE007FFAE8 /* API_Function.swift in Sources */,
@@ -658,6 +671,7 @@
 				336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */,
 				33CC1E322E520EC700380806 /* BreakMin_Modal.swift in Sources */,
 				33B293932E4CD9280062696B /* E-Checkin_VM.swift in Sources */,
+				44B3DB9E2E5456B400E5CA70 /* CustomAlertView.swift in Sources */,
 				333509FB2E3CD1BE007FFAE8 /* API_Constants.swift in Sources */,
 				333509FC2E3CD1BE007FFAE8 /* AlertView.swift in Sources */,
 				33B292232E4C7A690062696B /* Check-In.swift in Sources */,
@@ -678,6 +692,7 @@
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
 				33350A042E3CD1BE007FFAE8 /* Extensions.swift in Sources */,
 				33350A052E3CD1BE007FFAE8 /* CurveConcavePreview.swift in Sources */,
+				44BE35632E5324D000EB51A7 /* StarView.swift in Sources */,
 				33350A062E3CD1BE007FFAE8 /* UnderlinedTF.swift in Sources */,
 				33350A072E3CD1BE007FFAE8 /* ATTabState.swift in Sources */,
 				33350A082E3CD1BE007FFAE8 /* API_Call.swift in Sources */,
@@ -696,6 +711,7 @@
 				33350A142E3CD1BE007FFAE8 /* App_Route.swift in Sources */,
 				33350A152E3CD1BE007FFAE8 /* ATTabItem.swift in Sources */,
 				333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */,
+				44BE35612E5324B400EB51A7 /* Echeckin_View.swift in Sources */,
 				33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,7 +845,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = F7P87PL667;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "IntelliStaff-CMA-Info.plist";
@@ -859,7 +875,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = F7P87PL667;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "IntelliStaff-CMA-Info.plist";

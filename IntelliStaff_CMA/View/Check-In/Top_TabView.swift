@@ -68,7 +68,9 @@ struct Top_TabView: View {
                     Break_Min()
                     
                 case .fourth:
-                    Text("Fourth Tab Content")
+                   // Text("Fourth Tab Content")
+                    ECheckin_View(
+                        path: .constant([]))
                     
                 }
             }
