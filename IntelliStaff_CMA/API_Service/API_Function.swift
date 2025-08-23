@@ -5,6 +5,8 @@
 //  Created by Vivek Lakshmanan on 16/07/25.
 //
 
+import SwiftUI
+
 struct APIFunction {
     
     //MARK: - serviceAuthAPICalling
@@ -45,5 +47,151 @@ struct APIFunction {
         let url = APIConstants.baseURL + APIConstants.CandidateDetailsAPI
         return try await APIService.request(url: url, urlParams: params)
     }
+    
+    //MARK: - E-Check In API
+    
+    static func eCheckInAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.ECheckInAPI
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        // Ask APIService to just give us Data (raw response)
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            urlParams: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - E-checkin Submit API
+    
+    static func eCheckInSubmitAPICalling(params: [String: Any]) async throws -> [SubmitAPIResponse] {
+//        print("Calling CheckIn Submit API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.ECheckInSubmit
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+    }
+    
+    //MARK: - E-Check Out API
+    
+    static func eCheckOutAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.ECheckOutAPI
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        // Ask APIService to just give us Data (raw response)
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            urlParams: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - E-checkOut Submit API
+    
+    static func eCheckOutSubmitAPICalling(params: [String: Any]) async throws -> [SubmitAPIResponse] {
+//        print("Calling CheckOut Submit API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.ECheckOutSubmit
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+    }
+    
+    //MARK: - Break Min API
+    
+    static func breakMinAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.BreakMinDetails
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        // Ask APIService to just give us Data (raw response)
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            urlParams: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - Save Break Min Submit API
+    
+    static func saveBreakMinAPICalling(params: [String: Any]) async throws -> [SubmitAPIResponse] {
+//        print("Calling Break Min Submit API with params: \(params)")
+        let url = APIConstants.baseURL + APIConstants.saveBreakMin
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Bearer \(token)"]
+        )
+        
+        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+    }
+
+
     
 }

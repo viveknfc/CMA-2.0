@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SSDateTimePicker
 
 enum TimeType {
     case start
@@ -20,12 +21,17 @@ struct Break_Min: View {
     
     @State private var showTimePicker = false
     @State private var activeItemID: UUID? = nil
-    @State private var activeTime: Date = Date()
+    @State private var activeTime: Time = Time()
     @State private var activeTimeType: TimeType? = nil   // Start or End
     
-    @State private var selectedTimes: [UUID: (start: Date, end: Date)] = [:]
+    @EnvironmentObject var errorHandler: GlobalErrorHandler
+    
+    @State private var selectedTimes: [UUID: (start: Time, end: Time)] = [:]
     
     @State var viewModel = Break_VM()
+    
+    let clientID: Int?
+    let contactID: Int?
     
     var body: some View {
         ZStack {
@@ -49,8 +55,35 @@ struct Break_Min: View {
             }
         }
         .onAppear {
-            viewModel.fetchBreakData()
+            if let clientID = clientID,
+               let contactID = contactID {
+                
+                viewModel.fetchBreakMinData(
+                    clientId: "\(clientID)",
+                    contactId: "\(contactID)",
+                    weekEnd: Date_Time_Formatter.APIformatDate(Date()),
+                    errorHandler: errorHandler
+                )
+            } else {
+                print("❌ Missing clientID or contactID")
+                errorHandler.showError(message: "Missing clientID or contactID", mode: .toast)
+            }
         }
+        .onChange(of: startDate) { _ , newDate in
+            guard let newDate,
+                  let clientID = clientID,
+                  let contactID = contactID else {
+                return
+            }
+
+            viewModel.fetchBreakMinData(
+                clientId: "\(clientID)",
+                contactId: "\(contactID)",
+                weekEnd: Date_Time_Formatter.APIformatDate(newDate),
+                errorHandler: errorHandler
+            )
+        }
+
     }
 }
 
@@ -81,33 +114,32 @@ extension Break_Min {
             VStack(spacing: 20) {
                 ForEach(viewModel.breakData) { item in
                     BreakItem(
-                        id: item.id,
-                        name: item.name,
-                        position: item.position,
-                        schTime: item.scheduledTime,
-                        startTime: selectedTimes[item.id]?.start ?? item.startTime,
-                        endTime: selectedTimes[item.id]?.end ?? item.endTime,
-                        duration: {
-                            if let times = selectedTimes[item.id] {
-                                return max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
-                            } else {
-                                return item.duration
-                            }
-                        }(),
-                        onStartTap: { id, time in
-                            activeItemID = id
+                        item: item,
+                        startTime: selectedTimes[item.id]?.start ?? item.startDate ?? Date(),
+                        endTime: selectedTimes[item.id]?.end ?? item.endDate ?? Date(),
+                        onStartTap: { item, time in
+                            activeItemID = item.id
                             activeTime = time
                             activeTimeType = .start
                             showTimePicker = true
                         },
-                        onEndTap: { id, time in
-                            activeItemID = id
+                        onEndTap: { item, time in
+                            activeItemID = item.id
                             activeTime = time
                             activeTimeType = .end
                             showTimePicker = true
                         },
-                        onSave: { id in
-                            viewModel.saveBreak(for: id)
+                        onSave: { item, duration in
+                            if let clientID = clientID,
+                               let contactID = contactID {
+                                viewModel.breakMinSubmit(
+                                    item: item,
+                                    clientId: clientID,
+                                    contactId: contactID,
+                                    duration: duration,
+                                    errorHandler: errorHandler
+                                )
+                            }
                         }
                     )
                     
@@ -135,8 +167,16 @@ extension Break_Min {
                     selectedDate = date
                     startDate = date
                     print("Start Date Selected: \(Date_Time_Formatter.formattedDate(date))")
+                    
+//                    viewModel.fetchBreakMinData(
+//                        clientId: "\(clientID ?? 0)",
+//                        contactId: "\(contactID ?? 0)",
+//                        weekEnd: Date_Time_Formatter.APIformatDate(Date()),
+//                        errorHandler: errorHandler
+//                    )
+                    
                     showDatePicker = false
-                }
+                }, disabledDates: Date_Time_Formatter.disabledDatesExceptTodayAndYesterday()
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .clipped()
@@ -152,22 +192,23 @@ extension Break_Min {
             
             Custom_Timer(showTimePicker: $showTimePicker, selectedTime: $activeTime) { pickedTime in
                 if let id = activeItemID, let type = activeTimeType {
-                    // Get the model for this break
                     guard let model = viewModel.breakData.first(where: { $0.id == id }) else { return }
                     
-                    var times = selectedTimes[id] ?? (start: model.startTime, end: model.endTime)
+                    var times = selectedTimes[id] ?? (
+                        start: model.startDate ?? Date(),
+                        end: model.endDate ?? Date()
+                    )
                     
                     switch type {
                     case .start:
-                        times.start = combine(date: model.scheduledTime, with: pickedTime)
+                        times.start = pickedTime
                     case .end:
-                        times.end = combine(date: model.scheduledTime, with: pickedTime)
+                        times.end = pickedTime
                     }
                     
-                    selectedTimes[id] = times   // update dictionary
-                    print("Selected \(type) time for \(id): \(pickedTime)")
+                    selectedTimes[id] = times
+                    print("Selected \(type) time for \(id): \(Date_Time_Formatter.formatTime(pickedTime))")
                     
-                    // 👉 Optionally update duration immediately
                     let duration = max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
                     print("Duration for \(id): \(duration) mins")
                 }
@@ -177,24 +218,63 @@ extension Break_Min {
         .zIndex(10)
     }
     
-    func combine(date: Date, with time: Date) -> Date {
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
-        
-        var merged = DateComponents()
-        merged.year = dateComponents.year
-        merged.month = dateComponents.month
-        merged.day = dateComponents.day
-        merged.hour = timeComponents.hour
-        merged.minute = timeComponents.minute
-        
-        return calendar.date(from: merged) ?? date
-    }
+//    private var timePickerOverlay: some View {
+//        ZStack {
+//            Color.black.opacity(0.4)
+//                .edgesIgnoringSafeArea(.all)
+//                .onTapGesture { showTimePicker = false }
+//            
+//            Custom_Timer(showTimePicker: $showTimePicker, selectedTime: $activeTime) { pickedTime in
+//                if let id = activeItemID, let type = activeTimeType {
+//                    // Get the model for this break
+//                    guard let model = viewModel.breakData.first(where: { $0.id == id }) else { return }
+//                    
+//                    var times = selectedTimes[id] ?? (
+//                        start: model.startDate ?? Date(),
+//                        end: model.endDate ?? Date()
+//                    )
+//                    
+//                    let baseDate = startDate ?? Date()
+//                    
+//                    switch type {
+//                    case .start:
+//                        times.start = combine(date: baseDate, with: pickedTime)
+//                    case .end:
+//                        times.end = combine(date: baseDate, with: pickedTime)
+//                    }
+//                    
+//                    selectedTimes[id] = times   // update dictionary
+//                    print("Selected \(type) time for \(id): \(pickedTime)")
+//                    
+//                    // 👉 Optionally update duration immediately
+//                    let duration = max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
+//                    print("Duration for \(id): \(duration) mins")
+//                }
+//            }
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        }
+//        .zIndex(10)
+//    }
+//    
+//    func combine(date: Date, with time: Date) -> Date {
+//        let calendar = Calendar.current
+//        let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
+//        let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+//        
+//        var merged = DateComponents()
+//        merged.year = dateComponents.year
+//        merged.month = dateComponents.month
+//        merged.day = dateComponents.day
+//        merged.hour = timeComponents.hour
+//        merged.minute = timeComponents.minute
+//        
+//        return calendar.date(from: merged) ?? date
+//    }
 
 }
 
 
 #Preview {
-    Break_Min()
+    Break_Min(clientID: 1, contactID: 1)
+        .environmentObject(GlobalErrorHandler())
 }

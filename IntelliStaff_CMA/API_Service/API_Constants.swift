@@ -21,4 +21,13 @@ enum APIConstants {
     static var CMADashboardDetails = "clientsapi/GetCwaMenuInformation"
     static var CandidateDetailsAPI = "candidateapi/api/Candidate/CandidateDetails"
     
+    static var ECheckInAPI = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/GetCheckInDetails"
+    static var ECheckInSubmit = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/CheckIn"
+    
+    static var ECheckOutAPI = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/GetCheckOutDetails"
+    static var ECheckOutSubmit = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/CheckOut"
+    
+    static var BreakMinDetails = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/GetBreakMinuteDetails"
+    static var saveBreakMin = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/SaveBreakMinutes"
+    
 }

@@ -20,6 +20,8 @@ struct Top_TabView: View {
     
     @State private var selectedTab: Tab = .first
     
+    let division: DivisionList
+    
     var body: some View {
         VStack(spacing: 0) {
             // Custom Tab Bar
@@ -59,13 +61,13 @@ struct Top_TabView: View {
             ZStack {
                 switch selectedTab {
                 case .first:
-                    Check_In()
+                    Check_In(clientID: division.clientID, contactID: division.contactID)
                     
                 case .second:
-                    Check_Out()
+                    Check_Out(clientID: division.clientID, contactID: division.contactID)
                     
                 case .third:
-                    Break_Min()
+                    Break_Min(clientID: division.clientID, contactID: division.contactID)
                     
                 case .fourth:
                     Text("Fourth Tab Content")
@@ -88,5 +90,5 @@ struct Top_TabView: View {
 }
 
 #Preview {
-    Top_TabView()
+    Top_TabView(division: .mock)
 }

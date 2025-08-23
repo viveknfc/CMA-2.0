@@ -7,6 +7,58 @@
 
 import SwiftUI
 
+enum AlertType {
+    case success
+    case error
+    
+    struct Theme {
+        var background: Color
+        var titleColor: Color
+        var messageColor: Color
+        var buttonBackground: Color
+        var buttonText: Color
+        var secondaryButtonBackground: Color
+        var secondaryButtonText: Color
+        
+        static let `default` = Theme(
+            background: Color.white,
+            titleColor: .black,
+            messageColor: .gray,
+            buttonBackground: .theme,
+            buttonText: .white,
+            secondaryButtonBackground: .gray.opacity(0.3),
+            secondaryButtonText: .black
+        )
+    }
+    
+    var theme: Theme {
+        switch self {
+        case .success:
+            return Theme(
+                background: Color.green.opacity(0.1),
+                titleColor: .green,
+                messageColor: .black.opacity(0.7),
+                buttonBackground: .green,
+                buttonText: .white,
+                secondaryButtonBackground: .gray.opacity(0.3),
+                secondaryButtonText: .black
+            )
+            
+        case .error:
+             return Theme(
+            background: Color(red: 1.0, green: 0.97, blue: 0.96),   // soft coral tint
+            titleColor: Color(red: 0.85, green: 0.25, blue: 0.25), // coral red
+            messageColor: .black.opacity(0.7),
+            buttonBackground: Color(red: 0.95, green: 0.35, blue: 0.35), // coral button
+            buttonText: .white,
+            secondaryButtonBackground: .gray.opacity(0.25),
+            secondaryButtonText: .black
+        )
+
+        }
+    }
+}
+
 struct AlertButtonConfig {
     var title: String
     var action: () -> Void
@@ -29,6 +81,12 @@ struct AlertView: View {
     var primaryButton: AlertButtonConfig
     var secondaryButton: AlertButtonConfig?
     var dismiss: () -> Void
+    
+    var alertType: AlertType? = nil
+    
+    private var theme: AlertType.Theme {
+        alertType?.theme ?? .default
+    }
 
     var body: some View {
         ZStack {
@@ -45,19 +103,20 @@ struct AlertView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 40, height: 40)
-                } else {
-                    Image(systemName: "exclamationmark.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.theme)
                 }
+//                else {
+//                    Image(systemName: "exclamationmark.circle")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 40, height: 40)
+//                        .foregroundColor(theme.titleColor)
+//                }
 
                 // Title
                 if let title = title {
                     Text(title)
                         .font(.titleFont)
-                        .foregroundColor(.black)
+                        .foregroundColor(theme.titleColor)
                         .multilineTextAlignment(.center)
                 }
 
@@ -65,7 +124,7 @@ struct AlertView: View {
                 if let message = message {
                     Text(message)
                         .font(.bodyFont)
-                        .foregroundColor(.gray)
+                        .foregroundColor(theme.messageColor)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
@@ -73,11 +132,11 @@ struct AlertView: View {
                 // Buttons
                 if let second = secondaryButton {
                     HStack(spacing: 12) {
-                        buttonView(config: second, bgColor: .gray.opacity(0.3), textColor: .black)
-                        buttonView(config: primaryButton, bgColor: .theme, textColor: .white)
+                        buttonView(config: second, bgColor: theme.secondaryButtonBackground, textColor: theme.secondaryButtonText)
+                        buttonView(config: primaryButton, bgColor: theme.buttonBackground, textColor: theme.buttonText)
                     }
                 } else {
-                    buttonView(config: primaryButton, bgColor: .theme, textColor: .white)
+                    buttonView(config: primaryButton, bgColor: theme.buttonBackground, textColor: theme.buttonText)
                 }
             }
             .padding(.vertical, 22)

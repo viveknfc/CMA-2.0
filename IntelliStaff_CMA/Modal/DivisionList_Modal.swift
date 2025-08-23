@@ -39,3 +39,22 @@ struct DivisionList: Codable, Identifiable, Hashable {
         case clientContactInfoId = "ClientContactInfoId"
     }
 }
+
+extension DivisionList {
+    static var mock: DivisionList {
+        DivisionList(
+            clientName: "Mock Client",
+            clientID: 123,
+            contactID: 456,
+            divisionName: "Mock Division",
+            pendingTS: 0,
+            divisionId: 789,
+            showLogin: 1,
+            showBreakminutes: 1,
+            name: "Mock Name",
+            master: 0,
+            clientContactInfoId: 111
+        )
+    }
+}
+

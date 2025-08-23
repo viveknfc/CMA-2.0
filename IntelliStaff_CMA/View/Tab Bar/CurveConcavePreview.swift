@@ -73,7 +73,7 @@ import SwiftUI
                         systemName: "plus.circle.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Top_TabView()
+                            Top_TabView(division: division)
                         }
                        )
                        

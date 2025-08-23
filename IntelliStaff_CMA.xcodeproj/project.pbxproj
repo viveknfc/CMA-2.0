@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33034B112E543F7B007A31E0 /* No_Data_Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33034B102E543F72007A31E0 /* No_Data_Response.swift */; };
+		33034BC32E544E55007A31E0 /* Location_Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33034BC22E544E4D007A31E0 /* Location_Support.swift */; };
+		33034BC52E5456B4007A31E0 /* Local_IP_Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33034BC42E5456AD007A31E0 /* Local_IP_Address.swift */; };
 		333509D52E3CD1BE007FFAE8 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 333509892E3CD1BE007FFAE8 /* Poppins-SemiBold.ttf */; };
 		333509D62E3CD1BE007FFAE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3335098B2E3CD1BE007FFAE8 /* Assets.xcassets */; };
 		333509D72E3CD1BE007FFAE8 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 333509882E3CD1BE007FFAE8 /* Poppins-Regular.ttf */; };
@@ -77,6 +80,7 @@
 		333800CD2E50A5FC007F19E3 /* CheckoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800CC2E50A5FC007F19E3 /* CheckoutItem.swift */; };
 		333800CF2E50A6C5007F19E3 /* Date_Time_Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */; };
 		333800D12E50CEE3007F19E3 /* Check-Out.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333800D02E50CEE3007F19E3 /* Check-Out.swift */; };
+		33577F842E590ADC001AFE5A /* BreakTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33577F832E590ADC001AFE5A /* BreakTime.swift */; };
 		336CBFA42E4B0ABC00EF9AF0 /* Profile_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */; };
 		336CBFA62E4B0CAC00EF9AF0 /* Profile_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */; };
 		336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */; };
@@ -102,6 +106,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		33034B102E543F72007A31E0 /* No_Data_Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = No_Data_Response.swift; sourceTree = "<group>"; };
+		33034BC22E544E4D007A31E0 /* Location_Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location_Support.swift; sourceTree = "<group>"; };
+		33034BC42E5456AD007A31E0 /* Local_IP_Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Local_IP_Address.swift; sourceTree = "<group>"; };
 		3335097D2E3CD1BE007FFAE8 /* GlobalErroHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalErroHandler.swift; sourceTree = "<group>"; };
 		3335097E2E3CD1BE007FFAE8 /* GlobalErrorOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalErrorOverlay.swift; sourceTree = "<group>"; };
 		3335097F2E3CD1BE007FFAE8 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
@@ -173,6 +180,7 @@
 		333800CC2E50A5FC007F19E3 /* CheckoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutItem.swift; sourceTree = "<group>"; };
 		333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_Time_Formatter.swift; sourceTree = "<group>"; };
 		333800D02E50CEE3007F19E3 /* Check-Out.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Check-Out.swift"; sourceTree = "<group>"; };
+		33577F832E590ADC001AFE5A /* BreakTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTime.swift; sourceTree = "<group>"; };
 		336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Screen.swift; sourceTree = "<group>"; };
 		336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_Modal.swift; sourceTree = "<group>"; };
 		336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile_VM.swift; sourceTree = "<group>"; };
@@ -245,6 +253,8 @@
 		333509932E3CD1BE007FFAE8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				33034BC42E5456AD007A31E0 /* Local_IP_Address.swift */,
+				33034BC22E544E4D007A31E0 /* Location_Support.swift */,
 				333800CE2E50A6BD007F19E3 /* Date_Time_Formatter.swift */,
 				3335098A2E3CD1BE007FFAE8 /* Poppins_Font */,
 				3335098B2E3CD1BE007FFAE8 /* Assets.xcassets */,
@@ -262,6 +272,7 @@
 		333509992E3CD1BE007FFAE8 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				33034B102E543F72007A31E0 /* No_Data_Response.swift */,
 				33CC1E312E520EBF00380806 /* BreakMin_Modal.swift */,
 				333800C62E50A37E007F19E3 /* ECheckoutModal.swift */,
 				33B293902E4CD8C10062696B /* E-Checkin_Modal.swift */,
@@ -499,6 +510,7 @@
 			children = (
 				33CC1E352E52201600380806 /* BreakItem.swift */,
 				33CC1E372E5230AE00380806 /* Break_Min.swift */,
+				33577F832E590ADC001AFE5A /* BreakTime.swift */,
 			);
 			path = "Break Minutes";
 			sourceTree = "<group>";
@@ -613,6 +625,7 @@
 				333509DD2E3CD1BE007FFAE8 /* Dashboard_Modal.swift in Sources */,
 				333509DE2E3CD1BE007FFAE8 /* Rectangle_Container.swift in Sources */,
 				333509DF2E3CD1BE007FFAE8 /* ATTabConstant.swift in Sources */,
+				33034BC52E5456B4007A31E0 /* Local_IP_Address.swift in Sources */,
 				333509E02E3CD1BE007FFAE8 /* View+Extension.swift in Sources */,
 				333509E12E3CD1BE007FFAE8 /* Capsule_Button.swift in Sources */,
 				333509E22E3CD1BE007FFAE8 /* BottomSheet_Design_Support.swift in Sources */,
@@ -671,12 +684,14 @@
 				33350A022E3CD1BE007FFAE8 /* Network_Monitor.swift in Sources */,
 				336E299D2E40C54000EF8B44 /* DashboardWrapper_View.swift in Sources */,
 				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
+				33034BC32E544E55007A31E0 /* Location_Support.swift in Sources */,
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
 				33350A042E3CD1BE007FFAE8 /* Extensions.swift in Sources */,
 				33350A052E3CD1BE007FFAE8 /* CurveConcavePreview.swift in Sources */,
 				33350A062E3CD1BE007FFAE8 /* UnderlinedTF.swift in Sources */,
 				33350A072E3CD1BE007FFAE8 /* ATTabState.swift in Sources */,
 				33350A082E3CD1BE007FFAE8 /* API_Call.swift in Sources */,
+				33034B112E543F7B007A31E0 /* No_Data_Response.swift in Sources */,
 				33350A092E3CD1BE007FFAE8 /* WebView_Screen.swift in Sources */,
 				33350A0A2E3CD1BE007FFAE8 /* Spinner_Triangle.swift in Sources */,
 				33350A0B2E3CD1BE007FFAE8 /* Input_View.swift in Sources */,
@@ -692,6 +707,7 @@
 				33350A142E3CD1BE007FFAE8 /* App_Route.swift in Sources */,
 				33350A152E3CD1BE007FFAE8 /* ATTabItem.swift in Sources */,
 				333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */,
+				33577F842E590ADC001AFE5A /* BreakTime.swift in Sources */,
 				33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,6 +845,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "IntelliStaff-CMA-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to provide personalized features based on your area.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -859,6 +876,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "IntelliStaff-CMA-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to provide personalized features based on your area.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

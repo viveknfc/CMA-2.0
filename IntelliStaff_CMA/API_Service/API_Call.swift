@@ -52,9 +52,13 @@ struct APIService {
 
         var finalHeaders = headers ?? [:]
         
-        if !APIConstants.accessToken.isEmpty {
-//            print("the access token from api call is : \(APIConstants.accessToken)")
-            finalHeaders["Authorization"] = "Bearer \(APIConstants.accessToken)"
+        if finalHeaders["Authorization"] == nil {
+            if !APIConstants.accessToken.isEmpty {
+//                print("🔑 Using default APIConstants.accessToken: \(APIConstants.accessToken)")
+                finalHeaders["Authorization"] = "Bearer \(APIConstants.accessToken)"
+            }
+        } else {
+            print("🔑 Using caller-provided Authorization header")
         }
 
         
@@ -92,6 +96,9 @@ struct APIService {
 //            }
 
             do {
+                if T.self == Data.self {
+                    return data as! T   // 👈 allow raw Data passthrough
+                }
                 return try JSONDecoder().decode(T.self, from: data)
             } catch {
                 print("❌ Decoding error: \(error)")

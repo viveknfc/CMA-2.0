@@ -18,9 +18,13 @@ struct Check_Out: View {
     @State private var activeItemID: UUID? = nil
     @State private var activeTime: Time = Time()
     @State private var selectedTimes: [UUID: Time] = [:]
-
+    
+    @EnvironmentObject var errorHandler: GlobalErrorHandler
     
     @State var viewModel = ECheckout_VM()
+    
+    let clientID: Int?
+    let contactID: Int?
     
     var body: some View {
         GeometryReader { geo in
@@ -47,23 +51,39 @@ struct Check_Out: View {
                     }
                     
                     ScrollView {
+                        
+                        if viewModel.eCheckOutData.isEmpty {
+                            VStack {
+                                Text(viewModel.noDataMessage ?? "No check-out data available")
+                                    .foregroundColor(.gray)
+                                    .font(.buttonFont)
+                                    .padding(.top, 150)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                        
+                        else {
                         VStack (spacing: 30){
-                            ForEach(viewModel.checkoutData) { item in
+                            ForEach(viewModel.eCheckOutData) { item in
                                 CheckoutItem(
-                                    id: item.id,
-                                    firstName: item.name,
-                                    position: item.position,
-                                    schTime: item.scheduledTime,
-                                    selectedTime: selectedTimes[item.id] ?? item.selectedTime,
-                                    onTimeTap: { id, time in
-                                            activeItemID = id
-                                            activeTime = time
-                                            showTimePicker = true
-                                        },
-                                    onCheckOut: { id, time in
-                                        print("Checked in for \(id) at \(Date_Time_Formatter.formatTime(time))")
+                                    item: item,
+                                    selectedTime: activeTime,
+                                    onTimeTap: { item, time in
+                                        activeTime = time
+                                        showTimePicker = false
+                                    }, onCheckOut: { selectedItem, time in       print("check out pressed")
+                                        if let clientID = clientID,
+                                           let contactID = contactID {
+                                            viewModel.checkOutSubmit(
+                                                item: selectedItem,
+                                                clientId: clientID,
+                                                contactId: contactID, type: "OUT",
+                                                errorHandler: errorHandler
+                                            )
+                                        }
+                                        
                                     }
-                                    )
+                                )
                                 
                                 DottedLine()
                                     .stroke(style: StrokeStyle(lineWidth: 1, dash: [2, 8]))
@@ -78,11 +98,58 @@ struct Check_Out: View {
                         }
                         .padding(.bottom, 100)
                     }
+                    }
 
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.top, 20)
                 .padding()
+                
+                // 🔔 Show custom alert if triggered
+                if viewModel.showAlert, let message = viewModel.alertMessage {
+                    if viewModel.alertType == .success {
+                        // ✅ Only one OK button
+                        AlertView(
+                            title: "Check-Out",
+                            message: message,
+                            primaryButton: AlertButtonConfig(title: "OK") {
+                                viewModel.showAlert = false
+                            },
+                            dismiss: {
+                                viewModel.showAlert = false
+                            },
+                            alertType: .success
+                        )
+                    } else {
+                        // ❌ Error case → Retry + Cancel
+                        AlertView(
+                            title: "Check-Out",
+                            message: message,
+                            primaryButton: AlertButtonConfig(title: "Retry") {
+                                if let firstItem = viewModel.eCheckOutData.first,
+                                   let clientID = clientID,
+                                   let contactID = contactID {
+                                    viewModel.checkOutSubmit(
+                                        item: firstItem,
+                                        clientId: clientID,
+                                        contactId: contactID,
+                                        type: "OUT",
+                                        errorHandler: errorHandler,
+                                        isRetry: true
+                                    )
+                                }
+                                viewModel.showAlert = false
+                            },
+                            secondaryButton: AlertButtonConfig(title: "Cancel") {
+                                viewModel.showAlert = false
+                            },
+                            dismiss: {
+                                viewModel.showAlert = false
+                            },
+                            alertType: .error
+                        )
+                    }
+                }
                 
                 // Date Picker Overlay
                 if showDatePicker {
@@ -102,8 +169,16 @@ struct Check_Out: View {
                                     selectedDate = date
                                     startDate = date
                                     print("Start Date Selected: \(Date_Time_Formatter.formattedDate(date))")
+                                    
+                                    viewModel.fetchCheckOutData(
+                                        clientId: "\(clientID ?? 0)",
+                                        contactId: "\(contactID ?? 0)",
+                                        weekEnd: Date_Time_Formatter.APIformatDate(date),
+                                        errorHandler: errorHandler
+                                    )
+                                    
                                     showDatePicker = false
-                                }
+                                }, disabledDates: Date_Time_Formatter.disabledDatesExceptTodayAndYesterday()
                             )
                             .frame(maxWidth: .infinity, maxHeight: .infinity) // Add this
                             .clipped()
@@ -136,11 +211,31 @@ struct Check_Out: View {
             }
         }
         .onAppear {
-            viewModel.fetchCheckoutData()
+            if let clientID = clientID,
+               let contactID = contactID {
+                
+                viewModel.fetchCheckOutData(
+                    clientId: "\(clientID)",
+                    contactId: "\(contactID)",
+                    weekEnd: Date_Time_Formatter.APIformatDate(Date()),
+                    errorHandler: errorHandler
+                )
+            } else {
+                print("❌ Missing clientID or contactID")
+                errorHandler.showError(message: "Missing clientID or contactID", mode: .toast)
+            }
         }
+        
+        if viewModel.isLoading {
+            Color.black.opacity(0.5)
+                .ignoresSafeArea()
+            TriangleLoader()
+        }
+        
     }
 }
 
 #Preview {
-    Check_Out()
+    Check_Out(clientID: 1, contactID: 1)
+        .environmentObject(GlobalErrorHandler())
 }

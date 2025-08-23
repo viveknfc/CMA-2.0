@@ -6,101 +6,60 @@
 //
 
 import SwiftUI
+import SSDateTimePicker
 
 struct BreakItem: View {
-    let id: UUID
-    let name: String
-    let position: String
-    let schTime: Date
-    var startTime: Date
-    var endTime: Date
-    var duration: Int
     
-    var onStartTap: (UUID, Date) -> Void
-    var onEndTap: (UUID, Date) -> Void
-    var onSave: (UUID) -> Void
+    let item: ECheckinModal_Nw
+    var startTime: Time
+    var endTime: Time
+    
+    private var computedDuration: Int {
+        max(Int(endTime.timeIntervalSince(startTime) / 60), 0)
+    }
+    
+    var onStartTap: (ECheckinModal_Nw, Time) -> Void
+    var onEndTap: (ECheckinModal_Nw, Time) -> Void
+    var onSave: (ECheckinModal_Nw, Int) -> Void
     
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Name: \(name)")
+                Text("Name: \(item.candidateName)")
                     .font(.buttonFont)
                 
-                Text("Position: \(position)")
+                (Text("Position: ")
                     .font(.bodyFont)
+                    .foregroundColor(.primary))
+                +
+                (Text(item.position)
+                    .font(.bodyFont)
+                    .foregroundColor(Color(hex: item.positionLabelColor)))
                 
-                Text("Scheduled Time: \(Date_Time_Formatter.formatDate(schTime))")
+                Text("Scheduled Time: \(item.scheduleTime)")
                     .font(.bodyFont)
                 
                 HStack(spacing: 12) {
-                    // Start Time Field
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Start")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Button(action: {
-                            onStartTap(id, startTime)
-                        }) {
-                            HStack {
-                                Text("\(Date_Time_Formatter.formatTime(startTime))")
-                                    .foregroundColor(.theme)
-                                    .font(.bodyFont)
-                                    .lineLimit(1)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding()
-                            .frame(height: 30)
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
-                        }
+                    BreakTime(title: "Start",
+                              value: Date_Time_Formatter.formatTime(startTime)) {
+                        onStartTap(item, startTime)
                     }
                     
-                    // End Time Field
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("End")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Button(action: {
-                            onEndTap(id, endTime)
-                        }) {
-                            HStack {
-                                Text("\(Date_Time_Formatter.formatTime(endTime))")
-                                    .foregroundColor(.theme)
-                                    .font(.bodyFont)
-                                    .lineLimit(1)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding()
-                            .frame(height: 30)
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
-                        }
+                    BreakTime(title: "End",
+                              value: Date_Time_Formatter.formatTime(endTime)) {
+                        onEndTap(item, endTime)
                     }
                     
-                    // Duration Field
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Duration")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Button(action: {
-                            print("duration pressed")
-                        }) {
-                            HStack {
-                                Text("\(duration) min")
-                                    .foregroundColor(.theme)
-                                    .font(.bodyFont)
-                                    .lineLimit(1)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding()
-                            .frame(height: 30)
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray))
-                        }
+                    BreakTime(title: "Duration",
+                              value: "\(computedDuration) min") {
+                        print("duration pressed")
                     }
                 }
 
                 
                 // Save Button
                 Rectangular_Rounded_Button(title: "Save") {
-                    onSave(id)
+                    onSave(item, computedDuration)
                 }
                 .frame(height: 40)
             }
@@ -112,21 +71,39 @@ struct BreakItem: View {
 
 struct BreakItem_Previews: PreviewProvider {
     static var previews: some View {
-        BreakItem(
-            id: UUID(),
-            name: "John Doe",
-            position: "Developer",
-            schTime: Date(),
+        
+        let mockItem = ECheckinModal_Nw(
+            orderId: 123,
+            checkIn: "0001-01-01T00:00:00",
+            positionLabelColor: "#ff6600",
+            position: "Manager",
+            weekEnd: "2025-08-24T00:00:00",
+            endTime: "1900-01-01T18:00:00",
+            candId: 456,
+            startTime: "1900-01-01T17:00:00",
+            isAdminUser: 0,
+            reportTo: "CEO",
+            payForBreak: true,
+            recCode: "REC001",
+            candidateName: "John Doe",
+            checkOut: "0001-01-01T00:00:00",
+            billDate: "2025-08-18T00:00:00",
+            breakMinutes: 0,
+            timeIn: "",
+            timeOut: ""
+        )
+        
+       return  BreakItem(
+            item: mockItem,
             startTime: Date(),
-            endTime: Calendar.current.date(byAdding: .minute, value: 30, to: Date()) ?? Date(),
-            duration: 30,
+            endTime: Date(),
             onStartTap: { id, date in
                 print("Start tapped for \(id), \(date)")
             },
             onEndTap: { id, date in
                 print("End tapped for \(id), \(date)")
             },
-            onSave: { id in
+            onSave: { id, duration in
                 print("Save tapped for \(id)")
             }
         )
