@@ -13,6 +13,7 @@ struct DivisionList_View: View {
     @State private var searchText = ""
     @Bindable var viewModal: DivisionList_VM
     @EnvironmentObject var errorHandler: GlobalErrorHandler
+    @State private var showRetryAlert = false
 
     var filteredItems: [DivisionList] {
         if searchText.isEmpty {
@@ -50,9 +51,9 @@ struct DivisionList_View: View {
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Search Division"
+                prompt: "search division"
             )
-            .navigationTitle("Tempositions")
+            .navigationTitle("Divisions")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -69,6 +70,11 @@ struct DivisionList_View: View {
             }
             .onAppear {
                 viewModal.fetchDivisions(errorHandler: errorHandler)
+            }
+            .onChange(of: viewModal.divisions) { oldValue, newValue in
+                if newValue.isEmpty && !viewModal.isLoading {
+                    showRetryAlert = true
+                }
             }
             
             if showLogoutAlert {
@@ -100,6 +106,26 @@ struct DivisionList_View: View {
                 .transition(.opacity)
             }
             
+            if showRetryAlert {
+                Color.black.opacity(0.4) // dim background
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                
+                AlertView(
+                    image: Image(systemName: "exclamationmark.circle.fill"),
+                    message: "No divisions found, please retry",
+                    primaryButton: AlertButtonConfig(title: "Retry", action: {
+                        viewModal.fetchDivisions(errorHandler: errorHandler)
+                    }),
+                    dismiss: {
+                        showRetryAlert = false
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // ensures full screen
+                .transition(.opacity)
+                
+            }
+            
             if viewModal.isLoading {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
@@ -115,6 +141,7 @@ struct DivisionList_View: View {
         path: .constant([]),
         viewModal: mockViewModel
     )
+    .environmentObject(GlobalErrorHandler())
 }
 
 // MARK: - Preview Mock

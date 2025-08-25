@@ -29,6 +29,7 @@ class DivisionList_VM {
                 
                 self.divisions = result
                 self.isLoading = false
+                
             } catch {
                 print("🔥 API Failed: \(error)")
                 self.errorMessage = error.localizedDescription

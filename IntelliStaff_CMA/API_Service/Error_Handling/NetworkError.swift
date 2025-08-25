@@ -13,7 +13,7 @@ enum NetworkError: Error, LocalizedError, Equatable {
     case decodingFailed
     case encodingFailed
     case timeout
-    case serverError(statusCode: Int)
+    case serverError(statusCode: Int, message: String? = nil)
     case noInternet
     
     var errorDescription: String? {
@@ -28,8 +28,8 @@ enum NetworkError: Error, LocalizedError, Equatable {
             return "Failed to encode the Params."
         case .timeout:
             return "The request timed out."
-        case .serverError(let code):
-            return "Server returned error code \(code)."
+        case .serverError(let code, let message):
+            return message ?? "Server returned error code \(code)."
         case .noInternet:
             return "No internet connection."
         }

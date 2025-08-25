@@ -56,6 +56,7 @@ class LoginViewModel {
         do {
             let response = try await APIFunction.loginAPICalling(params: params)
 //            print("Login success: the response is \n \(response)")
+            
             self.loginResponse = response
             self.isLoginSuccess = true
             // Handle navigation, token storage, etc.
@@ -68,7 +69,7 @@ class LoginViewModel {
             
 //            print("the response access tokem is \n \(response.accessToken)")
             
-            if let userId = decodeUserIdFromJWT(response.accessToken) {
+            if let userId = decodeUserIdFromJWT(response.accessToken ?? "") {
                 UserDefaults.standard.set(userId, forKey: "userId")
                 print("Decoded User ID: \(userId)")
             }
@@ -77,7 +78,8 @@ class LoginViewModel {
             
         } catch let error as NetworkError {
             self.errorMessage = error.localizedDescription
-            errorHandler.handleNetworkError(error)
+            errorHandler.showError(message: error.localizedDescription, mode: error.displayMode)
+//            errorHandler.handleNetworkError(error)
             return nil
         } catch {
             self.errorMessage = error.localizedDescription

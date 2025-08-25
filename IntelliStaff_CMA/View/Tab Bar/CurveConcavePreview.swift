@@ -45,7 +45,7 @@ import SwiftUI
                         systemName: "house.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet, path: $path)
+                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet, path: $path, divisionName: division.divisionName ?? "")
                         }
                        )
                        

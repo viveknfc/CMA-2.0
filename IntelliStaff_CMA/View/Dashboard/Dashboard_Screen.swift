@@ -15,6 +15,7 @@ struct Dashboard_Screen: View {
     @Binding var selectedAssignment: Dashboard_Menu_Items?
     @Binding var showSheet: Bool
     @Binding var path: [AppRoute]
+    @State var divisionName: String = ""
     
     var body: some View {
         GeometryReader { geo in
@@ -26,6 +27,9 @@ struct Dashboard_Screen: View {
                             .resizable()
                             .scaledToFit()
                             .frame(height: 50)
+                        
+                        Text("\(divisionName)")
+                            .font(.buttonFont)
                         
                         Rectangle_Container {
                             ScrollView {
@@ -68,7 +72,8 @@ struct Dashboard_Screen: View {
                 viewModel: viewModel,
                 selectedAssignment: $selectedAssignment,
                 showSheet: $showSheet,
-                path: $path
+                path: $path,
+                divisionName: "vivek"
             )
         }
     }
