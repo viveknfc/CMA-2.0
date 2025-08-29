@@ -88,15 +88,6 @@ struct APIService {
                 throw NetworkError.serverError(statusCode: httpResponse.statusCode)
             }
             
-//            guard response is HTTPURLResponse else {
-//                throw NetworkError.noData
-//            }
-
-//            guard let httpResponse = response as? HTTPURLResponse,
-//                  200..<300 ~= httpResponse.statusCode else {
-//                throw NetworkError.serverError(statusCode: (response as? HTTPURLResponse)?.statusCode ?? -1)
-//            }
-            
             if data.isEmpty {
                 if T.self == EmptyResponse.self {
                     return EmptyResponse() as! T

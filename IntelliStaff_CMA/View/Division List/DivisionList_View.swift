@@ -30,50 +30,72 @@ struct DivisionList_View: View {
     
     var body: some View {
         ZStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(filteredItems) { item in
-                        Button(action: {
-
-                            path.append(.dashboard(division: item))
-                        
-                            
-                        }) {
-                            DivisionRow_View(item: item)
+            
+            VStack {
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Please select appropriate division")
+                        .padding()
+                    HStack {
+                        Image(systemName: "info.circle")
+                        Text("Note: You have rights to multiple divisions.")
+                    }
+                    .padding(10)
+                    .background(Color.blue.opacity(0.1)) // first background color
+                    .cornerRadius(8)
+                    Text("Rows highlighting in blue indicate there are pending time slip(s) for the division")
+                        .padding(10)
+                        .background(Color.blue.opacity(0.2)) // second background color
+                        .cornerRadius(8)
+                }
+                .font(.bodyFont)
+                
+                
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(filteredItems) { item in
+                            Button(action: {
+                                
+                                path.append(.dashboard(division: item))
+                                
+                                
+                            }) {
+                                DivisionRow_View(item: item)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        
                     }
-
+                    .padding(.top, 10)
+                    .padding(.horizontal, 10)
                 }
-                .padding(.top, 10)
-                .padding(.horizontal, 10)
-            }
-            .searchable(
-                text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "search division"
-            )
-            .navigationTitle("Divisions")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        print("Global right button tapped")
-                        showLogoutAlert = true
-                    }) {
-                        Image(systemName: "rectangle.portrait.and.arrow.forward")
-                            .font(.system(size: 14))
-                            .foregroundColor(.white)
+                .searchable(
+                    text: $searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "search division"
+                )
+                .navigationTitle("Divisions")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            print("Global right button tapped")
+                            showLogoutAlert = true
+                        }) {
+                            Image(systemName: "rectangle.portrait.and.arrow.forward")
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+                        }
                     }
                 }
-            }
-            .onAppear {
-                viewModal.fetchDivisions(errorHandler: errorHandler)
-            }
-            .onChange(of: viewModal.divisions) { oldValue, newValue in
-                if newValue.isEmpty && !viewModal.isLoading {
-                    showRetryAlert = true
+                .onAppear {
+                    viewModal.fetchDivisions(errorHandler: errorHandler)
+                }
+                .onChange(of: viewModal.divisions) { oldValue, newValue in
+                    if newValue.isEmpty && !viewModal.isLoading {
+                        showRetryAlert = true
+                    }
                 }
             }
             

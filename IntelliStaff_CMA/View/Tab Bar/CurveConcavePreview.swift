@@ -49,19 +49,19 @@ import SwiftUI
                         }
                        )
                        
-                       ControlView(
-                        selection: $selection,
-                        constant: $constant,
-                        radius: $radius,
-                        concaveDepth: $concaveDepth,
-                        color: $color,
-                        tag: 1,
-                        systemName: "note.text",
-                        safeArea: proxy.safeAreaInsets,
-                        content: {
-                            Text("Second")
-                        }
-                       )
+//                       ControlView(
+//                        selection: $selection,
+//                        constant: $constant,
+//                        radius: $radius,
+//                        concaveDepth: $concaveDepth,
+//                        color: $color,
+//                        tag: 1,
+//                        systemName: "note.text",
+//                        safeArea: proxy.safeAreaInsets,
+//                        content: {
+//                            Text("Second")
+//                        }
+//                       )
                        
                        ControlView(
                         selection: $selection,
@@ -77,19 +77,19 @@ import SwiftUI
                         }
                        )
                        
-                       ControlView(
-                        selection: $selection,
-                        constant: $constant,
-                        radius: $radius,
-                        concaveDepth: $concaveDepth,
-                        color: $color,
-                        tag: 3,
-                        systemName: "alarm",
-                        safeArea: proxy.safeAreaInsets,
-                        content: {
-                            Text("Settings")
-                        }
-                       )
+//                       ControlView(
+//                        selection: $selection,
+//                        constant: $constant,
+//                        radius: $radius,
+//                        concaveDepth: $concaveDepth,
+//                        color: $color,
+//                        tag: 3,
+//                        systemName: "alarm",
+//                        safeArea: proxy.safeAreaInsets,
+//                        content: {
+//                            Text("Settings")
+//                        }
+//                       )
                        
                        ControlView(
                         selection: $selection,

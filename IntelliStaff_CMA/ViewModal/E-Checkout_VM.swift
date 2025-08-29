@@ -66,21 +66,21 @@ class ECheckout_VM {
                 let params = CheckInRequest(
                     candId: item.candId,
                     orderId: item.orderId,
-                    type: 0,
+                    type: 1,
                     weekEnd: item.weekEnd,
-                    clientId: 95017,//clientId,
+                    clientId: clientId, //95017,//
                     timeOut: type == "OUT" ? now : "1900-01-01T00:00:00",
                     totlaHours: 0,
                     recCode: item.recCode,
                     payForBreak: 0,
-                    latitude: 40.7644176,//coordinate.latitude, //11.0066731, //
+                    latitude: coordinate.latitude, //11.0066731, //40.7644176,//
                     endTime: item.endTime,
                     breakMinutes: 0,
                     address: address,
                     checkIn: type == "IN" ? now : "0001-01-01T00:00:00",
                     retry: 0,
                     contactId: contactId,
-                    longitude: -73.9937463,//coordinate.longitude, //76.9456552,
+                    longitude: coordinate.longitude, //76.9456552, -73.9937463,//
                     billDate: item.billDate,
                     startTime: item.startTime,
                     ipAddress: ipAddress,

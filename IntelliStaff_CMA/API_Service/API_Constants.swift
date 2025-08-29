@@ -9,6 +9,7 @@ enum APIConstants {
     
     static var DevelopmentURL = "https://tempositionsdev.com/"
     static var ProducitonURL = "https://apps.tempositions.com/"
+    static var UATURL = "http://172.25.16.69/intellistaffUAT/"
     static let baseURL = DevelopmentURL
     
     static var accessToken = ""
