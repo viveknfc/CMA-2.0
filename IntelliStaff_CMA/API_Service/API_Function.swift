@@ -194,4 +194,297 @@ struct APIFunction {
 
 
     
+    //MARK: - Overall UI
+    static func overallUICalling(params: [String: Any]) async throws -> ([ECheckInAllResponse], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.testURL)\(APIConstants.EAllData)?\(queryString)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url.absoluteString,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Basic \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([ECheckInAllResponse].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    
+    //MARK: - FeedBack UI
+    static func submitRatingCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.testURL)\(APIConstants.Rating)?\(queryString)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url.absoluteString,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Basic \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([RatingResponse].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - Delete UI
+    static func deleteCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.testURL)\(APIConstants.EDelete)?\(queryString)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url.absoluteString,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Basic \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([RatingResponse].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - reason Api Calling
+    static func reasonAPICalling(params: [String: Any]) async throws -> ([ReasonResponse], String?) {
+        print("Calling candidate ID API with params: \(params)")
+        
+        let url = APIConstants.testURL + APIConstants.ESaveReason
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        
+        
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Basic \(token)"]
+        )
+        if let result = try? JSONDecoder().decode([ReasonResponse].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - Overall Submit
+    static func overallSubmitCalling(
+        params: [[String: Any]]
+    ) async throws -> ([RatingResponse], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        
+        let queryString = params
+            .flatMap { dict in
+                dict.map { "\($0.key)=\($0.value)" }
+            }
+            .joined(separator: "&")
+
+        // Prepare URL
+        let urlString = "\(APIConstants.testURL)\(APIConstants.ESubmitAll)?\(queryString)"
+        var jsonString = String()
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
+            jsonString = String(data: jsonData, encoding: .utf8) ?? ""
+                print(jsonString)
+                // 👉 Use this jsonString in your API call
+            
+        } catch {
+            print("Error converting to JSON: \(error)")
+        }
+        
+        let termData = jsonString.data(using: .utf8)
+        
+        print(termData)
+
+        var request = URLRequest(url: URL(string: urlString)!,timeoutInterval: Double.infinity)
+        request.addValue("Basic ddhaiti24@yahoo.com:iFs0pWWk9QfEA6YZhVSKZ4yTVzP3O3dz", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        request.httpMethod = "POST"
+        request.httpBody = termData
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                return
+            }
+            print(String(data: data, encoding: .utf8)!)
+            
+            
+        }
+            let (data, response) = try await URLSession.shared.data(for: request)
+                
+                print(String(data: data, encoding: .utf8)!)
+                
+                // Try to decode as RatingResponse array first
+                if let result = try? JSONDecoder().decode([RatingResponse].self, from: data),
+                   !result.isEmpty {
+                    return (result, nil)
+                }
+                
+                // Try to decode as NoDataResponse array
+                if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+                   let first = noData.first {
+                    return ([], first.message)
+                }
+                // If neither decode succeeds, throw an error
+                throw NetworkError.decodingFailed
+        
+       // task.resume()
+       // throw NetworkError.decodingFailed
+    }
+
+
+    static func saveCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.testURL)\(APIConstants.EAllSave)?\(queryString)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        
+        let data: Data = try await APIService.request(
+            url: url.absoluteString,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Basic \(token)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([RatingResponse].self, from: data), !result.isEmpty {
+            return (result, nil)
+        }
+        
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+
+}
+
+
+
+
+class ECheckInService{
+    static func submitAllDetails(params: [[String: Any]]) async throws -> Data {
+        let queryString = params
+            .flatMap { dict in
+                dict.map { "\($0.key)=\($0.value)" }
+            }
+            .joined(separator: "&")
+
+        // Prepare URL
+        let urlString = "\(APIConstants.testURL)\(APIConstants.ESubmitAll)?\(queryString)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        // Serialize params to JSON data
+        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
+        
+        // Create URLRequest
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Basic ddhaiti24@yahoo.com:iFs0pWWk9QfEA6YZhVSKZ4yTVzP3O3dz", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        // Use async/await URLSession data(for:) method
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        // Check HTTP response status code
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.decodingFailed
+        }
+        
+        return data
+    }
+
+
 }

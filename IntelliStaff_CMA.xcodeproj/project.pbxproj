@@ -103,6 +103,12 @@
 		33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E332E520F7F00380806 /* BreakMin_VM.swift */; };
 		33CC1E362E52201600380806 /* BreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E352E52201600380806 /* BreakItem.swift */; };
 		33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E372E5230AE00380806 /* Break_Min.swift */; };
+		44CFCCB42E66F2BD00C63FC3 /* OverallUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB32E66F2BD00C63FC3 /* OverallUI.swift */; };
+		44CFCCB62E66F32200C63FC3 /* OverAll_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB52E66F30F00C63FC3 /* OverAll_Modal.swift */; };
+		44CFCCB82E66F3D300C63FC3 /* EcheckViewIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */; };
+		44CFCCBA2E66F40600C63FC3 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB92E66F40600C63FC3 /* StarView.swift */; };
+		44CFCCBC2E66F42200C63FC3 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */; };
+		44CFCCBE2E66F74E00C63FC3 /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -202,6 +208,12 @@
 		33CC1E332E520F7F00380806 /* BreakMin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_VM.swift; sourceTree = "<group>"; };
 		33CC1E352E52201600380806 /* BreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakItem.swift; sourceTree = "<group>"; };
 		33CC1E372E5230AE00380806 /* Break_Min.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Break_Min.swift; sourceTree = "<group>"; };
+		44CFCCB32E66F2BD00C63FC3 /* OverallUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallUI.swift; sourceTree = "<group>"; };
+		44CFCCB52E66F30F00C63FC3 /* OverAll_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverAll_Modal.swift; sourceTree = "<group>"; };
+		44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcheckViewIn.swift; sourceTree = "<group>"; };
+		44CFCCB92E66F40600C63FC3 /* StarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
+		44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
+		44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -261,6 +273,7 @@
 				3335098C2E3CD1BE007FFAE8 /* BottomSheet_Design_Support.swift */,
 				3335098D2E3CD1BE007FFAE8 /* CountdonwTimer.swift */,
 				3335098E2E3CD1BE007FFAE8 /* Decode_JWT.swift */,
+				44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */,
 				3335098F2E3CD1BE007FFAE8 /* Extensions.swift */,
 				333509902E3CD1BE007FFAE8 /* Font.swift */,
 				333509912E3CD1BE007FFAE8 /* NavBar_Appearence.swift */,
@@ -279,6 +292,7 @@
 				336CBFA52E4B0C8000EF9AF0 /* Profile_Modal.swift */,
 				336E279E2E40781C00EF8B44 /* DivisionList_Modal.swift */,
 				333509942E3CD1BE007FFAE8 /* App_Route.swift */,
+				44CFCCB52E66F30F00C63FC3 /* OverAll_Modal.swift */,
 				333509952E3CD1BE007FFAE8 /* Candidate_Modal.swift */,
 				333509972E3CD1BE007FFAE8 /* Dashboard_Modal.swift */,
 				333509982E3CD1BE007FFAE8 /* Login_Modal.swift */,
@@ -313,7 +327,9 @@
 			isa = PBXGroup;
 			children = (
 				333509A52E3CD1BE007FFAE8 /* AlertView.swift */,
+				44CFCCB92E66F40600C63FC3 /* StarView.swift */,
 				33B292D42E4C85C10062696B /* Custom_Calendar.swift */,
+				44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */,
 				333509A62E3CD1BE007FFAE8 /* Capsule_Button.swift */,
 				333509A72E3CD1BE007FFAE8 /* Rectangle_Container.swift */,
 				333509A82E3CD1BE007FFAE8 /* RememberMe_Button.swift */,
@@ -433,6 +449,7 @@
 				333800C82E50A3BB007F19E3 /* E-Checkout_VM.swift */,
 				33B293922E4CD91F0062696B /* E-Checkin_VM.swift */,
 				336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */,
+				44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */,
 				336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */,
 				333509CC2E3CD1BE007FFAE8 /* Dashboard_VM.swift */,
 				333509CD2E3CD1BE007FFAE8 /* Login_VM.swift */,
@@ -482,6 +499,7 @@
 				33CC1E302E520E2E00380806 /* Break Minutes */,
 				33B2921F2E4C714F0062696B /* E-Checkin */,
 				333800CA2E50A574007F19E3 /* E-Checkout */,
+				44CFCCB12E66F28000C63FC3 /* OverAllUI */,
 				33B292202E4C71D80062696B /* Top_TabView.swift */,
 			);
 			path = "Check-In";
@@ -513,6 +531,14 @@
 				33577F832E590ADC001AFE5A /* BreakTime.swift */,
 			);
 			path = "Break Minutes";
+			sourceTree = "<group>";
+		};
+		44CFCCB12E66F28000C63FC3 /* OverAllUI */ = {
+			isa = PBXGroup;
+			children = (
+				44CFCCB32E66F2BD00C63FC3 /* OverallUI.swift */,
+			);
+			path = OverAllUI;
 			sourceTree = "<group>";
 		};
 		F567CF9D2E24CC3800A05CE7 = {
@@ -626,6 +652,7 @@
 				333509DE2E3CD1BE007FFAE8 /* Rectangle_Container.swift in Sources */,
 				333509DF2E3CD1BE007FFAE8 /* ATTabConstant.swift in Sources */,
 				33034BC52E5456B4007A31E0 /* Local_IP_Address.swift in Sources */,
+				44CFCCB62E66F32200C63FC3 /* OverAll_Modal.swift in Sources */,
 				333509E02E3CD1BE007FFAE8 /* View+Extension.swift in Sources */,
 				333509E12E3CD1BE007FFAE8 /* Capsule_Button.swift in Sources */,
 				333509E22E3CD1BE007FFAE8 /* BottomSheet_Design_Support.swift in Sources */,
@@ -671,11 +698,14 @@
 				333509FC2E3CD1BE007FFAE8 /* AlertView.swift in Sources */,
 				33B292232E4C7A690062696B /* Check-In.swift in Sources */,
 				333509FD2E3CD1BE007FFAE8 /* Dashboard_Menu_Card.swift in Sources */,
+				44CFCCB42E66F2BD00C63FC3 /* OverallUI.swift in Sources */,
 				333509FE2E3CD1BE007FFAE8 /* ATTabItemModifier.swift in Sources */,
 				33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */,
+				44CFCCBA2E66F40600C63FC3 /* StarView.swift in Sources */,
 				333800C92E50A3C1007F19E3 /* E-Checkout_VM.swift in Sources */,
 				333509FF2E3CD1BE007FFAE8 /* Tab_SupportItem.swift in Sources */,
 				33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */,
+				44CFCCB82E66F3D300C63FC3 /* EcheckViewIn.swift in Sources */,
 				336E284B2E4089D200EF8B44 /* DivisionRow_View.swift in Sources */,
 				33350A002E3CD1BE007FFAE8 /* ATConstant.swift in Sources */,
 				33350A012E3CD1BE007FFAE8 /* Dashboard_Menu_Collection.swift in Sources */,
@@ -683,6 +713,7 @@
 				333800CD2E50A5FC007F19E3 /* CheckoutItem.swift in Sources */,
 				33350A022E3CD1BE007FFAE8 /* Network_Monitor.swift in Sources */,
 				336E299D2E40C54000EF8B44 /* DashboardWrapper_View.swift in Sources */,
+				44CFCCBC2E66F42200C63FC3 /* CustomAlertView.swift in Sources */,
 				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
 				33034BC32E544E55007A31E0 /* Location_Support.swift in Sources */,
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
@@ -700,6 +731,7 @@
 				33350A0D2E3CD1BE007FFAE8 /* IntelliStaff_CMAApp.swift in Sources */,
 				33350A0E2E3CD1BE007FFAE8 /* ATCurveShape.swift in Sources */,
 				33B292DB2E4C982E0062696B /* CheckInItem.swift in Sources */,
+				44CFCCBE2E66F74E00C63FC3 /* LocationDataManager.swift in Sources */,
 				33350A0F2E3CD1BE007FFAE8 /* ATShadowConstant.swift in Sources */,
 				33350A112E3CD1BE007FFAE8 /* Spalsh_Screen.swift in Sources */,
 				33350A122E3CD1BE007FFAE8 /* GlobalErrorOverlay.swift in Sources */,
