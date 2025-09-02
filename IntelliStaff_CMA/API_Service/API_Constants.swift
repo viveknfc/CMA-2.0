@@ -11,7 +11,7 @@ enum APIConstants {
     static var ProducitonURL = "https://apps.tempositions.com/"
     static var UATURL = "http://172.25.16.69/intellistaffUAT/"
     static let baseURL = DevelopmentURL
-    
+    static var testURL = "https://tempositionsdev.com/TemPositionsCMAAPIDEV/CWAAPI/"
     static var accessToken = ""
     
     static let ServiceAuthAPI = "auth/api/User/ServiceAuth"
@@ -30,5 +30,20 @@ enum APIConstants {
     
     static var BreakMinDetails = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/GetBreakMinuteDetails"
     static var saveBreakMin = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/SaveBreakMinutes"
+    static let ERegisterGetDivision = "eCheckIn/GetClientsList"
+    static let ECheckInData = "eCheckIn/GetCheckInDetails"
+    static let ECheckInButton = "eCheckIn/CheckIn"
+    static let ECheckOutData = "eCheckIn/GetCheckOutDetails"
+    static let ECheckOutButton = "eCheckIn/CheckOut"
+    static let EBreakMinData = "eCheckIn/GetBreakMinuteDetails"
+    static let EBreakMinSave = "eCheckIn/SaveBreakMinutes"
+    static let EAllData = "eCheckIn/GetAllDetails"
+    static let EAllSave = "eCheckIn/SaveCheckinCheckOut"
+    static let ESaveReason = "eCheckIn/SubmitReason"
+    static let EDelete = "eCheckIn/DeleteCheckinCheckOut"
+    static let EAddTime = "eCheckIn/AddAdjustmenthours"
+    static let ESubmitAll = "eCheckIn/SubmitAllDetails"
+    //Rating
+    static let Rating = "echeckin/SubmitRating"
     
 }

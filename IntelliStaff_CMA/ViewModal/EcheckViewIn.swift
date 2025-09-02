@@ -3,7 +3,7 @@ import Foundation
 
 @MainActor
 @Observable
-class ECheckVM {
+class OverallVM {
     var echeckallData: [ECheckInAllResponse] = []
     var ratingData: [RatingResponse] = []
     var reasonData: [ReasonResponse] = []
@@ -176,8 +176,9 @@ class ECheckVM {
             print("✅ Got location: \(coordinate.latitude), \(coordinate.longitude)")
             let address = try await locationManager.getAddress()
                    print("Full address: \(address)")
+            let ipAddress = MobileNetworkInfo.getLocalIPAddress()
             do {
-                let params: [String: Any] = ["CandId":responseData.candID, "OrderId":responseData.orderID, "WeekEnd":responseData.weekEnd, "BillDate":responseData.billDate, "StartTime":responseData.startTime, "EndTime": responseData.endTime, "CheckIn":responseData.checkIn, "CheckOut":responseData.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientId, "ContactId":contactId, "timeOut":"1900-01-01 00:00:00", "timeIn":"1900-01-01 00:00:00", "breakMinutes":responseData.breakMinutes, "totlaHours":responseData.totalHours, "RecCode":responseData.recCode, "PayforBreak":0, "Id":responseData.id, "longitude":coordinate.longitude, "latitude": coordinate.latitude, "Address":address, "IPAddress":getIPv4Address() ?? "Not Found"]
+                let params: [String: Any] = ["CandId":responseData.candID, "OrderId":responseData.orderID, "WeekEnd":responseData.weekEnd, "BillDate":responseData.billDate, "StartTime":responseData.startTime, "EndTime": responseData.endTime, "CheckIn":responseData.checkIn, "CheckOut":responseData.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientId, "ContactId":contactId, "timeOut":"1900-01-01 00:00:00", "timeIn":"1900-01-01 00:00:00", "breakMinutes":responseData.breakMinutes, "totlaHours":responseData.totalHours, "RecCode":responseData.recCode, "PayforBreak":0, "Id":responseData.id, "longitude":coordinate.longitude, "latitude": coordinate.latitude, "Address":address, "IPAddress":ipAddress ?? "Not Found"]
                 print("Calling API ------> delete api")
                 let (result, noDataMsg) = try await APIFunction.deleteCalling(params: params)
                 ratingData = result
@@ -247,7 +248,7 @@ class ECheckVM {
             isLoading = true
             do {
                 let locationManager = SimpleLocationManager()
-                 
+                let ipAddress = MobileNetworkInfo.getLocalIPAddress()
                 let coordinate = try await locationManager.getLocation()
                 print("✅ Got location: \(coordinate.latitude), \(coordinate.longitude)")
                 let address = try await locationManager.getAddress()
@@ -277,7 +278,7 @@ class ECheckVM {
                         "latitude": coordinate.latitude,
                         "Address": address ?? "Not Found",
                         "ReasonForTimeChange": note ?? "",
-                        "IPAddress": getIPv4Address() ?? "",
+                        "IPAddress": ipAddress ?? "",
                         "Retry": 0
                     
 

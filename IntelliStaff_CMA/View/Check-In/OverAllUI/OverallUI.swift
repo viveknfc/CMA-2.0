@@ -73,7 +73,7 @@ struct OverAllUI: View {
     @State private var startSelectedTime:String? = ""
     @State private var endSelectedTime:String? = ""
     @StateObject private var checkboxManager = CheckboxManager()
-    @State var viewModel = ECheckVM()
+    @State var viewModel = OverallVM()
     @EnvironmentObject var errorHandler: GlobalErrorHandler
     @State private var items: [AllItem] = []
     
@@ -1085,7 +1085,7 @@ struct OverAllUI: View {
     private func deleteItem(_ items: [ECheckInAllResponse]) {
         for item in items {
             print("Delete button pressed for item \(item.id)")
-            
+            let ipAddress = MobileNetworkInfo.getLocalIPAddress()
             let params: [String: Any] = [
                 "CandId": item.candID,
                 "OrderId": item.orderID,
@@ -1098,7 +1098,7 @@ struct OverAllUI: View {
                 "Id": item.id,
                 "breakMinutes": item.breakMinutes,
                 "totlaHours": item.totalHours,
-                "IPAddress": getIPv4Address() ?? "Not Found",
+                "IPAddress": ipAddress ?? "Not Found",
                 "ReasonType": selectedReasons[item.id]?.rawValue ?? "",
                 "ReasonComment": reasonComments[item.id] ?? ""
             ]
@@ -1125,7 +1125,7 @@ struct OverAllUI: View {
             errorHandler.showError(message: "Missing client or contact information", mode: .toast)
             return
         }
-        
+        let ipAddress = MobileNetworkInfo.getLocalIPAddress()
         // Prepare individual record data
         let recordDict: [String: Any] = [
             "Address": "",
@@ -1136,7 +1136,7 @@ struct OverAllUI: View {
             "ClientId": clientID,
             "ContactId": contactID,
             "EndTime": record.endTime,
-            "IPAddress": getIPv4Address() ?? "",
+            "IPAddress": ipAddress ?? "",
             "Id": record.id,
             "Name": record.candidateName ?? "",
             "OrderId": record.orderID,
@@ -1180,6 +1180,7 @@ struct OverAllUI: View {
             errorHandler.showError(message: "Cannot delete submitted record", mode: .toast)
             return
         }
+        let ipAddress = MobileNetworkInfo.getLocalIPAddress()
         
 //        guard let clientID = clientID,
 //              let contactID = contactID else {
@@ -1200,7 +1201,7 @@ struct OverAllUI: View {
             "Id": record.id,
             "breakMinutes": record.breakMinutes,
             "totlaHours": record.totalHours,
-            "IPAddress": getIPv4Address() ?? "Not Found",
+            "IPAddress": ipAddress ?? "Not Found",
             "ClientId": clientID,
             "ContactId": contactID,
             "ReasonType": selectedReasons[record.id]?.rawValue ?? "",
@@ -1264,7 +1265,7 @@ struct OverAllUI: View {
 // MARK: - Preview
 struct ECheckin_View_Previews: PreviewProvider {
     static var previews: some View {
-        ECheckin_View(clientID: 1, contactID: 1)
+        OverAllUI(clientID: 1, contactID: 1)
             .environmentObject(GlobalErrorHandler())
     }
 }
@@ -1352,14 +1353,14 @@ class CheckboxManager: ObservableObject {
         //            "RatingComments": record.ratingComments ?? ""
         //        ]
        
-        
+        let ipAddress = MobileNetworkInfo.getLocalIPAddress()
         
         do{
             //            let coordinate = try await locationManager.getLocation()
             //            print("✅ Got location: \(coordinate.latitude), \(coordinate.longitude)")
             //            let address = try await locationManager.getAddress()
             var recordDict :[String:Any] =  [
-                "CandId":record.candID, "OrderId":record.orderID, "WeekEnd":record.weekEnd, "BillDate":record.billDate, "StartTime":record.startTime, "EndTime": record.endTime, "CheckIn": startSelectedTime ?? record.checkIn, "CheckOut": endSelectedTime ?? record.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientid, "ContactId":contactid, "timeOut":"1900-01-01 00:00:00", "timeIn":"1900-01-01 00:00:00", "breakMinutes":record.breakMinutes, "totlaHours":record.totalHours, "RecCode":record.recCode, "PayforBreak":0, "Id":record.id, "longitude":locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0, "latitude": locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0, "Address":locationDataManager.currentAddress ?? "2/91/20, Green Fields Road, Hyderabad, India", "Name":record.candidateName, "ReasonId":record.reasonID, "IPAddress":getIPv4Address() ?? ""
+                "CandId":record.candID, "OrderId":record.orderID, "WeekEnd":record.weekEnd, "BillDate":record.billDate, "StartTime":record.startTime, "EndTime": record.endTime, "CheckIn": startSelectedTime ?? record.checkIn, "CheckOut": endSelectedTime ?? record.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientid, "ContactId":contactid, "timeOut":"1900-01-01 00:00:00", "timeIn":"1900-01-01 00:00:00", "breakMinutes":record.breakMinutes, "totlaHours":record.totalHours, "RecCode":record.recCode, "PayforBreak":0, "Id":record.id, "longitude":locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0, "latitude": locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0, "Address":locationDataManager.currentAddress ?? "2/91/20, Green Fields Road, Hyderabad, India", "Name":record.candidateName, "ReasonId":record.reasonID, "IPAddress":ipAddress ?? ""
             ]
             // Merge in the extra keys, allowing extraFields to overwrite on conflict
                 recordDict = recordDict.merging(extraFields) { _, new in new }
