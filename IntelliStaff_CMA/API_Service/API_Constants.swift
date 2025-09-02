@@ -37,13 +37,13 @@ enum APIConstants {
     static let ECheckOutButton = "eCheckIn/CheckOut"
     static let EBreakMinData = "eCheckIn/GetBreakMinuteDetails"
     static let EBreakMinSave = "eCheckIn/SaveBreakMinutes"
-    static let EAllData = "eCheckIn/GetAllDetails"
-    static let EAllSave = "eCheckIn/SaveCheckinCheckOut"
-    static let ESaveReason = "eCheckIn/SubmitReason"
-    static let EDelete = "eCheckIn/DeleteCheckinCheckOut"
+    static let EAllData = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/GetAllDetails"
+    static let EAllSave = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/SaveCheckinCheckOut"
+    static let ESaveReason = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/SubmitReason"
+    static let EDelete = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/DeleteCheckinCheckOut"
     static let EAddTime = "eCheckIn/AddAdjustmenthours"
-    static let ESubmitAll = "eCheckIn/SubmitAllDetails"
+    static let ESubmitAll = "TemPositionsCMAAPIDEV/CWAAPI/eCheckIn/SubmitAllDetails"
     //Rating
-    static let Rating = "echeckin/SubmitRating"
+    static let Rating = "TemPositionsCMAAPIDEV/CWAAPI/echeckin/SubmitRating"
     
 }

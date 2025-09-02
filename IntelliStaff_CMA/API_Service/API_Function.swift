@@ -202,7 +202,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.testURL)\(APIConstants.EAllData)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.EAllData)?\(queryString)"
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
@@ -241,7 +241,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.testURL)\(APIConstants.Rating)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.Rating)?\(queryString)"
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
@@ -279,7 +279,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.testURL)\(APIConstants.EDelete)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.EDelete)?\(queryString)"
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
@@ -313,7 +313,7 @@ struct APIFunction {
     static func reasonAPICalling(params: [String: Any]) async throws -> ([ReasonResponse], String?) {
         print("Calling candidate ID API with params: \(params)")
         
-        let url = APIConstants.testURL + APIConstants.ESaveReason
+        let url = APIConstants.baseURL + APIConstants.ESaveReason
         let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
         
         
@@ -351,7 +351,7 @@ struct APIFunction {
             .joined(separator: "&")
 
         // Prepare URL
-        let urlString = "\(APIConstants.testURL)\(APIConstants.ESubmitAll)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.ESubmitAll)?\(queryString)"
         var jsonString = String()
         
         do {
@@ -414,7 +414,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.testURL)\(APIConstants.EAllSave)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.EAllSave)?\(queryString)"
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
@@ -458,7 +458,7 @@ class ECheckInService{
             .joined(separator: "&")
 
         // Prepare URL
-        let urlString = "\(APIConstants.testURL)\(APIConstants.ESubmitAll)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.ESubmitAll)?\(queryString)"
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
