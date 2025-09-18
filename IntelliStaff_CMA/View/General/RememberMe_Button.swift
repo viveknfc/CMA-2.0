@@ -21,6 +21,7 @@ struct RememberMe_Button: View {
                     .foregroundColor(.primary)
                     .font(.buttonFont)
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle()) // Removes default button styling
     }

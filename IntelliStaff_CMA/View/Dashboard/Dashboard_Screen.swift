@@ -16,22 +16,60 @@ struct Dashboard_Screen: View {
     @Binding var showSheet: Bool
     @Binding var path: [AppRoute]
     @State var divisionName: String = ""
+    @State var divisionImage: String = ""
     
     var body: some View {
+       // Rectangle_Container {
         GeometryReader { geo in
             ZStack {
-
-                    VStack(spacing: 16) {
-                        
-                        Image("Splash")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 50)
-                        
+               
+                    VStack(spacing: 6) {
                         Text("\(divisionName)")
-                            .font(.buttonFont)
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(2)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .background(Color.theme.opacity(0.9))
+                            .cornerRadius(1)
+                    
+                        if let url = URL(string: divisionImage), !divisionImage.isEmpty {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView() // show loading spinner
+                                        .frame(height: 50)
+
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 50)
+
+                                case .failure:
+                                    Image("Splash") // fallback image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 50)
+                                @unknown default:
+                                    Image("Splash")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 50)
+                                }
+                            }
+                        } else {
+                            // If URL string is empty or invalid
+                            Image("Splash")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 50)
+                        }
+
+//                        Image("Splash")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(height: 50)
                         
-                        Rectangle_Container {
                             ScrollView {
                                 Dashboard_Menu_Collection(
                                     assignments: viewModel.dashboardMenuItems,
@@ -42,6 +80,9 @@ struct Dashboard_Screen: View {
                                     path: $path
                                 )
                             }
+                            .padding(.top, 12) // 👈 adds spacing at the top of the scroll area
+                            .padding(.leading, 0)
+                            .padding(.trailing, 0)
                         }
                     }
                 
@@ -55,7 +96,7 @@ struct Dashboard_Screen: View {
             }
             .animation(.easeInOut, value: selectedAssignment)
         }
-    }
+    
 }
 
 #Preview {

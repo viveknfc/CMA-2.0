@@ -70,7 +70,9 @@ struct Children_BottomSheet_View: View {
                         }
                         .onTapGesture {
                             print("the api key is \(child.apiKey)")
-                            path.append(.webView(apiKey: child.apiKey, division: division))
+                            path.append(.webView(apiKey: child.apiKey))
+                            
+                          // path.append(.webView(apiKey: child.apiKey, division: division))
                         }
                     }
                 }

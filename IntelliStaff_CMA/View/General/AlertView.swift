@@ -29,6 +29,8 @@ enum AlertType {
             secondaryButtonBackground: .gray.opacity(0.3),
             secondaryButtonText: .black
         )
+        
+        
     }
     
     var theme: Theme {
@@ -87,6 +89,8 @@ struct AlertView: View {
     private var theme: AlertType.Theme {
         alertType?.theme ?? .default
     }
+    
+    
 
     var body: some View {
         ZStack {
@@ -173,4 +177,28 @@ struct AlertView: View {
               primaryButton: AlertButtonConfig(title: "Ok", action: {}),
               secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
               dismiss: {})
+}
+
+
+
+enum AlertTextType {
+    case error
+    case warning
+    case info
+    case success
+}
+
+extension AlertTextType {
+    var alertIcon: (name: String, color: Color) {
+        switch self {
+        case .error:
+            return ("xmark.octagon.fill", .red)
+        case .warning:
+            return ("exclamationmark.triangle.fill", .yellow)
+        case .info:
+            return ("info.circle.fill", .blue)
+        case .success:
+            return ("checkmark.circle.fill", .green)
+        }
+    }
 }

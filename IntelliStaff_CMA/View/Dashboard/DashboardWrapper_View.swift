@@ -20,10 +20,11 @@ struct DashboardWrapper_View: View {
                 dashboardViewModel: dashboardVM,
                 division: division
             )
+        
             
             .onAppear {
-                if let contactID = division.contactID {
-                    dashboardVM.fetchDashboard(contactID: contactID)
+                if let contactID = division.contactID, let clientid = division.clientID{
+                    dashboardVM.fetchDashboard(contactID: contactID, clientID: clientid)
                 }
             }
         

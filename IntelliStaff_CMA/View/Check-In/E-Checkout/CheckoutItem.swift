@@ -28,7 +28,7 @@ struct CheckoutItem: View {
                 +
                 (Text(item.position)
                     .font(.bodyFont)
-                    .foregroundColor(Color(hex: item.positionLabelColor)))
+                    .foregroundColor(Color(hex: item.positionLabelColor ?? "")))
                 
                 Text("Scheduled Time: \(item.scheduleTime)")
                     .font(.bodyFont)

@@ -103,6 +103,12 @@
 		33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E332E520F7F00380806 /* BreakMin_VM.swift */; };
 		33CC1E362E52201600380806 /* BreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E352E52201600380806 /* BreakItem.swift */; };
 		33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E372E5230AE00380806 /* Break_Min.swift */; };
+		449BAD0C2E72AEFF00F6D687 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449BAD0B2E72AEFF00F6D687 /* BottomView.swift */; };
+		449BAEF02E74516A00F6D687 /* ProfileActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */; };
+		449C85422E714CB0006DE44E /* Forget_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449C85412E714CB0006DE44E /* Forget_VM.swift */; };
+		449C86232E7160BB006DE44E /* UpdatePassword_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449C86222E7160B1006DE44E /* UpdatePassword_VM.swift */; };
+		449CB6EB2E794871005505F5 /* ClientInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449CB6EA2E794869005505F5 /* ClientInfo.swift */; };
+		449CB6ED2E7948A1005505F5 /* Client_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449CB6EC2E794894005505F5 /* Client_VM.swift */; };
 		44CFCCB42E66F2BD00C63FC3 /* OverallUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB32E66F2BD00C63FC3 /* OverallUI.swift */; };
 		44CFCCB62E66F32200C63FC3 /* OverAll_Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB52E66F30F00C63FC3 /* OverAll_Modal.swift */; };
 		44CFCCB82E66F3D300C63FC3 /* EcheckViewIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */; };
@@ -178,7 +184,6 @@
 		333509CC2E3CD1BE007FFAE8 /* Dashboard_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard_VM.swift; sourceTree = "<group>"; };
 		333509CD2E3CD1BE007FFAE8 /* Login_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login_VM.swift; sourceTree = "<group>"; };
 		333509CF2E3CD1BE007FFAE8 /* IntelliStaff_CMAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntelliStaff_CMAApp.swift; sourceTree = "<group>"; };
-		333509D12E3CD1BE007FFAE8 /* IntelliStaff_CMA.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = IntelliStaff_CMA.xcodeproj; sourceTree = "<group>"; };
 		333509D22E3CD1BE007FFAE8 /* IntelliStaff-CMA-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IntelliStaff-CMA-Info.plist"; sourceTree = "<group>"; };
 		33350A1A2E3CF8AB007FFAE8 /* DivisionList_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivisionList_View.swift; sourceTree = "<group>"; };
 		333800C62E50A37E007F19E3 /* ECheckoutModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECheckoutModal.swift; sourceTree = "<group>"; };
@@ -208,6 +213,12 @@
 		33CC1E332E520F7F00380806 /* BreakMin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_VM.swift; sourceTree = "<group>"; };
 		33CC1E352E52201600380806 /* BreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakItem.swift; sourceTree = "<group>"; };
 		33CC1E372E5230AE00380806 /* Break_Min.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Break_Min.swift; sourceTree = "<group>"; };
+		449BAD0B2E72AEFF00F6D687 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSheet.swift; sourceTree = "<group>"; };
+		449C85412E714CB0006DE44E /* Forget_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forget_VM.swift; sourceTree = "<group>"; };
+		449C86222E7160B1006DE44E /* UpdatePassword_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePassword_VM.swift; sourceTree = "<group>"; };
+		449CB6EA2E794869005505F5 /* ClientInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientInfo.swift; sourceTree = "<group>"; };
+		449CB6EC2E794894005505F5 /* Client_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client_VM.swift; sourceTree = "<group>"; };
 		44CFCCB32E66F2BD00C63FC3 /* OverallUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallUI.swift; sourceTree = "<group>"; };
 		44CFCCB52E66F30F00C63FC3 /* OverAll_Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverAll_Modal.swift; sourceTree = "<group>"; };
 		44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcheckViewIn.swift; sourceTree = "<group>"; };
@@ -329,6 +340,7 @@
 				333509A52E3CD1BE007FFAE8 /* AlertView.swift */,
 				44CFCCB92E66F40600C63FC3 /* StarView.swift */,
 				33B292D42E4C85C10062696B /* Custom_Calendar.swift */,
+				449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */,
 				44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */,
 				333509A62E3CD1BE007FFAE8 /* Capsule_Button.swift */,
 				333509A72E3CD1BE007FFAE8 /* Rectangle_Container.swift */,
@@ -406,6 +418,7 @@
 		333509C42E3CD1BE007FFAE8 /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
+				449BAD0A2E72AEE500F6D687 /* Bottom Bar */,
 				333509B42E3CD1BE007FFAE8 /* Constants */,
 				333509C12E3CD1BE007FFAE8 /* TableView */,
 				333509C22E3CD1BE007FFAE8 /* CurveConcavePreview.swift */,
@@ -450,9 +463,12 @@
 				33B293922E4CD91F0062696B /* E-Checkin_VM.swift */,
 				336CBFA72E4B0D4200EF9AF0 /* Profile_VM.swift */,
 				44CFCCB72E66F3D300C63FC3 /* EcheckViewIn.swift */,
+				449CB6EC2E794894005505F5 /* Client_VM.swift */,
 				336E27A02E407A2300EF8B44 /* DivisionList_VM.swift */,
+				449C86222E7160B1006DE44E /* UpdatePassword_VM.swift */,
 				333509CC2E3CD1BE007FFAE8 /* Dashboard_VM.swift */,
 				333509CD2E3CD1BE007FFAE8 /* Login_VM.swift */,
+				449C85412E714CB0006DE44E /* Forget_VM.swift */,
 			);
 			path = ViewModal;
 			sourceTree = "<group>";
@@ -468,11 +484,6 @@
 				333509CF2E3CD1BE007FFAE8 /* IntelliStaff_CMAApp.swift */,
 			);
 			path = IntelliStaff_CMA;
-			sourceTree = "<group>";
-		};
-		333509D32E3CD1BE007FFAE8 /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
 			sourceTree = "<group>";
 		};
 		33350A172E3CF3B6007FFAE8 /* Division List */ = {
@@ -510,6 +521,7 @@
 			children = (
 				336CBFA32E4B0ABC00EF9AF0 /* Profile_Screen.swift */,
 				336CBFAA2E4B17FA00EF9AF0 /* Profile_Row.swift */,
+				449CB6EA2E794869005505F5 /* ClientInfo.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -533,6 +545,14 @@
 			path = "Break Minutes";
 			sourceTree = "<group>";
 		};
+		449BAD0A2E72AEE500F6D687 /* Bottom Bar */ = {
+			isa = PBXGroup;
+			children = (
+				449BAD0B2E72AEFF00F6D687 /* BottomView.swift */,
+			);
+			path = "Bottom Bar";
+			sourceTree = "<group>";
+		};
 		44CFCCB12E66F28000C63FC3 /* OverAllUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -545,7 +565,6 @@
 			isa = PBXGroup;
 			children = (
 				333509D02E3CD1BE007FFAE8 /* IntelliStaff_CMA */,
-				333509D12E3CD1BE007FFAE8 /* IntelliStaff_CMA.xcodeproj */,
 				333509D22E3CD1BE007FFAE8 /* IntelliStaff-CMA-Info.plist */,
 				F567CFA72E24CC3800A05CE7 /* Products */,
 			);
@@ -612,12 +631,6 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F567CFA72E24CC3800A05CE7 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 333509D32E3CD1BE007FFAE8 /* Products */;
-					ProjectRef = 333509D12E3CD1BE007FFAE8 /* IntelliStaff_CMA.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				F567CFA52E24CC3800A05CE7 /* IntelliStaff_CMA */,
@@ -660,6 +673,7 @@
 				33350A1B2E3CF8AB007FFAE8 /* DivisionList_View.swift in Sources */,
 				333509E42E3CD1BE007FFAE8 /* ATScreenConstant.swift in Sources */,
 				33B292D52E4C85D90062696B /* Custom_Calendar.swift in Sources */,
+				449CB6EB2E794871005505F5 /* ClientInfo.swift in Sources */,
 				333509E52E3CD1BE007FFAE8 /* NewPassword_Screen.swift in Sources */,
 				333509E62E3CD1BE007FFAE8 /* Children_BottomSheet_View.swift in Sources */,
 				333509E72E3CD1BE007FFAE8 /* Toast_View.swift in Sources */,
@@ -689,6 +703,7 @@
 				333509F82E3CD1BE007FFAE8 /* ATStateViewModel.swift in Sources */,
 				333509F92E3CD1BE007FFAE8 /* Decode_JWT.swift in Sources */,
 				333509FA2E3CD1BE007FFAE8 /* Dashboard_VM.swift in Sources */,
+				449C86232E7160BB006DE44E /* UpdatePassword_VM.swift in Sources */,
 				33B292212E4C71D80062696B /* Top_TabView.swift in Sources */,
 				338315732E41C7AA0060C0CF /* UserJson.swift in Sources */,
 				336CBFA82E4B0D4700EF9AF0 /* Profile_VM.swift in Sources */,
@@ -717,12 +732,14 @@
 				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
 				33034BC32E544E55007A31E0 /* Location_Support.swift in Sources */,
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
+				449BAD0C2E72AEFF00F6D687 /* BottomView.swift in Sources */,
 				33350A042E3CD1BE007FFAE8 /* Extensions.swift in Sources */,
 				33350A052E3CD1BE007FFAE8 /* CurveConcavePreview.swift in Sources */,
 				33350A062E3CD1BE007FFAE8 /* UnderlinedTF.swift in Sources */,
 				33350A072E3CD1BE007FFAE8 /* ATTabState.swift in Sources */,
 				33350A082E3CD1BE007FFAE8 /* API_Call.swift in Sources */,
 				33034B112E543F7B007A31E0 /* No_Data_Response.swift in Sources */,
+				449CB6ED2E7948A1005505F5 /* Client_VM.swift in Sources */,
 				33350A092E3CD1BE007FFAE8 /* WebView_Screen.swift in Sources */,
 				33350A0A2E3CD1BE007FFAE8 /* Spinner_Triangle.swift in Sources */,
 				33350A0B2E3CD1BE007FFAE8 /* Input_View.swift in Sources */,
@@ -739,6 +756,8 @@
 				33350A142E3CD1BE007FFAE8 /* App_Route.swift in Sources */,
 				33350A152E3CD1BE007FFAE8 /* ATTabItem.swift in Sources */,
 				333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */,
+				449C85422E714CB0006DE44E /* Forget_VM.swift in Sources */,
+				449BAEF02E74516A00F6D687 /* ProfileActionSheet.swift in Sources */,
 				33577F842E590ADC001AFE5A /* BreakTime.swift in Sources */,
 				33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */,
 			);
@@ -872,7 +891,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = F7P87PL667;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -903,7 +922,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = F7P87PL667;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

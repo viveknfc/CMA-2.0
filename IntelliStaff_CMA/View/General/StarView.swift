@@ -127,3 +127,101 @@ struct RatingDemo: View {
     }
 }
 
+
+
+import SwiftUI
+
+// MARK: - Fixed Alert Handling Section
+
+// Add this enum for better alert management
+enum ActiveModeAlert: Identifiable {
+    case feedback
+    case info
+    case save
+    case delete
+    
+    var id: Int {
+        switch self {
+        case .feedback: return 1
+        case .info: return 2
+        case .save: return 3
+        case .delete: return 4
+        }
+    }
+}
+
+struct TextFieldAlert {
+    let title: String
+    let message: String
+    let placeholder: String
+    let onSave: (String?) -> Void
+    
+    init(title: String, message: String, placeholder: String = "", onSave: @escaping (String?) -> Void) {
+        self.title = title
+        self.message = message
+        self.placeholder = placeholder
+        self.onSave = onSave
+    }
+}
+
+// MARK: - TextFieldWrapper (Fixed Implementation)
+struct TextFieldWrapper: UIViewControllerRepresentable {
+    @Binding var alert: TextFieldAlert?
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        if let alert = alert {
+            DispatchQueue.main.async {
+                self.presentAlert(on: uiViewController, alert: alert)
+            }
+        }
+    }
+    
+    private func presentAlert(on viewController: UIViewController, alert: TextFieldAlert) {
+        // Dismiss any existing alerts first
+        if viewController.presentedViewController != nil {
+            viewController.dismiss(animated: false) {
+                self.showAlert(on: viewController, alert: alert)
+            }
+        } else {
+            showAlert(on: viewController, alert: alert)
+        }
+    }
+    
+    private func showAlert(on viewController: UIViewController, alert: TextFieldAlert) {
+        let alertController = UIAlertController(
+            title: alert.title,
+            message: alert.message,
+            preferredStyle: .alert
+        )
+        
+        alertController.addTextField { textField in
+            textField.placeholder = alert.placeholder
+            textField.autocapitalizationType = .sentences
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            let textField = alertController.textFields?.first
+            alert.onSave(textField?.text)
+            // Clear the alert after handling
+            DispatchQueue.main.async {
+                self.alert = nil
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            // Clear the alert on cancel
+            DispatchQueue.main.async {
+                self.alert = nil
+            }
+        }
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        viewController.present(alertController, animated: true)
+    }
+}

@@ -16,6 +16,9 @@ struct Login_Screen: View {
     @State private var isForgotActive = false
     @State private var isLoginSuccess = false
     @Binding var path: [AppRoute]
+    @State private var rememberMe: Bool = false
+    @State private var hasLoadedOnce = false
+    @AppStorage("isRemembered") private var isRemembered = false
     
     var body: some View {
 
@@ -45,7 +48,15 @@ struct Login_Screen: View {
                     }
                     .padding(.top, 10)
                     
+                    HStack {
+                        RememberMe_Button(isSelected: $rememberMe)
+                        Spacer()
+                    }
+                    .padding(.top, 20)
+                    
                     Capsule_Button(title: "Submit") {
+                        
+
                         
                         UIApplication.shared.endEditing()
                         print("Submit tapped")
@@ -53,7 +64,7 @@ struct Login_Screen: View {
                             errorHandler.showError(message: "Please enter both username and password", mode: .toast)
                         } else {
                             Task {
-                                if (await viewModel.login(username: username, password: password,errorHandler: errorHandler)) != nil {
+                                if (await viewModel.login(username: username, password: password, rememberMe: rememberMe,errorHandler: errorHandler)) != nil {
                                     path.append(.divisionList)
                                 }
                             }
@@ -81,8 +92,31 @@ struct Login_Screen: View {
     
             }
             .task {
-                await viewModel.fetchServiceToken(errorHandler: errorHandler)
+                
+                guard !hasLoadedOnce else { return }
+                hasLoadedOnce = true
+                
+                await viewModel.fetchServiceToken(errorHandler: errorHandler) // Auto call when screen appears
+                
+                // 2. Auto-login if remembered
+                if UserDefaults.standard.bool(forKey: "isRemembered") {
+                    let savedUsername = UserDefaults.standard.string(forKey: "savedUsername") ?? ""
+                    let savedPassword = UserDefaults.standard.string(forKey: "savedPassword") ?? ""
+
+                    if !savedUsername.isEmpty && !savedPassword.isEmpty {
+
+                        if (await viewModel.login(
+                            username: savedUsername,
+                            password: savedPassword,
+                            rememberMe: true,
+                            errorHandler: errorHandler
+                        )) != nil {
+                            path.append(.divisionList)
+                        }
+                    }
+                }
             }
+
 
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Code_Screen: View {
     
-    @State private var inputs: [String] = Array(repeating: "", count: 4)
+    @State private var inputs: [String] = Array(repeating: "", count: 6)
     @FocusState private var focusIndex: Int?
     private var verificationCode: String {
         inputs.joined()
@@ -20,6 +20,12 @@ struct Code_Screen: View {
     @State private var isNewPasActive = false
     @Environment(\.dismiss) var dismiss
     @Binding var path: [AppRoute]
+    
+    var email: String
+    var code: String
+    @State private var viewModel = Forget_VM()
+    @State private var showAlert = false
+    @EnvironmentObject var errorHandler: GlobalErrorHandler
     
     var body: some View {
 
@@ -49,13 +55,21 @@ struct Code_Screen: View {
                         
                         HStack {
                                Spacer()
-                               FourBoxInputView(inputs: $inputs, focusedIndex: _focusIndex)
+                               SixBoxInputView(inputs: $inputs, focusedIndex: _focusIndex)
                                Spacer()
                            }
                         
                         Capsule_Button(title: "Verify Code") {
-                            path.append(.newPassword)
+                            
                             print("Verify code tapped")
+                            
+                            if verificationCode == code{
+                                //viewModel.otpResponseObj?.code ?? "" {
+                                path.append(.newPassword(email: email))
+                            } else {
+                                showAlert = true
+                            }
+  
                         }
                         .padding(.top, 18)
                         .padding([.leading, .trailing], 50)
@@ -64,6 +78,10 @@ struct Code_Screen: View {
                             Text("Haven't got the email yet?")
                                 .font(.bodyFont)
                             Button(action: {
+                                Task {
+                                    await viewModel.fetchOTP(email: email, errorHandler: errorHandler)
+                                }
+                                
                                 timerModel.start()
                             }) {
                                 if timerModel.canResend {
@@ -98,6 +116,28 @@ struct Code_Screen: View {
                         }
                     }
                 }
+                
+                if showAlert {
+                    AlertView(
+                        title: "Alert",
+                        message: "Wrong code entered. Please try again.",
+                        primaryButton: AlertButtonConfig(title: "Ok", action: {
+                            showAlert = false
+                        }),
+                        dismiss: {
+                            showAlert = false
+                        }
+                    )
+                    .transition(.opacity)
+                }
+                
+                if viewModel.isLoading {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+
+                    TriangleLoader()
+                }
+                
             }
 
     }
@@ -109,7 +149,7 @@ struct Code_Screen: View {
 
         var body: some View {
             NavigationStack(path: $path) {
-                Code_Screen(path: $path)
+                Code_Screen(path: $path, email: "", code: "")
             }
         }
     }

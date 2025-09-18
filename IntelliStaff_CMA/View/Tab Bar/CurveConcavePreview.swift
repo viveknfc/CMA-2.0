@@ -13,7 +13,8 @@ import SwiftUI
        @State private var constant = ATConstant(axisMode: .bottom, screen: .init(activeSafeArea: false), tab: .init())
        @State private var radius: CGFloat = 66//96
         @State private var concaveDepth: CGFloat = 0.86//0.96
-        @State private var color: Color = .theme//Color(hex: 0x1A4E56)
+        @State private var color: Color = .white
+            //.theme//Color(hex: 0x1A4E56)
 
         @State private var showLogoutAlert = false
         @Environment(\.dismiss) private var dismiss
@@ -45,7 +46,7 @@ import SwiftUI
                         systemName: "house.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet, path: $path, divisionName: division.divisionName ?? "")
+                            Dashboard_Screen(viewModel: dashboardViewModel, selectedAssignment: $selectedAssignment, showSheet: $showSheet, path: $path, divisionName: division.clientName ?? "", divisionImage: "")
                         }
                        )
                        
@@ -101,9 +102,10 @@ import SwiftUI
                         systemName: "person.fill",
                         safeArea: proxy.safeAreaInsets,
                         content: {
-                            Profile_Screen(viewModal: profileVM, showLogoutAlert: $showLogoutAlert)
+                            Profile_Screen(viewModal: profileVM, clientID: division.clientID ?? 0, contactID: division.contactID ?? 0, showLogoutAlert: $showLogoutAlert, path: $path)
                         }
                        )
+                       .ignoresSafeArea()  // ✅ This makes it cover top + sides fully
                        
                    } onTapReceive: { selectionTap in
                        
@@ -205,6 +207,7 @@ import SwiftUI
 
                }
            }
+           
            .onChange(of: dashboardViewModel.isLoading) {
                if !dashboardViewModel.isLoading {
                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -238,6 +241,7 @@ import SwiftUI
                }
            }
        }
+        
     }
 
 

@@ -35,3 +35,11 @@ struct LoginResponse: Decodable, Hashable {
 //    let username: String
 //}
 
+struct SendOTPResponse: Decodable{
+    let code, message, ttl: String
+}
+
+struct UpdatePasswordResponse: Codable {
+    var message: String?
+}
+

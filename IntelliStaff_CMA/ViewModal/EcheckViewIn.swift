@@ -5,7 +5,8 @@ import Foundation
 @Observable
 class OverallVM {
     var echeckallData: [ECheckInAllResponse] = []
-    var ratingData: [RatingResponse] = []
+    var ratingData = [RatingResponse]()
+    var overAll:OverallSubmitResponse?
     var reasonData: [ReasonResponse] = []
     var isLoading: Bool = false
     var errorMessage: String?
@@ -13,6 +14,7 @@ class OverallVM {
     var alertMessage: String?
     var showAlert: Bool = false
     var alertType: AlertType = .error
+private var checkboxManager = CheckboxManager()
     // ✅ use shared instance
     func fetchOverallDetails(
         contactId: String,
@@ -30,6 +32,7 @@ class OverallVM {
                 ]
                 print("Calling API ------> overall api")
                 let (result, noDataMsg) = try await APIFunction.overallUICalling(params: params)
+                self.echeckallData.removeAll()
                 self.echeckallData = result
                 self.noDataMessage = noDataMsg
                 self.isLoading = false
@@ -61,7 +64,8 @@ class OverallVM {
                 ]
                 print("Calling API ------> submit rating api")
                 let (result, noDataMsg) = try await APIFunction.submitRatingCalling(params: params)
-                ratingData = result
+                ratingData.removeAll()
+                ratingData.append(result)
                 print(ratingData)
                 DispatchQueue.main.async {
                     self.alertMessage = self.ratingData[0].message
@@ -111,14 +115,14 @@ class OverallVM {
                 let params: [String: Any] = [
                     "Address": "\(address)",
                     "BillDate": "\(responseData.billDate)",
-                    "CandId": "\(responseData.candID)",
+                    "CandidateId": responseData.candID,
                     "CheckIn": "\(responseData.checkIn)",
                     "CheckOut": "\(responseData.checkOut)",
                     "ClientId": ClientId,
                     "ContactId": ContactId,
                     "EndTime": "\(responseData.endTime)",
-                    "Id": "\(responseData.id)",
-                    "OrderId": "\(responseData.orderID)",
+                    "Id": responseData.id,
+                    "OrderId": responseData.orderID,
                     "OtherReason": reasonComment,
                     "PayforBreak": 0,
                     "ReasonId": reasonID,
@@ -130,11 +134,11 @@ class OverallVM {
                     "Type": 3,
                     "WeekEnd": "\(responseData.weekEnd)",
                     "BreakMinutes": 0,
-                    "latitude": coordinate.latitude,
-                    "longitude": coordinate.longitude,
-                    "timeIn": "1900-01-01T00:48:00",
-                    "timeOut": "1900-01-01T08:46:00",
-                    "totlaHours": 0
+                    "Latitude": "\(coordinate.latitude)",
+                    "Longitude": "\(coordinate.longitude)",
+                    "TimeIn": "1900-01-01T00:48:00",
+                    "TimeOut": "1900-01-01T08:46:00",
+                    "TotlaHours": 0
                 ]
                 
                 print("Reason: \(params)")
@@ -178,23 +182,26 @@ class OverallVM {
                    print("Full address: \(address)")
             let ipAddress = MobileNetworkInfo.getLocalIPAddress()
             do {
-                let params: [String: Any] = ["CandId":responseData.candID, "OrderId":responseData.orderID, "WeekEnd":responseData.weekEnd, "BillDate":responseData.billDate, "StartTime":responseData.startTime, "EndTime": responseData.endTime, "CheckIn":responseData.checkIn, "CheckOut":responseData.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientId, "ContactId":contactId, "timeOut":"1900-01-01 00:00:00", "timeIn":"1900-01-01 00:00:00", "breakMinutes":responseData.breakMinutes, "totlaHours":responseData.totalHours, "RecCode":responseData.recCode, "PayforBreak":0, "Id":responseData.id, "longitude":coordinate.longitude, "latitude": coordinate.latitude, "Address":address, "IPAddress":ipAddress ?? "Not Found"]
+                let params: [String: Any] = ["CandidateId":responseData.candID, "OrderId":responseData.orderID, "WeekEnd":responseData.weekEnd, "BillDate":responseData.billDate, "StartTime":responseData.startTime, "EndTime": responseData.endTime, "CheckIn":responseData.checkIn, "CheckOut":responseData.checkOut, "Type":0, "RouteName":"iOS", "ClientId":clientId, "ContactId":contactId, "timeOut":responseData.checkOut, "timeIn":responseData.checkIn, "breakMinutes":responseData.breakMinutes, "totlaHours":responseData.totalHours, "RecCode":responseData.recCode, "PayforBreak":0, "Id":responseData.id, "longitude":"\(coordinate.longitude)", "latitude": "\(coordinate.latitude)", "Address":address, "IPAddress":ipAddress ?? "Not Found"]
                 print("Calling API ------> delete api")
                 let (result, noDataMsg) = try await APIFunction.deleteCalling(params: params)
+                ratingData.removeAll()
                 ratingData = result
                 print(ratingData)
                 DispatchQueue.main.async {
-                    self.alertMessage = self.ratingData[0].message
-                    
-                    if self.ratingData[0].statusCode == 1 {
-                        // ✅ Success → Only one OK button
-                        self.alertType = .success
-                        self.showAlert = true
+                    if !self.ratingData.isEmpty{
+                        self.alertMessage = self.ratingData[0].message
                         
-                    } else if self.ratingData[0].statusCode == 0 {
-                        // ❌ Error → Show Retry + Cancel buttons
-                        self.alertType = .error
-                        self.showAlert = true
+                        if self.ratingData[0].statusCode == 1 {
+                            // ✅ Success → Only one OK button
+                            self.alertType = .success
+                            self.showAlert = true
+                            
+                        } else if self.ratingData[0].statusCode == 0 {
+                            // ❌ Error → Show Retry + Cancel buttons
+                            self.alertType = .error
+                            self.showAlert = true
+                        }
                     }
                 }
                 self.noDataMessage = noDataMsg
@@ -209,22 +216,30 @@ class OverallVM {
     }
     
     func overallSubmit(params: [[String:Any]], errorHandler: GlobalErrorHandler){
+        
         Task {
             isLoading = true
             do {
-                print("Calling API ------> overall Submit")
+                print("Calling API ------> overall Submit \(params)")
                     let (result, noDataMsg) = try await APIFunction.overallSubmitCalling(params: params)
-                    ratingData = result
+               
+                overAll = result
                   //  print(ratingData)
                     DispatchQueue.main.async {
-                        self.alertMessage = self.ratingData[0].message
+                        self.alertMessage = self.overAll?.message
                         
-                        if self.ratingData[0].statusCode == 1 {
+                        if self.overAll?.statusCode == 1 {
                             // ✅ Success → Only one OK button
                             self.alertType = .success
                             self.showAlert = true
                             
-                        } else if self.ratingData[0].statusCode == 0 {
+                            // 🔄 Reset checkboxes after successful submit
+                                              self.checkboxManager.clearAll()
+                            // 🔄 Refresh the available list
+//                               Task {
+//                                   await self.fetchOverallDetails(contactId: "", clientId: "", weekEnd: "", errorHandler: errorHandler)
+//                               }
+                        } else if self.overAll?.statusCode == 0 {
                             // ❌ Error → Show Retry + Cancel buttons
                             self.alertType = .error
                             self.showAlert = true
@@ -253,56 +268,84 @@ class OverallVM {
                 print("✅ Got location: \(coordinate.latitude), \(coordinate.longitude)")
                 let address = try await locationManager.getAddress()
                        print("Full address: \(address)")
-                let params: [String: Any] = [
-                   
-                        "CandId": response.candID,
-                        "OrderId": response.orderID,
-                        "WeekEnd": response.weekEnd,  // ✅ keep only one
-                        "BillDate": response.billDate,
-                        "StartTime": response.startTime,
-                        "EndTime": response.endTime,
-                        "CheckIn": checkin ?? response.checkIn,
-                        "CheckOut": checkout ??  response.checkOut,
-                        "Type": 2,
-                        "RouteName": response.routeName,
-                        "ClientId": clientId,
-                        "ContactId": contactId,
-                        "timeOut": "1900-01-01 00:00:00",
-                        "timeIn": "1900-01-01 00:00:00",
-                        "breakMinutes": response.breakMinutes,
-                        "totlaHours": response.totalHours,
-                        "RecCode": response.recCode,
-                        "PayforBreak": 0,
-                        "Id": response.id,
-                        "longitude": coordinate.longitude,
-                        "latitude": coordinate.latitude,
-                        "Address": address ?? "Not Found",
-                        "ReasonForTimeChange": note ?? "",
-                        "IPAddress": ipAddress ?? "",
-                        "Retry": 0
-                    
-
-                ]
                 
-                let (result, noDataMsg) = try await APIFunction.saveCalling(params: params)
-                print("Calling API ------> save")
-                self.ratingData = result
-                DispatchQueue.main.async {
-                    self.alertMessage = self.ratingData[0].message
+                
+                let params = CheckInRequest(candId: response.candID, orderId: response.orderID, type: 0, weekEnd: response.weekEnd, clientId: Int(clientId) ?? 0, timeOut: "1900-01-01T09:00:00", totlaHours: Int(response.totalHours), recCode: "S", payForBreak: 0, latitude: "\(coordinate.latitude)", endTime: "\(response.endTime)", breakMinutes: response.breakMinutes, address: address, checkIn: "\(response.checkIn)", retry: 0, contactId: Int(contactId) ?? 0, longitude: "\(coordinate.longitude)", billDate: response.billDate, startTime: "\(response.startTime)", ipAddress: ipAddress ?? "", checkOut:"\(response.checkOut)", routeName: "iOS", timeIn: "1900-01-01T09:00:00", id: response.id, ReasonId: 0, OtherReason: "")
+                
+                
+                
+                if let dict = params.asDictionary() {
+                    let additionalData: [String: Any] = [
+                           "ReasonForTimeChange": "\(note)",
+                       ]
+                       
+                       // Merge dictionaries
+                       let mergedDict = dict.merging(additionalData) { (original, new) in
+                           return new  // In case of key conflicts, use the new value
+                       }
                     
-                    if self.ratingData[0].statusCode == 1 {
-                        // ✅ Success → Only one OK button
-                        self.alertType = .success
-                        self.showAlert = true
-                        
-                    } else if self.ratingData[0].statusCode == 0 {
-                        // ❌ Error → Show Retry + Cancel buttons
-                        self.alertType = .error
-                        self.showAlert = true
+                    // 🔎 Log request for debugging
+                    if let jsonData = try? JSONSerialization.data(withJSONObject: mergedDict, options: .prettyPrinted),
+                       let jsonString = String(data: jsonData, encoding: .utf8) {
+                        print("📤 Request JSON:\n\(jsonString)")
                     }
+                    
+                    
+                    
+                    
+                    //                let params: [String: Any] = [
+                    //
+                    //                        "CandId": response.candID,
+                    //                        "OrderId": response.orderID,
+                    //                        "WeekEnd": response.weekEnd,  // ✅ keep only one
+                    //                        "BillDate": response.billDate,
+                    //                        "StartTime": response.startTime,
+                    //                        "EndTime": response.endTime,
+                    //                        "CheckIn": checkin ?? response.checkIn,
+                    //                        "CheckOut": checkout ??  response.checkOut,
+                    //                        "Type": 2,
+                    //                        "RouteName": response.routeName,
+                    //                        "ClientId": clientId,
+                    //                        "ContactId": contactId,
+                    //                        "TimeOut": "1900-01-01 00:00:00",
+                    //                        "TimeIn": "1900-01-01 00:00:00",
+                    //                        "BreakMinutes": response.breakMinutes,
+                    //                        "TotlaHours": response.totalHours,
+                    //                        "RecCode": response.recCode,
+                    //                        "PayforBreak": 0,
+                    //                        "Id": response.id,
+                    //                        "Longitude": coordinate.longitude,
+                    //                        "Latitude": coordinate.latitude,
+                    //                        "Address": address ?? "Not Found",
+                    //                        "ReasonForTimeChange": note ?? "",
+                    //                        "IPAddress": ipAddress ?? "",
+                    //                        "Retry": 0
+                    //
+                    //
+                    //                ]
+                    
+                    let (result, noDataMsg) = try await APIFunction.saveCalling(params: dict)
+                    print("Calling API ------> save")
+                    self.ratingData.removeAll()
+                    self.ratingData.append(result)
+                    DispatchQueue.main.async {
+                        self.alertMessage = self.ratingData[0].message
+                        
+                        if self.ratingData[0].statusCode == 1 {
+                            // ✅ Success → Only one OK button
+                            self.alertType = .success
+                            self.showAlert = true
+                           // self.fetchOverallDetails(contactId: contactId, clientId: clientId, weekEnd: <#T##String#>, errorHandler: GlobalErrorHandler())
+                            
+                        } else if self.ratingData[0].statusCode == 0 {
+                            // ❌ Error → Show Retry + Cancel buttons
+                            self.alertType = .error
+                            self.showAlert = true
+                        }
+                    }
+                    self.noDataMessage = noDataMsg
+                    self.isLoading = false
                 }
-                self.noDataMessage = noDataMsg
-                self.isLoading = false
             } catch {
                 self.alertType = .error
                 self.showAlert = true

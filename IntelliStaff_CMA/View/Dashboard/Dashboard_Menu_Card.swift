@@ -29,13 +29,15 @@ struct Dashboard_Menu_Card: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fill) // ✅ Makes square
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.white) // Or any fill color you want
+            )
             .overlay(
-                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.theme, lineWidth: 0.5) // Stroke border only
-                     )
-            .background(Color.clear)
-            .cornerRadius(12)
-            .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.theme, lineWidth: 0.5) // ✅ Very thin border
+            )
+            .shadow(color: .theme.opacity(0.1), radius: 2, x: 0, y: 1)
 
             // Badge
             if assignment.itemCount > 0 {
@@ -43,7 +45,7 @@ struct Dashboard_Menu_Card: View {
                     .font(.caption)
                     .foregroundColor(.white)
                     .padding(6)
-                    .background(.theme)
+                    .background(.white)
                     .clipShape(Circle())
                     .offset(x: -8, y: 8)
             }

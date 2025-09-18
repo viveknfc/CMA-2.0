@@ -53,6 +53,51 @@ struct Break_Min: View {
             if showTimePicker {
                 timePickerOverlay
             }
+            
+            if viewModel.breakData.isEmpty {
+                VStack {
+                    Text(viewModel.noDataMessage ?? "No Break time data available")
+                        .foregroundColor(.gray)
+                        .font(.buttonFont)
+                        .padding(.top, 150)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            
+            if viewModel.showAlert, let message = viewModel.alertMessage {
+                if viewModel.alertType == .success {
+                    AlertView(
+                        title: "EMA 2.0",
+                        message: message,
+                        primaryButton: AlertButtonConfig(title: "OK") {
+                            viewModel.showAlert = false
+                        },
+                        dismiss: {
+                            viewModel.showAlert = false
+                        },
+                        alertType: .success
+                    )
+                }else {
+                    AlertView(
+                        title: "EMA 2.0",
+                        message: message,
+                        primaryButton: AlertButtonConfig(title: "Retry") {
+                            if let firstItem = viewModel.breakData.first,
+                               let clientID = clientID,
+                               let contactID = contactID {
+                            }
+                            viewModel.showAlert = false
+                        },
+                        secondaryButton: AlertButtonConfig(title: "Cancel") {
+                            viewModel.showAlert = false
+                        },
+                        dismiss: {
+                            viewModel.showAlert = false
+                        },
+                        alertType: .error
+                    )
+                }
+            }
         }
         .onAppear {
             if let clientID = clientID,
@@ -209,7 +254,11 @@ extension Break_Min {
                     selectedTimes[id] = times
                     print("Selected \(type) time for \(id): \(Date_Time_Formatter.formatTime(pickedTime))")
                     
-                    let duration = max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
+//                    let duration = max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
+//                    print("Duration for \(id): \(duration) mins")
+                    
+                    let totalMinutes = max(Int(times.end.timeIntervalSince(times.start) / 60), 0)
+                    let duration = totalMinutes % (24 * 60) // Wrap to 24-hour range (0-1439 minutes)
                     print("Duration for \(id): \(duration) mins")
                 }
             }

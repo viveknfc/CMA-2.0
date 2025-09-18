@@ -36,7 +36,7 @@ class LoginViewModel {
         }
     }
 
-    func login(username: String, password: String,errorHandler: GlobalErrorHandler) async -> LoginResponse?{
+    func login(username: String, password: String, rememberMe: Bool,errorHandler: GlobalErrorHandler) async -> LoginResponse?{
         isLoading = true
         defer { isLoading = false }
 
@@ -60,7 +60,7 @@ class LoginViewModel {
             self.loginResponse = response
             self.isLoginSuccess = true
             // Handle navigation, token storage, etc.
-            
+            print(loginResponse)
             UserDefaults.standard.set(response.refreshToken, forKey: "refreshToken")
             UserDefaults.standard.set(response.accessToken, forKey: "accessToken")
             UserDefaults.standard.set(response.expiresIn, forKey: "expiresIn")
@@ -73,6 +73,18 @@ class LoginViewModel {
                 UserDefaults.standard.set(userId, forKey: "userId")
                 print("Decoded User ID: \(userId)")
             }
+            
+            // ✅ Remember Me logic
+            if rememberMe {
+                UserDefaults.standard.set(true, forKey: "isRemembered")
+                UserDefaults.standard.set(username, forKey: "savedUsername")
+                UserDefaults.standard.set(password, forKey: "savedPassword")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "isRemembered")
+                UserDefaults.standard.removeObject(forKey: "savedUsername")
+                UserDefaults.standard.removeObject(forKey: "savedPassword")
+            }
+            
             
             return response
             

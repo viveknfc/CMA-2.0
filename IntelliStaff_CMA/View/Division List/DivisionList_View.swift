@@ -33,23 +33,54 @@ struct DivisionList_View: View {
             
             VStack {
                 
-                VStack(alignment: .leading, spacing: 8) {
+//                VStack(alignment: .leading, spacing: 8) {
+//                    Text("Please select appropriate division")
+//                        .padding()
+//                    HStack {
+//                        Image(systemName: "info.circle")
+//                        Text("Note: You have rights to multiple divisions.")
+//                    }
+//                    .padding(10)
+//                    .background(Color.blue.opacity(0.1)) // first background color
+//                    .cornerRadius(8)
+//                    Text("Rows highlighting in blue indicate there are pending time slip(s) for the division")
+//                        .padding(10)
+//                        .background(Color.blue.opacity(0.2)) // second background color
+//                        .cornerRadius(8)
+//                }
+//                .font(.bodyFont)
+                VStack(alignment: .leading, spacing: 5) {
                     Text("Please select appropriate division")
-                        .padding()
-                    HStack {
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.theme.opacity(0.9))
+                        .cornerRadius(6)
+
+                    HStack(spacing: 6) {
                         Image(systemName: "info.circle")
                         Text("Note: You have rights to multiple divisions.")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(.black)
                     }
-                    .padding(10)
-                    .background(Color.blue.opacity(0.1)) // first background color
-                    .cornerRadius(8)
-                    Text("Rows highlighting in blue indicate there are pending time slip(s) for the division")
-                        .padding(10)
-                        .background(Color.blue.opacity(0.2)) // second background color
-                        .cornerRadius(8)
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.mint.opacity(0.9))
+                    .cornerRadius(6)
+
+                    Text("Rows highlighted in blue indicate there are pending timeslip(s) for the division")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.brown)
+                        .cornerRadius(6)
                 }
-                .font(.bodyFont)
-                
+                .padding(.horizontal)
+                .padding(.top, 4)
+
+
                 
                 ScrollView {
                     VStack(spacing: 12) {

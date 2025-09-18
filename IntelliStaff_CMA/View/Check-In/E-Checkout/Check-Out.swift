@@ -168,12 +168,12 @@ struct Check_Out: View {
                                 onDateSelection: { date in
                                     selectedDate = date
                                     startDate = date
-                                    print("Start Date Selected: \(Date_Time_Formatter.formattedDate(date))")
-                                    
+                                    print("Start Date Selected: \(Date_Time_Formatter.customDateFormat(from:(date)))")
+                                    viewModel.eCheckOutData.removeAll()
                                     viewModel.fetchCheckOutData(
                                         clientId: "\(clientID ?? 0)",
                                         contactId: "\(contactID ?? 0)",
-                                        weekEnd: Date_Time_Formatter.APIformatDate(date),
+                                        weekEnd: Date_Time_Formatter.customDateFormat(from:(date)),
                                         errorHandler: errorHandler
                                     )
                                     
@@ -217,7 +217,7 @@ struct Check_Out: View {
                 viewModel.fetchCheckOutData(
                     clientId: "\(clientID)",
                     contactId: "\(contactID)",
-                    weekEnd: Date_Time_Formatter.APIformatDate(Date()),
+                    weekEnd: Date_Time_Formatter.customDateFormat(from: Date()),
                     errorHandler: errorHandler
                 )
             } else {

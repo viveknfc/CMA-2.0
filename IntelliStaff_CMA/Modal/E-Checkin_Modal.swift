@@ -17,14 +17,14 @@ struct CheckInRequest: Codable {
     let totlaHours: Int
     let recCode: String
     let payForBreak: Int
-    let latitude: Double
+    let latitude: String
     let endTime: String
     let breakMinutes: Int
     let address: String
     let checkIn: String
     let retry: Int
     let contactId: Int
-    let longitude: Double
+    let longitude: String
     let billDate: String
     let startTime: String
     let ipAddress: String?
@@ -32,32 +32,37 @@ struct CheckInRequest: Codable {
     let routeName: String
     let timeIn: String
     let id: Int
+    let ReasonId: Int?
+    let OtherReason:String?
+   
     
     enum CodingKeys: String, CodingKey {
         case orderId = "OrderId"
-        case candId = "CandId"
+        case candId = "CandidateId"
         case type = "Type"
         case weekEnd = "WeekEnd"
         case clientId = "ClientId"
-        case timeOut
-        case totlaHours
+        case timeOut = "TimeOut"
+        case totlaHours = "TotlaHours"
         case recCode = "RecCode"
         case payForBreak = "PayforBreak"
-        case latitude
+        case latitude = "Latitude"
         case endTime = "EndTime"
-        case breakMinutes
+        case breakMinutes = "BreakMinutes"
         case address = "Address"
         case checkIn = "CheckIn"
         case retry = "Retry"
         case contactId = "ContactId"
-        case longitude
+        case longitude = "Longitude"
         case billDate = "BillDate"
         case startTime = "StartTime"
         case ipAddress = "IPAddress"
         case checkOut = "CheckOut"
         case routeName = "RouteName"
-        case timeIn
+        case timeIn = "TimeIn"
         case id = "Id"
+        case ReasonId = "ReasonId"
+        case OtherReason = "OtherReason"
     }
 }
 
@@ -65,8 +70,8 @@ struct CheckInRequest: Codable {
 struct ECheckinModal_Nw: Identifiable, Codable {
     let id = UUID()
     let orderId: Int
-    let checkIn: String
-    let positionLabelColor: String
+    let checkIn: String?
+    let positionLabelColor: String?
     let position: String
     let weekEnd: String
     let endTime: String
@@ -74,10 +79,10 @@ struct ECheckinModal_Nw: Identifiable, Codable {
     let startTime: String
     let isAdminUser: Int
     let reportTo: String?
-    let payForBreak: Bool
+    let payForBreak: Bool?
     let recCode: String
     let candidateName: String
-    let checkOut: String
+    let checkOut: String?
     let billDate: String
     
     var scheduleTime: String {
@@ -104,7 +109,7 @@ struct ECheckinModal_Nw: Identifiable, Codable {
         case position = "Position"
         case weekEnd = "WeekEnd"
         case endTime = "EndTime"
-        case candId = "CandId"
+        case candId = "CandidateId"
         case startTime = "StartTime"
         case isAdminUser = "ISAdminUser"
         case reportTo = "ReportTo"
@@ -116,6 +121,7 @@ struct ECheckinModal_Nw: Identifiable, Codable {
         case breakMinutes = "BreakMinutes"
         case timeIn = "TimeIn"
         case timeOut = "TimeOut"
+
     }
 }
 
@@ -126,7 +132,7 @@ struct SubmitAPIResponse: Codable {
     let sleep: Int
 
     enum CodingKeys: String, CodingKey {
-        case message = "message"
+        case message = "Message"
         case statusCode = "StatusCode"
         case retry = "Retry"
         case sleep = "Sleep"

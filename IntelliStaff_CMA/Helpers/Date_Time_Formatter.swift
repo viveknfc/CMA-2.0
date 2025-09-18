@@ -49,6 +49,14 @@ struct Date_Time_Formatter {
         return formatter
     }()
     
+    static let customISOFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter
+    }()
+    
     /// Convert current local date → UTC string for server
     static func nowForServer() -> String {
         let now = Date()
@@ -79,6 +87,10 @@ struct Date_Time_Formatter {
     /// Converts API datetime string ("yyyy-MM-dd'T'HH:mm:ss") to Date
     static func apiTimeToDate(from string: String) -> Date? {
         return serverFormatter.date(from: string) // serverFormatter = UTC
+    }
+    
+    static func customDateFormat(from string: Date) -> String{
+        return customISOFormatter.string(from: string)
     }
     
     /// Converts Date → API datetime string ("yyyy-MM-dd'T'HH:mm:ss")

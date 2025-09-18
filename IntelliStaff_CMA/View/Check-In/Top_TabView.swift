@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct Top_TabView: View {
-    
+   
+
     enum Tab: String, CaseIterable, Identifiable {
         case first = "Check In"
         case second = "Check Out"
@@ -91,4 +92,5 @@ struct Top_TabView: View {
 
 #Preview {
     Top_TabView(division: .mock)
+        .environmentObject(GlobalErrorHandler())
 }

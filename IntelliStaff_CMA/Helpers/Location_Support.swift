@@ -128,7 +128,114 @@ class SimpleLocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
     }
+    
+    // MARK: - Helper function for user-friendly error messages
+    public func getUserFriendlyLocationError(error: Error) -> String {
+        // Check if it's a CLError (Core Location error)
+        if let clError = error as? CLError {
+            switch clError.code {
+            case .locationUnknown:
+                return "Unable to determine your location. Please make sure you're in an area with good GPS signal and try again."
+                
+            case .denied:
+                return "Location access is denied. Please enable location permissions in Settings > Privacy & Security > Location Services."
+                
+            case .network:
+                return "Network error while getting location. Please check your internet connection and try again."
+                
+            case .regionMonitoringDenied:
+                return "Location monitoring is not available. Please enable location services for this app."
+                
+            case .regionMonitoringFailure:
+                return "Failed to monitor location. Please try again in a few moments."
+                
+            case .regionMonitoringSetupDelayed:
+                return "Location setup is taking longer than expected. Please wait and try again."
+                
+            case .headingFailure:
+                return "Unable to determine device orientation for location."
+                
+            case .rangingUnavailable:
+                return "Location ranging is not available on this device."
+                
+            case .rangingFailure:
+                return "Failed to determine precise location. Please try again."
+                
+            case .promptDeclined:
+                return "Location permission was declined. Please enable location access in Settings to continue."
+                
+            default:
+                return "Location error occurred. Please ensure location services are enabled and try again."
+            }
+        }
+        
+        // Check for common network/geocoding errors
+        let errorDescription = error.localizedDescription.lowercased()
+        
+        if errorDescription.contains("network") || errorDescription.contains("internet") {
+            return "Network connection issue. Please check your internet connection and try again."
+        }
+        
+        if errorDescription.contains("timeout") {
+            return "Request timed out. Please check your internet connection and try again."
+        }
+        
+        if errorDescription.contains("geocod") {
+            return "Unable to determine your address. Please ensure you have a stable internet connection and try again."
+        }
+        
+        if errorDescription.contains("permission") || errorDescription.contains("authorization") {
+            return "Location permission required. Please enable location access in Settings > Privacy & Security > Location Services."
+        }
+        
+        // Generic fallback with actionable advice
+        return "Unable to get your current location. Please ensure location services are enabled, you have a good GPS signal, and try again."
+    }
 }
+
+// MARK: - Alternative: Enum-based approach for more structured error handling
+enum LocationError: LocalizedError {
+    case permissionDenied
+    case locationUnavailable
+    case networkIssue
+    case geocodingFailed
+    case timeout
+    case unknown(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .permissionDenied:
+            return "Location access is required for check-in/out. Please enable location permissions in Settings > Privacy & Security > Location Services."
+        case .locationUnavailable:
+            return "Unable to determine your location. Please make sure you're in an area with good GPS signal and try again."
+        case .networkIssue:
+            return "Network connection issue. Please check your internet connection and try again."
+        case .geocodingFailed:
+            return "Unable to determine your address. Please ensure you have a stable internet connection and try again."
+        case .timeout:
+            return "Location request timed out. Please try again in a few moments."
+        case .unknown(let message):
+            return "Location error: \(message). Please ensure location services are enabled and try again."
+        }
+    }
+    
+    var recoverySuggestion: String? {
+        switch self {
+        case .permissionDenied:
+            return "Go to Settings > Privacy & Security > Location Services and enable location access for this app."
+        case .locationUnavailable:
+            return "Move to an area with better GPS signal, such as near a window or outdoors."
+        case .networkIssue, .geocodingFailed:
+            return "Check your Wi-Fi or cellular connection and try again."
+        case .timeout:
+            return "Wait a moment and try the check-in/out process again."
+        case .unknown:
+            return "Restart the app or contact support if the problem persists."
+        }
+    }
+}
+
+
 
 extension SimpleLocationManager {
     static func reverseGeocodeLocation(coordinate: CLLocationCoordinate2D) async throws -> String {

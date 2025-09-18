@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var path: [AppRoute] = []
-    
+    @State private var dashboardViewModel = DashboardViewModel()
     init() {
         AppAppearance.setupNavigationBar()
     }
@@ -19,7 +19,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Login_Screen(path: $path) // Initial screen
                 .navigationDestination(for: AppRoute.self) { route in
-                    route.destinationView(path: $path)
+                    route.destinationView(path: $path, dashboardViewModel: dashboardViewModel)
                 }
         }
         .withGlobalOverlay()

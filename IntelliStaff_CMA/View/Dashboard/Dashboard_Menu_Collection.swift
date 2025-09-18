@@ -91,6 +91,8 @@ struct DashboardMenuCollectionPreviewWrapper: View {
             Dashboard_Menu_Items(id: 6, title: "Music", imageName: "music.note", itemCount: 1, children: sampleChildren)
         ]
         
+        
+        
        return Dashboard_Menu_Collection(
             assignments: assignments,
             showToast: $showToast,

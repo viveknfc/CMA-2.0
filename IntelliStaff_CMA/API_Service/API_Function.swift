@@ -14,6 +14,7 @@ struct APIFunction {
     static func serviceAuthAPICalling() async throws -> TokenResponse {
         let params:[String:String] = ["userData": "N6aM+1OPod0PNWGFb4Xg68jVcwJpeWWzXxtiGXG8VH3VEAZZt7D9VMPnkhHQwxrBn9OI8l5GM73kFTQ4BVJudOoGc1j0dIoFzeY090lHVlRHJIaRCrz/PjuE+MxJrhhs0CayK5EcFVPrOBEsZ6Z4z/PCw/XQZwaESi/YKG+axiCtDAeUOkkArclXAQY+rwPU6Vbg2g3EAKHDb9VK7eCUM80+PFi7QyQi/4vlDaVOnTq6oqgN3VQ3kdcqI4emOySvxGWMiUcWQfONRfU4ImyDbIy98UCNwwoHwKNZnAI/2cDyuEtbA5YtMnq/leaj5L0ZYkzlB3phSaUB93rZorXSaI15KK1aAbgkaVtc+bMFDm/1Wn2sZKySS97KD1CazY9q0PLG5hCA9J2bYYIdzDgGzA=="]
         let url = APIConstants.baseURL + APIConstants.ServiceAuthAPI
+        print(url)
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
@@ -21,6 +22,23 @@ struct APIFunction {
     
     static func loginAPICalling(params: [String: Any]) async throws -> LoginResponse {
         let url = APIConstants.baseURL + APIConstants.LoginAPI
+        return try await APIService.request(url: url, method: .post, parameters: params)
+    }
+    
+    
+    //MARK: - SendOTP API
+    
+    static func sendOTPAPICalling(params: [String: Any]) async throws -> SendOTPResponse {
+        let url = APIConstants.baseURL + APIConstants.sendOTP
+        print("url: \(url)")
+        print("Calling otp List API with params: \(params)")
+        return try await APIService.request(url: url, method: .post, parameters: params)
+    }
+    
+    //MARK: - UpdatePassword API
+    
+    static func updatePasswordAPICalling(params: [String: Any]) async throws -> UpdatePasswordResponse {
+        let url = APIConstants.baseURL + APIConstants.updatePassowrd
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
@@ -44,7 +62,18 @@ struct APIFunction {
     
     static func candidateIdAPICalling(params: [String: Any]) async throws -> CandidateIdModel {
         print("Calling candidate ID API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.CandidateDetailsAPI
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.CandidateDetailsAPI)?\(queryString)"
+        
+        return try await APIService.request(url: urlString, urlParams: params)
+    }
+    
+    //MARK: - Demographic Details API
+    
+    static func demographicAPICalling(params: [String: Any]) async throws -> CandidateInfo {
+        let url = APIConstants.baseURL + APIConstants.demoGraphicDetailsAPI
         return try await APIService.request(url: url, urlParams: params)
     }
     
@@ -52,22 +81,29 @@ struct APIFunction {
     
     static func eCheckInAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
         print("Calling E-Check In API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.ECheckInAPI
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
         
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)?\(queryString)"
+        
+        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
         // Ask APIService to just give us Data (raw response)
         let data: Data = try await APIService.request(
-            url: url,
-            method: .post,
+            url: urlString,
+            method: .get,
             urlParams: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
-        
-        // Try decode normal data
-        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
-            return (result, nil)
-        }
+      
+        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data) {
+                if !result.isEmpty {
+                    return (result, nil)
+                } else {
+                    // API returned []
+                    return ([], "No records found")
+                }
+            }
         
         // Try decode no-data response
         if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
@@ -80,42 +116,49 @@ struct APIFunction {
     
     //MARK: - E-checkin Submit API
     
-    static func eCheckInSubmitAPICalling(params: [String: Any]) async throws -> [SubmitAPIResponse] {
+    static func eCheckInSubmitAPICalling(params: [String: Any]) async throws -> SubmitAPIResponse {
 //        print("Calling CheckIn Submit API with params: \(params)")
         let url = APIConstants.baseURL + APIConstants.ECheckInSubmit
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
         let data: Data = try await APIService.request(
             url: url,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            body: jsonData,
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
-        
-        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+
+        return try JSONDecoder().decode(SubmitAPIResponse.self, from: data)
     }
     
     //MARK: - E-Check Out API
     
     static func eCheckOutAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
         print("Calling E-Check In API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.ECheckOutAPI
+        // Build URL components
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.ECheckOutAPI)?\(queryString)"
+
         // Ask APIService to just give us Data (raw response)
         let data: Data = try await APIService.request(
-            url: url,
-            method: .post,
-            urlParams: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            url: urlString, // 👈 keep it as URL, not String
+            method: .get,
+            urlParams: params, // no need to pass again
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         
         // Try decode normal data
-        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
-            return (result, nil)
-        }
+        if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data) {
+                if !result.isEmpty {
+                    return (result, nil)
+                } else {
+                    // API returned []
+                    return ([], "No records found")
+                }
+            }
         
         // Try decode no-data response
         if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
@@ -128,38 +171,37 @@ struct APIFunction {
     
     //MARK: - E-checkOut Submit API
     
-    static func eCheckOutSubmitAPICalling(params: [String: Any]) async throws -> [SubmitAPIResponse] {
+    static func eCheckOutSubmitAPICalling(params: [String: Any]) async throws -> SubmitAPIResponse {
 //        print("Calling CheckOut Submit API with params: \(params)")
         let url = APIConstants.baseURL + APIConstants.ECheckOutSubmit
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
         let data: Data = try await APIService.request(
             url: url,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            body: jsonData,
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         
-        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+        return try JSONDecoder().decode(SubmitAPIResponse.self, from: data)
     }
     
     //MARK: - Break Min API
     
     static func breakMinAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
         print("Calling E-Check In API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.BreakMinDetails
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.BreakMinDetails)?\(queryString)"
         // Ask APIService to just give us Data (raw response)
         let data: Data = try await APIService.request(
-            url: url,
-            method: .post,
+            url: urlString,
+            method: .get,
             urlParams: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
-        
         // Try decode normal data
         if let result = try? JSONDecoder().decode([ECheckinModal_Nw].self, from: data), !result.isEmpty {
             return (result, nil)
@@ -170,7 +212,7 @@ struct APIFunction {
            let first = noData.first {
             return ([], first.message)
         }
-        
+        print("\(NetworkError.decodingFailed.failureReason ?? "")")
         throw NetworkError.decodingFailed
     }
     
@@ -180,16 +222,16 @@ struct APIFunction {
 //        print("Calling Break Min Submit API with params: \(params)")
         let url = APIConstants.baseURL + APIConstants.saveBreakMin
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
         let data: Data = try await APIService.request(
             url: url,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Bearer \(token)"]
+            body: jsonData,
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
-        
-        return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
+       // throw NetworkError.decodingFailed
+       return try JSONDecoder().decode([SubmitAPIResponse].self, from: data)
     }
 
 
@@ -207,21 +249,23 @@ struct APIFunction {
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
         }
-        
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+
         
         let data: Data = try await APIService.request(
             url: url.absoluteString,
-            method: .post,
+            method: .get,
             parameters: params,
-            headers: ["Authorization": "Basic \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
-        
         // Try decode normal data
-        if let result = try? JSONDecoder().decode([ECheckInAllResponse].self, from: data), !result.isEmpty {
-            return (result, nil)
-        }
-        
+        if let result = try? JSONDecoder().decode([ECheckInAllResponse].self, from: data) {
+                if !result.isEmpty {
+                    return (result, nil)
+                } else {
+                    // API returned []
+                    return ([], "No records found")
+                }
+            }
         
         // Try decode no-data response
         if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
@@ -234,38 +278,30 @@ struct APIFunction {
     
     
     //MARK: - FeedBack UI
-    static func submitRatingCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
+    static func submitRatingCalling(params: [String: Any]) async throws -> (RatingResponse, String?) {
         print("Calling E-Check In API with params: \(params)")
-        
-        // Build query string from params
-        let queryString = params.map { "\($0.key)=\($0.value)" }
-                                .joined(separator: "&")
-        
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.Rating)?\(queryString)"
+        let urlString = APIConstants.baseURL + APIConstants.Rating
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
         }
-        
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
         let data: Data = try await APIService.request(
             url: url.absoluteString,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Basic \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         
         // Try decode normal data
-        if let result = try? JSONDecoder().decode([RatingResponse].self, from: data), !result.isEmpty {
+        if let result = try? JSONDecoder().decode(RatingResponse.self, from: data), !result.message.isEmpty {
             return (result, nil)
         }
-        
+//        
         
         // Try decode no-data response
         if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
            let first = noData.first {
-            return ([], first.message)
+            return (try RatingResponse(from: self as! Decoder), first.message) // assuming RatingResponse has a default init
         }
         
         throw NetworkError.decodingFailed
@@ -275,23 +311,19 @@ struct APIFunction {
     static func deleteCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
         print("Calling E-Check In API with params: \(params)")
         
-        // Build query string from params
-        let queryString = params.map { "\($0.key)=\($0.value)" }
-                                .joined(separator: "&")
-        
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.EDelete)?\(queryString)"
+        let urlString = APIConstants.baseURL + APIConstants.EDelete
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
         }
         
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
+       // let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
         
         let data: Data = try await APIService.request(
             url: url.absoluteString,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Basic \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         
         // Try decode normal data
@@ -314,15 +346,13 @@ struct APIFunction {
         print("Calling candidate ID API with params: \(params)")
         
         let url = APIConstants.baseURL + APIConstants.ESaveReason
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
         
         
         let data: Data = try await APIService.request(
             url: url,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Basic \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         if let result = try? JSONDecoder().decode([ReasonResponse].self, from: data), !result.isEmpty {
             return (result, nil)
@@ -341,96 +371,40 @@ struct APIFunction {
     //MARK: - Overall Submit
     static func overallSubmitCalling(
         params: [[String: Any]]
-    ) async throws -> ([RatingResponse], String?) {
-        print("Calling E-Check In API with params: \(params)")
+    ) async throws -> (OverallSubmitResponse, String?) {
+        print("Calling overall API with params: \(params)")
         
-        let queryString = params
-            .flatMap { dict in
-                dict.map { "\($0.key)=\($0.value)" }
-            }
-            .joined(separator: "&")
-
-        // Prepare URL
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.ESubmitAll)?\(queryString)"
-        var jsonString = String()
+        let data: Data = try await ECheckInService.submitAllDetails(params: params)
         
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
-            jsonString = String(data: jsonData, encoding: .utf8) ?? ""
-                print(jsonString)
-                // 👉 Use this jsonString in your API call
-            
-        } catch {
-            print("Error converting to JSON: \(error)")
+        if let result = try? JSONDecoder().decode(OverallSubmitResponse.self, from: data), !result.message.isEmpty {
+            return (result, nil)
         }
         
-        let termData = jsonString.data(using: .utf8)
-        
-        print(termData)
-
-        var request = URLRequest(url: URL(string: urlString)!,timeoutInterval: Double.infinity)
-        request.addValue("Basic ddhaiti24@yahoo.com:iFs0pWWk9QfEA6YZhVSKZ4yTVzP3O3dz", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-        request.httpBody = termData
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                print(String(describing: error))
-                return
-            }
-            print(String(data: data, encoding: .utf8)!)
-            
-            
+        var ratingObj:OverallSubmitResponse!
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return (ratingObj, first.message)
         }
-            let (data, response) = try await URLSession.shared.data(for: request)
-                
-                print(String(data: data, encoding: .utf8)!)
-                
-                // Try to decode as RatingResponse array first
-                if let result = try? JSONDecoder().decode([RatingResponse].self, from: data),
-                   !result.isEmpty {
-                    return (result, nil)
-                }
-                
-                // Try to decode as NoDataResponse array
-                if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
-                   let first = noData.first {
-                    return ([], first.message)
-                }
-                // If neither decode succeeds, throw an error
-                throw NetworkError.decodingFailed
         
-       // task.resume()
-       // throw NetworkError.decodingFailed
+        throw NetworkError.decodingFailed
+        
+
     }
 
 
-    static func saveCalling(params: [String: Any]) async throws -> ([RatingResponse], String?) {
+    static func saveCalling(params: [String: Any]) async throws -> (RatingResponse, String?) {
         print("Calling E-Check In API with params: \(params)")
-        
-        // Build query string from params
-        let queryString = params.map { "\($0.key)=\($0.value)" }
-                                .joined(separator: "&")
-        
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.EAllSave)?\(queryString)"
-        
-        guard let url = URL(string: urlString) else {
-            throw NetworkError.invalidURL
-        }
-        
-        let token = "pkadrikar@tempositions.com:VUAvrDfCjhTn+gkeRo4o/MTbN9eVibBHDWRFUDjEJL4="
-        
+        let urlString = APIConstants.baseURL + APIConstants.EAllSave
         let data: Data = try await APIService.request(
-            url: url.absoluteString,
+            url: urlString,
             method: .post,
             parameters: params,
-            headers: ["Authorization": "Basic \(token)"]
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
         )
         
         // Try decode normal data
-        if let result = try? JSONDecoder().decode([RatingResponse].self, from: data), !result.isEmpty {
+        if let result = try? JSONDecoder().decode(RatingResponse.self, from: data), !result.message.isEmpty {
             return (result, nil)
         }
         
@@ -438,10 +412,32 @@ struct APIFunction {
         // Try decode no-data response
         if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
            let first = noData.first {
-            return ([], first.message)
+            return (try RatingResponse(from: self as! Decoder), first.message) // assuming RatingResponse has a default init
         }
+
         
         throw NetworkError.decodingFailed
+    }
+    
+    //MARK: - SubVendor API
+    
+    static func subVendorAPICalling(params: [String: Any]) async throws -> SubVendorResponse {
+        let url = APIConstants.baseURL + APIConstants.subVendor
+        return try await APIService.request(url: url, method: .get, parameters: params)
+    }
+    
+    //MARK: - clients API
+    
+    static func clientAPICalling(params: [String: Any]) async throws -> ClientResponse {
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.clientInfo)?\(queryString)"
+       
+        return try await APIService.request(url: urlString, method: .get, parameters: params)
     }
 
 }
@@ -451,14 +447,8 @@ struct APIFunction {
 
 class ECheckInService{
     static func submitAllDetails(params: [[String: Any]]) async throws -> Data {
-        let queryString = params
-            .flatMap { dict in
-                dict.map { "\($0.key)=\($0.value)" }
-            }
-            .joined(separator: "&")
-
         // Prepare URL
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.ESubmitAll)?\(queryString)"
+        let urlString = APIConstants.baseURL + APIConstants.ESubmitAll
         
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
@@ -470,7 +460,7 @@ class ECheckInService{
         // Create URLRequest
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Basic ddhaiti24@yahoo.com:iFs0pWWk9QfEA6YZhVSKZ4yTVzP3O3dz", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(APIConstants.accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
         
@@ -485,6 +475,9 @@ class ECheckInService{
         
         return data
     }
+    
+    
+   
 
 
 }

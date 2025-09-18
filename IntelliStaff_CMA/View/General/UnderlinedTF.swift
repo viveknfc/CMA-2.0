@@ -13,6 +13,8 @@ struct UnderlinedTF: View {
     @Binding var text: String
     var isSecure: Bool = false
     @State private var isPasswordVisible = false
+    var borderColor: Color = .gray
+    var textColor: Color = .black // default text color
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -25,6 +27,7 @@ struct UnderlinedTF: View {
                     SecureField("Enter \(title.lowercased())", text: $text)
                         .padding(.vertical, 4)
                         .font(.bodyFont)
+                        .foregroundColor(textColor)
                         .onChange(of: text) {
                             text = text.replacingOccurrences(of: " ", with: "")
                         }
@@ -33,13 +36,13 @@ struct UnderlinedTF: View {
                     TextField("Enter \(title.lowercased())", text: $text)
                         .padding(.vertical, 4)
                         .font(.bodyFont)
+                        .foregroundColor(textColor)
                         .onChange(of: text) {
                             text = text.replacingOccurrences(of: " ", with: "")
                         }
                     
                 }
                 
-                // Show eye button only for secure fields
                 if isSecure {
                     Button(action: {
                         isPasswordVisible.toggle()
@@ -53,10 +56,11 @@ struct UnderlinedTF: View {
             
             Rectangle()
                 .frame(height: 1)
-                .foregroundColor(.gray)
+                .foregroundColor(borderColor)
         }
     }
 }
+
 
 #Preview {
     struct UnderlinePreviewWrapper: View {

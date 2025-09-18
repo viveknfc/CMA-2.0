@@ -169,7 +169,7 @@ struct Check_In: View {
                                     selectedDate = date
                                     startDate = date
                                     print("Start Date Selected: \(Date_Time_Formatter.formattedDate(date))")
-                                    
+                                    viewModel.eCheckinData.removeAll()
                                     viewModel.fetchCheckinData(
                                         clientId: "\(clientID ?? 0)",
                                         contactId: "\(contactID ?? 0)",
@@ -213,7 +213,7 @@ struct Check_In: View {
         .onAppear {
             if let clientID = clientID,
                let contactID = contactID {
-                
+               
                 viewModel.fetchCheckinData(
                     clientId: "\(clientID)",
                     contactId: "\(contactID)",

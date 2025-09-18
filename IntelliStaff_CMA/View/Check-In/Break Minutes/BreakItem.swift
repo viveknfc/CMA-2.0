@@ -14,9 +14,17 @@ struct BreakItem: View {
     var startTime: Time
     var endTime: Time
     
+//    private var computedDuration: Int {
+//      //  max(Int(endTime.timeIntervalSince(startTime) / 60), 0)
+//        max(Int(endTime.timeIntervalSince(startTime) % (24 * 60)), 0)
+//    }
+    
     private var computedDuration: Int {
-        max(Int(endTime.timeIntervalSince(startTime) / 60), 0)
+        let minutes = endTime.timeIntervalSince(startTime) / 60 // convert to minutes
+        let duration = minutes.truncatingRemainder(dividingBy: 24 * 60) // keep within 24h
+        return max(Int(duration), 0)
     }
+
     
     var onStartTap: (ECheckinModal_Nw, Time) -> Void
     var onEndTap: (ECheckinModal_Nw, Time) -> Void
@@ -34,7 +42,7 @@ struct BreakItem: View {
                 +
                 (Text(item.position)
                     .font(.bodyFont)
-                    .foregroundColor(Color(hex: item.positionLabelColor)))
+                    .foregroundColor(Color(hex: item.positionLabelColor ?? "")))
                 
                 Text("Scheduled Time: \(item.scheduleTime)")
                     .font(.bodyFont)

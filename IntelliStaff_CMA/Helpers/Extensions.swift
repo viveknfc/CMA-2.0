@@ -46,3 +46,40 @@ extension Encodable {
 }
 
 
+
+
+
+
+
+extension String {
+    func toDateTimeString() -> String? {
+        // Possible time formats ("8.00 am" or "8:00 AM")
+        let possibleFormats = ["h.mm a", "h:mm a"]
+
+        var parsedDate: Date? = nil
+
+        for format in possibleFormats {
+            let inputFormatter = DateFormatter()
+            inputFormatter.dateFormat = format
+            inputFormatter.amSymbol = "AM"
+            inputFormatter.pmSymbol = "PM"
+            inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+
+            if let date = inputFormatter.date(from: self) {
+                parsedDate = date
+                break
+            }
+        }
+
+        guard let date = parsedDate else {
+            return nil
+        }
+
+        // Output: "1900-01-01T08:00:00"
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "'1900-01-01'T'HH:mm:ss"
+        outputFormatter.locale = Locale(identifier: "en_US_POSIX")
+
+        return outputFormatter.string(from: date)
+    }
+}

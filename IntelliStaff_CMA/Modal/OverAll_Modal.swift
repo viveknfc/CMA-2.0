@@ -9,94 +9,116 @@ import SwiftUI
 
 struct ECheckInAllResponse: Codable, Identifiable {
     let candID: Int
-     let candidateName: String?
-     let orderID: Int
-     let weekEnd, billDate, startTime, endTime: String
-     let checkIn, checkOut: String
-     let txnType: Int
-     let routeName: String
-     let totalHours, roundedTotalHours: Double
-     let breakMinutes: Int
-     let recCode: String
-     var payforBreak: Bool
-     let position: String
-     let isAdminUser, status, id, reasonID: Int
-     let reasonForTimeChange, additionalComments: JSONNull?
-     var isSubmitted: Int
-     let otherReason, positionLabelColor: String
-     let reportTo: JSONNull?
-     let rating: Int
-     let ratingComments: String
+        let candidateName: String
+        let orderID: Int
+        let weekEnd, billDate, startTime, endTime: String
+        let checkIn, checkOut: String
+        let txnType: Int
+        let routeName: String
+        let totalHours, roundedTotalHours: Double
+        let breakMinutes: Int
+        let recCode: String
+        let payforBreak: Bool
+        let position: String
+        let isAdminUser, status, id, reasonID: Int
+        let reasonForTimeChange, additionalComments: JSONNull?
+        let isSubmitted: Int
+        let otherReason: String?
+        let positionLabelColor: String
+        let reportTo: JSONNull?
+        let rating: Int
+        let ratingComments: JSONNull?
+        var canBeSelected: Bool {
+            return isSubmitted == 0
+        }
+        enum CodingKeys: String, CodingKey {
+            case candID = "CandidateId"
+            case candidateName = "CandidateName"
+            case orderID = "OrderId"
+            case weekEnd = "WeekEnd"
+            case billDate = "BillDate"
+            case startTime = "StartTime"
+            case endTime = "EndTime"
+            case checkIn = "CheckIn"
+            case checkOut = "CheckOut"
+            case txnType = "TxnType"
+            case routeName = "RouteName"
+            case totalHours = "TotalHours"
+            case roundedTotalHours = "RoundedTotalHours"
+            case breakMinutes = "BreakMinutes"
+            case recCode = "RecCode"
+            case payforBreak = "PayforBreak"
+            case position = "Position"
+            case isAdminUser = "ISAdminUser"
+            case status = "Status"
+            case id = "Id"
+            case reasonID = "ReasonId"
+            case reasonForTimeChange = "ReasonForTimeChange"
+            case additionalComments = "AdditionalComments"
+            case isSubmitted = "IsSubmitted"
+            case otherReason = "OtherReason"
+            case positionLabelColor = "PositionLabelColor"
+            case reportTo = "ReportTo"
+            case rating = "Rating"
+            case ratingComments = "RatingComments"
+        }
+    }
 
-     enum CodingKeys: String, CodingKey {
-         case candID = "CandId"
-         case candidateName = "CandidateName"
-         case orderID = "OrderId"
-         case weekEnd = "WeekEnd"
-         case billDate = "BillDate"
-         case startTime = "StartTime"
-         case endTime = "EndTime"
-         case checkIn = "CheckIn"
-         case checkOut = "CheckOut"
-         case txnType = "TxnType"
-         case routeName = "RouteName"
-         case totalHours = "TotalHours"
-         case roundedTotalHours = "RoundedTotalHours"
-         case breakMinutes = "BreakMinutes"
-         case recCode = "RecCode"
-         case payforBreak = "PayforBreak"
-         case position = "Position"
-         case isAdminUser = "ISAdminUser"
-         case status = "Status"
-         case id = "Id"
-         case reasonID = "ReasonId"
-         case reasonForTimeChange = "ReasonForTimeChange"
-         case additionalComments = "AdditionalComments"
-         case isSubmitted = "IsSubmitted"
-         case otherReason = "OtherReason"
-         case positionLabelColor = "PositionLabelColor"
-         case reportTo = "ReportTo"
-         case rating = "Rating"
-         case ratingComments = "RatingComments"
-     }
- }
 
- typealias ECheckInAllResponseObj = [ECheckInAllResponse]
+    // MARK: - Encode/decode helpers
 
- // MARK: - Encode/decode helpers
+    class JSONNull: Codable, Hashable {
 
- class JSONNull: Codable, Hashable {
+        public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
+                return true
+        }
 
-     public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-             return true
-     }
+        public var hashValue: Int {
+                return 0
+        }
 
-     public var hashValue: Int {
-             return 0
-     }
+        public init() {}
 
-     public init() {}
+        public required init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                if !container.decodeNil() {
+                        throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
+                }
+        }
 
-     public required init(from decoder: Decoder) throws {
-             let container = try decoder.singleValueContainer()
-             if !container.decodeNil() {
-                     throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
-             }
-     }
+        public func encode(to encoder: Encoder) throws {
+                var container = encoder.singleValueContainer()
+                try container.encodeNil()
+            
+            
+            print(container.codingPath)
+        }
+    }
 
-     public func encode(to encoder: Encoder) throws {
-             var container = encoder.singleValueContainer()
-             try container.encodeNil()
-     }
- }
 
 
 struct RatingResponse: Codable {
     let message: String
+    let statusCode:Int
+        let Retry, Sleep: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case message = "Message"
+        case statusCode = "StatusCode"
+        case Sleep = "Sleep"
+        case Retry = "Retry"
+    }
+}
+
+
+struct OverallSubmitResponse: Codable {
+    let success: Bool
+    let message: String
     let statusCode: Int
 
     enum CodingKeys: String, CodingKey {
-        case message
+        case success = "Success"
+        case message = "Message"
         case statusCode = "StatusCode"
     }
 }
@@ -181,10 +203,11 @@ struct AllItem: Codable {
 
 struct ReasonResponse: Codable {
     let message: String
-    let statusCode, retry, sleep: Int
+    let statusCode:Int
+    let retry, sleep: Int?
 
     enum CodingKeys: String, CodingKey {
-        case message
+        case message = "Message"
         case statusCode = "StatusCode"
         case retry = "Retry"
         case sleep = "Sleep"
@@ -222,3 +245,82 @@ struct ECheckInRecord: Identifiable, Codable, Equatable {
     var rating: Double
     var ratingComments: String
 }
+
+
+struct SubVendorResponse: Codable {
+    let isSubVendor: Int
+
+    enum CodingKeys: String, CodingKey {
+        case isSubVendor = "IsSubVendor"
+    }
+}
+
+struct ClientResponse:Codable{
+
+var name, companyName, repName, repPhone: String
+    var repEmail, title, phone, ext: String
+    var fax, addETo: String
+    let master: Int
+    let contactAddress: String
+    let fl: JSONNull?
+    let city, state, codeZip: String
+    let noTsApproveConf, rosAuthorized, cwaTs, cwaInvoice: Int
+    let cwaRpt, cwaEditBilling: Int
+    let division, children: StringOrInt
+    let office: Int
+    let compName, companyAddress, companyCity, mainTelPhone: String
+    let clientRepID: Int
+    let suite: JSONNull?
+    let companyState, companyCodeZip: String
+    let consolidateMaster, hideIbInvoice, eTimeClock, noIbClient: Int
+    let customType, billContactID, invFileType, invoiceType: Int
+    let doNotServ, invoiceSendType, payByCompany: Int
+
+    enum CodingKeys: String, CodingKey {
+        case name = "Name"
+        case companyName = "CompanyName"
+        case repName = "RepName"
+        case repPhone = "RepPhone"
+        case repEmail = "RepEmail"
+        case title = "Title"
+        case phone = "Phone"
+        case ext = "Ext"
+        case fax = "Fax"
+        case addETo = "AddETo"
+        case master = "Master"
+        case contactAddress = "ContactAddress"
+        case fl = "Fl"
+        case city = "City"
+        case state = "State"
+        case codeZip = "CodeZip"
+        case noTsApproveConf = "NoTsApproveConf"
+        case rosAuthorized = "RosAuthorized"
+        case cwaTs = "CwaTs"
+        case cwaInvoice = "CwaInvoice"
+        case cwaRpt = "CwaRpt"
+        case cwaEditBilling = "CwaEditBilling"
+        case division = "Division"
+        case children = "Children"
+        case office = "Office"
+        case compName = "CompName"
+        case companyAddress = "CompanyAddress"
+        case companyCity = "CompanyCity"
+        case mainTelPhone = "MainTelPhone"
+        case clientRepID = "ClientRepId"
+        case suite = "Suite"
+        case companyState = "CompanyState"
+        case companyCodeZip = "CompanyCodeZip"
+        case consolidateMaster = "ConsolidateMaster"
+        case hideIbInvoice = "HideIbInvoice"
+        case eTimeClock = "ETimeClock"
+        case noIbClient = "NoIbClient"
+        case customType = "CustomType"
+        case billContactID = "BillContactId"
+        case invFileType = "InvFileType"
+        case invoiceType = "InvoiceType"
+        case doNotServ = "DoNotServ"
+        case invoiceSendType = "InvoiceSendType"
+        case payByCompany = "PayByCompany"
+    }
+}
+
