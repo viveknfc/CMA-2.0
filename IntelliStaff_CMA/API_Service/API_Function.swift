@@ -21,7 +21,7 @@ struct APIFunction {
     //MARK: - Login API
     
     static func loginAPICalling(params: [String: Any]) async throws -> LoginResponse {
-        let url = APIConstants.baseURL + APIConstants.LoginAPI
+        let url = APIConstants.baseLoginURL + APIConstants.LoginAPI
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
@@ -29,16 +29,23 @@ struct APIFunction {
     //MARK: - SendOTP API
     
     static func sendOTPAPICalling(params: [String: Any]) async throws -> SendOTPResponse {
-        let url = APIConstants.baseURL + APIConstants.sendOTP
+        let url = APIConstants.baseLoginURL + APIConstants.sendOTP
         print("url: \(url)")
         print("Calling otp List API with params: \(params)")
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
+    //MARK: - Fetch Assignment Details
+    
+    static func fetchAssignmentDetails(params: [String: Any]) async throws -> AssignmentResponse {
+        let url = APIConstants.baseURL + APIConstants.GetAssignmentDetails
+        return try await APIService.request(url: url, method: .get, urlParams: params)
+    }
+    
     //MARK: - UpdatePassword API
     
     static func updatePasswordAPICalling(params: [String: Any]) async throws -> UpdatePasswordResponse {
-        let url = APIConstants.baseURL + APIConstants.updatePassowrd
+        let url = APIConstants.baseLoginURL + APIConstants.updatePassowrd
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
@@ -46,8 +53,13 @@ struct APIFunction {
     
     static func divisionListAPICalling(params: [String: Any]) async throws -> [DivisionList] {
         print("Calling division List API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.DivisionList
-        return try await APIService.request(url: url, urlParams: params)
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let url = "\(APIConstants.uatBaseURL)\(APIConstants.DivisionList)?\(queryString)"
+      //  let url = APIConstants.baseURL + APIConstants.DivisionList
+        print(url)
+        return try await APIService.request(url: url, urlParams: params, token: APIConstants.accessToken)
     }
     
     //MARK: - Dashboard API
@@ -65,29 +77,39 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.CandidateDetailsAPI)?\(queryString)"
-        
-        return try await APIService.request(url: urlString, urlParams: params)
+        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.CandidateDetailsAPI)?\(queryString)"
+        print(urlString)
+        return try await APIService.request(url: urlString, urlParams: params, headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
     }
     
     //MARK: - Demographic Details API
     
     static func demographicAPICalling(params: [String: Any]) async throws -> CandidateInfo {
-        let url = APIConstants.baseURL + APIConstants.demoGraphicDetailsAPI
-        return try await APIService.request(url: url, urlParams: params)
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.demoGraphicDetailsAPI)?\(queryString)"
+        print(urlString)
+        return try await APIService.request(url: urlString, urlParams: params, headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
     }
     
     //MARK: - E-Check In API
     
     static func eCheckInAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
         print("Calling E-Check In API with params: \(params)")
+//        
+//        let queryString = params.map { "\($0.key)=\($0.value)" }
+//                                .joined(separator: "&")
+//        
+//        let urlString = "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)?\(queryString)"
+        var components = URLComponents(string: "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)")
+        components?.queryItems = params.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+
+        guard let urlString = components?.url?.absoluteString else {
+            throw NetworkError.invalidURL
+        }
         
-        let queryString = params.map { "\($0.key)=\($0.value)" }
-                                .joined(separator: "&")
-        
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)?\(queryString)"
-        
-        let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
+       // let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
         // Ask APIService to just give us Data (raw response)
         let data: Data = try await APIService.request(
             url: urlString,
@@ -106,9 +128,9 @@ struct APIFunction {
             }
         
         // Try decode no-data response
-        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+        if let noData = try? JSONDecoder().decode([NoDataCheckInResponse].self, from: data),
            let first = noData.first {
-            return ([], first.message)
+            return ([], first.statusMessage)
         }
         
         throw NetworkError.decodingFailed
@@ -161,9 +183,9 @@ struct APIFunction {
             }
         
         // Try decode no-data response
-        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+        if let noData = try? JSONDecoder().decode([NoDataCheckInResponse].self, from: data),
            let first = noData.first {
-            return ([], first.message)
+            return ([], first.statusMessage)
         }
         
         throw NetworkError.decodingFailed
@@ -268,9 +290,9 @@ struct APIFunction {
             }
         
         // Try decode no-data response
-        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+        if let noData = try? JSONDecoder().decode([NoDataAllDetail].self, from: data),
            let first = noData.first {
-            return ([], first.message)
+            return ([], first.statusMessage)
         }
         
         throw NetworkError.decodingFailed
@@ -422,8 +444,16 @@ struct APIFunction {
     //MARK: - SubVendor API
     
     static func subVendorAPICalling(params: [String: Any]) async throws -> SubVendorResponse {
-        let url = APIConstants.baseURL + APIConstants.subVendor
-        return try await APIService.request(url: url, method: .get, parameters: params)
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.subVendor)?\(queryString)"
+        print(urlString)
+        print(params)
+        return try await APIService.request(url: urlString, method: .get, parameters: params,headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
     }
     
     //MARK: - clients API
@@ -435,10 +465,54 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.baseURL)\(APIConstants.clientInfo)?\(queryString)"
-       
+        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.clientInfo)?\(queryString)"
+        print(urlString)
+        print(params)
+        return try await APIService.request(url: urlString, method: .get, parameters: params, headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
+    }
+    
+    
+    //MARK: - Division Theme
+    static func clientThemeAPICalling(params: [String: Any]) async throws -> [GetDivisionThemeModel]{
+        print("Calling E-Check In API with params: \(params)")
+        
+        // Build query string from params
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        
+        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.GetDivisionTheme)?\(queryString)"
+        print(urlString)
         return try await APIService.request(url: urlString, method: .get, parameters: params)
     }
+    
+    
+    //MARK: - Order Tracking
+    static func orderTrackingAPICalling(params: [String: Any]) async throws -> ([OrderResponse], String?) {
+        let url = APIConstants.uatBaseURL + APIConstants.scheduleDetails
+        print(url)
+        print("Calling orders In API with params: \(params)")
+        let data: Data = try await APIService.request(
+            url: url,
+            method: .post,
+            parameters: params,
+            headers: ["Authorization": "Bearer \(APIConstants.accessToken)"]
+        )
+        
+        // Try decode normal data
+        if let result = try? JSONDecoder().decode([OrderResponse].self, from: data),
+           !result.isEmpty {
+            return (result, nil)
+        }
+        
+        // Try decode no-data response
+        if let noData = try? JSONDecoder().decode([NoDataResponse].self, from: data),
+           let first = noData.first {
+            return ([], first.message)
+        }
+        
+        throw NetworkError.decodingFailed
+    }
+
 
 }
 

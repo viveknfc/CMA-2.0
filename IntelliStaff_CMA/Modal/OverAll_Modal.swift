@@ -21,13 +21,13 @@ struct ECheckInAllResponse: Codable, Identifiable {
         let payforBreak: Bool
         let position: String
         let isAdminUser, status, id, reasonID: Int
-        let reasonForTimeChange, additionalComments: JSONNull?
+        let reasonForTimeChange, additionalComments: String?
         let isSubmitted: Int
         let otherReason: String?
         let positionLabelColor: String
-        let reportTo: JSONNull?
+        let reportTo: String?
         let rating: Int
-        let ratingComments: JSONNull?
+        let ratingComments: String?
         var canBeSelected: Bool {
             return isSubmitted == 0
         }
@@ -323,4 +323,101 @@ var name, companyName, repName, repPhone: String
         case payByCompany = "PayByCompany"
     }
 }
+
+struct GetDivisionThemeModel:Codable{
+   let divisionID: Int
+   let divisionName, colorCode, rgbCode, skinName: String
+   let skinExtension, createdOn: String
+   let isActive: Bool
+   let companyURL: String
+   let logoPath: String
+   let apiLogoPath, apiSmallLogoPath, pdfSmallLogo, campaignLogoPath: String
+   let campaignDivisionName, companyDomainURL: String
+   let eProfileBannerPath, eProfileWebImages: String
+   let divisionLogo, ewaBanner, cwaBanner: String?
+
+   enum CodingKeys: String, CodingKey {
+       case divisionID = "DivisionID"
+       case divisionName = "DivisionName"
+       case colorCode = "ColorCode"
+       case rgbCode = "RGBCode"
+       case skinName = "SkinName"
+       case skinExtension = "SkinExtension"
+       case createdOn = "CreatedOn"
+       case isActive = "IsActive"
+       case companyURL = "CompanyURL"
+       case logoPath = "LogoPath"
+       case apiLogoPath = "APILogoPath"
+       case apiSmallLogoPath = "APISmallLogoPath"
+       case pdfSmallLogo = "PdfSmallLogo"
+       case campaignLogoPath = "CampaignLogoPath"
+       case campaignDivisionName = "CampaignDivisionName"
+       case companyDomainURL = "CompanyDomainURL"
+       case eProfileBannerPath = "EProfileBannerPath"
+       case eProfileWebImages = "EProfileWebImages"
+       case divisionLogo = "DivisionLogo"
+       case ewaBanner = "EWABanner"
+       case cwaBanner = "CWABanner"
+   }
+}
+
+
+// MARK: - OrderResponse
+struct OrderResponse: Codable {
+    let orderId: Int
+    let masterId: Int?
+    let masterClientName: String
+    let divisionClientId: Int?
+    let divisionClientName: String?
+    let subDivisionClientId: Int?
+    let subDivisionClientName: String?
+    let shift: String?
+    let orderValue: String?
+    let clientId: Int?
+    let orderIcon: Int?
+    let vendorType: String?
+    let clientName: String?
+    let child: String?
+    let monday, tuesday, wednesday, thursday, friday, saturday, sunday: String?
+    let startDate, endDate, enteredDate: String?
+    let orderStatusId: Int?
+    let orderStatus: String?
+    let orderType: String?
+    let candidateId: Int?
+    let candidateName: String?
+    let divisionId: Int?
+    let divisionName: String?
+    let vendorId: Int?
+    let vendorName: String?
+    let jobTitle: String?
+    let reportToLocation: String?
+    let monCancel, tueCancel, wedCancel, thuCancel, friCancel, satCancel, sunCancel: String?
+    let noOfTemps: Int?
+    let orderValueCount: Int?
+    let clientGuid: String?
+    let positionProfileId: Int?
+    let reportToLocationId: Int?
+    let roleId: Int?
+    let email: String?
+    let position: String?
+    let workStation: String?
+    let coordinator: String?
+    let weekEnding: String?
+    let address: String?
+    let city: String?
+    let state: String?
+    let codeZip: String?
+    let mainTelephone: String?
+    let comments: String?
+    let regionName: String?
+    let poDName: String?
+    let poNumber: String?
+    let department: String?
+    let reportTo: String?
+    let totalNoOfTemps: String?
+    let firstName: String?
+    let lastName: String?
+    let cancelled: String?
+}
+
 

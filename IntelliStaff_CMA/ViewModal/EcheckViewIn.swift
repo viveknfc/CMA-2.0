@@ -14,8 +14,10 @@ class OverallVM {
     var alertMessage: String?
     var showAlert: Bool = false
     var alertType: AlertType = .error
-private var checkboxManager = CheckboxManager()
+    private var checkboxManager = CheckboxManager()
     // ✅ use shared instance
+ 
+        
     func fetchOverallDetails(
         contactId: String,
         clientId: String,

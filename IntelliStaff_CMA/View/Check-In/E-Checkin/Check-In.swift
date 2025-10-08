@@ -236,6 +236,32 @@ struct Check_In: View {
 }
 
 #Preview {
-    Check_In(clientID: 1, contactID: 1)
+    let mockVM = ECheckin_VM()
+    mockVM.eCheckinData = [
+        ECheckinModal_Nw(
+            orderId: 0,
+            checkIn: "09:05 AM",
+            positionLabelColor: "blue",
+            position: "Developer",
+            weekEnd: "09/22/2025",
+            endTime: "05:00 PM",
+            candId: 1,
+            startTime: "09:00 AM",
+            isAdminUser: 0,
+            reportTo: "Manager",
+            payForBreak: true,
+            recCode: "ABC123",
+            candidateName: "John Doe",
+            checkOut: "",
+            billDate: "09/22/2025",
+            breakMinutes: 30,
+            timeIn: "",
+            timeOut: ""
+        )
+    ]
+    
+    return Check_In(viewModel: mockVM, clientID: 1, contactID: 1)
         .environmentObject(GlobalErrorHandler())
 }
+
+

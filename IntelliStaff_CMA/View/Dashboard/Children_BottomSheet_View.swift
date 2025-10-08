@@ -71,8 +71,6 @@ struct Children_BottomSheet_View: View {
                         .onTapGesture {
                             print("the api key is \(child.apiKey)")
                             path.append(.webView(apiKey: child.apiKey))
-                            
-                          // path.append(.webView(apiKey: child.apiKey, division: division))
                         }
                     }
                 }
@@ -90,21 +88,21 @@ struct Children_BottomSheet_View: View {
             Children_BottomSheet_View(
                 parentTitle: "Math Subjects",
                 children: [
-                    ChildItem(name: "Algebra", apiKey: "algebra123"),
-                    ChildItem(name: "Geometry", apiKey: "geometry456"),
-                    ChildItem(name: "Trigonometry", apiKey: "trig789")
+                    ChildItem(name: "Algebra",  apiKey: "algebra123"),
+                    ChildItem(name: "Geometry",  apiKey: "geometry456"),
+                    ChildItem(name: "Trigonometry",  apiKey: "trig789")
                 ],             division: DivisionList(
                     clientName: "Acme Corp",
                     clientID: 101,
                     contactID: 202,
                     divisionName: "Sales Division",
                     pendingTS: 3,
-                    divisionId: 301,
+                    divisionID: 301,
                     showLogin: 1,
                     showBreakminutes: 0,
                     name: "John Doe",
                     master: 1,
-                    clientContactInfoId: 404
+                    clientContactInfoID: 404
                 ),
                 onDismiss: { print("Dismissed") },
                 path: $dummyPath
@@ -114,5 +112,4 @@ struct Children_BottomSheet_View: View {
 
     return ChildrenBottomSheetPreviewWrapper()
 }
-
 

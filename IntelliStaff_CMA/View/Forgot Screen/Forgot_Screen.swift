@@ -30,7 +30,7 @@ struct Forgot_Screen: View {
                 
                 VStack {
                     
-                    Image("Splash")
+                    Image("CMA icon")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 300, height: 150)

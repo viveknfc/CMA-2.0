@@ -31,8 +31,8 @@ class ProfileList_VM {
            
         if isSubVendor?.isSubVendor == 0 {
                // CWA → add extra items
-               listItems.append(ProfileModel(title: "Verify Billing Information", imageName: "arrow.backward.circle"))
-               listItems.append(ProfileModel(title: "Your Client Rep", imageName: "questionmark.circle"))
+               listItems.append(ProfileModel(title: "Verify Billing Information", imageName: "doc.badge.plus"))
+               listItems.append(ProfileModel(title: "Your Client Rep", imageName: "person.text.rectangle"))
            }
            
            // common items for both PWA and CWA
@@ -54,6 +54,7 @@ class ProfileList_VM {
             do {
                 let response = try await APIFunction.subVendorAPICalling(params: params)
                 print("the response for subVendor is", response)
+                UserDefaults.standard.set(response.isSubVendor, forKey: "IsSubVendor")
                 vendorList = response
                 isLoading = false
                 getMenuItems()

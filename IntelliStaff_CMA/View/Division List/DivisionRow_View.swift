@@ -52,11 +52,11 @@ struct DivisionRow_View: View {
         contactID: 101,
         divisionName: "iOS Division",
         pendingTS: 0,
-        divisionId: 1,
+        divisionID: 1,
         showLogin: 1,
         showBreakminutes: 1,
         name: "John Appleseed",
         master: 1,
-        clientContactInfoId: 10
+        clientContactInfoID: 10
     ))
 }

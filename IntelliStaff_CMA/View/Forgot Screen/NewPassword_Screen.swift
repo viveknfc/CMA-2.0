@@ -193,7 +193,7 @@ struct NewPassword_Screen: View {
                 .onTapGesture {}
             
             VStack(spacing: 0) {
-                Image("Splash")
+                Image("CMA icon")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 300, height: 150)

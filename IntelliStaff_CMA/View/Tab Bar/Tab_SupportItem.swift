@@ -144,6 +144,7 @@ struct ControlView<Content: View>: View {
    
     let tag: Int
     let systemName: String
+    let systemTitile: String
     let safeArea: EdgeInsets
     let content: () -> Content
    
@@ -173,9 +174,9 @@ struct ControlView<Content: View>: View {
            }
        }
        .tabItem(tag: tag, normal: {
-           TabButton(constant: $constant, selection: $selection, tag: tag, isSelection: false, systemName: systemName)
+           TabButton(constant: $constant, selection: $selection, tag: tag, isSelection: false, systemName: systemName, label: systemTitile)
        }, select: {
-           TabButton(constant: $constant, selection: $selection, tag: tag, isSelection: true, systemName: systemName)
+           TabButton(constant: $constant, selection: $selection, tag: tag, isSelection: true, systemName: systemName, label: systemTitile)
        })
    }
    
@@ -198,34 +199,37 @@ struct TabButton: View {
    let tag: Int
    let isSelection: Bool
    let systemName: String
+   let label: String
    
-   var content: some View {
-       VStack(spacing: 0) {
-           // Top indicator line for selected state
-           Rectangle()
-               .fill(isSelection ? .theme : .gray)
-               .frame(height: 3)
-               .frame(maxWidth: isSelection ? 40 : 0)
-               .animation(.easeInOut(duration: 0.3), value: isSelection)
+   var body: some View {
+       VStack(spacing: 6) { // smaller spacing
            
-           Spacer()
+           // Top indicator
+           Rectangle()
+               .fill(isSelection ? .theme : .clear) // hide when not selected
+               .frame(height: 3)
+               .frame(maxWidth: isSelection ? 30 : 0)
+               .animation(.easeInOut(duration: 0.3), value: isSelection)
            
            // Icon
            Image(systemName: systemName)
                .resizable()
                .aspectRatio(contentMode: .fit)
-               .frame(width: 24, height: 24)
+               .frame(width: 22, height: 22)
                .foregroundColor(isSelection ? .theme : .gray)
                .scaleEffect(isSelection ? 1.0 : 0.9)
                .animation(.easeInOut(duration: 0.25), value: isSelection)
            
-           Spacer()
+           // Label
+           Text(label)
+               .font(.caption2)
+               .foregroundColor(isSelection ? .theme : .gray)
+               .lineLimit(1)
        }
-       .frame(maxWidth: .infinity, maxHeight: .infinity)
+       .frame(maxWidth: .infinity) // remove maxHeight stretching
+       .padding(.top, 6) // add safe top padding so it won’t collide
+       .padding(.bottom, 4)
        .contentShape(Rectangle())
    }
-
-   var body: some View {
-       content
-   }
 }
+

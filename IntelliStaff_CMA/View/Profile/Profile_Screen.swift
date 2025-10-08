@@ -93,7 +93,7 @@ struct Profile_Screen: View {
                             .buttonStyle(PlainButtonStyle())
                         }
                     }
-                    .padding(.top, 100)
+                    .padding(.top, 10)
                     .padding(.horizontal, 0)
                 }
                 if viewModel.isLoading {
@@ -118,8 +118,10 @@ struct Profile_Screen: View {
         switch item.title {
         case "Edit Your Information":
             path.append(.webView(apiKey: "EditYourInformation"))
+           // break
         case "Verify Billing Information":
             path.append(.webView(apiKey: "VerifyBillingInformation"))
+          //  break
         case "Your Client Rep":
             path.append(.clientRep(clientId: clientID, contactId: contactID))
            // path.append(.webView(apiKey: "Cwa2dev/VerifyBillingInformation"))

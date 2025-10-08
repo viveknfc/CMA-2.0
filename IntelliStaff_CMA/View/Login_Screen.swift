@@ -96,7 +96,7 @@ struct Login_Screen: View {
                 guard !hasLoadedOnce else { return }
                 hasLoadedOnce = true
                 
-                await viewModel.fetchServiceToken(errorHandler: errorHandler) // Auto call when screen appears
+              //  await viewModel.fetchServiceToken(errorHandler: errorHandler) // Auto call when screen appears
                 
                 // 2. Auto-login if remembered
                 if UserDefaults.standard.bool(forKey: "isRemembered") {

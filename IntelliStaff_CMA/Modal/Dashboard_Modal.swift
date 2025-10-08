@@ -36,25 +36,47 @@ struct MenuItem: Identifiable, Decodable {
     }
 }
 
-struct MenuGroup: Identifiable {
-    let id: Int
-    let parent: MenuItem
-    let children: [MenuItem]
-}
+//struct MenuGroup: Identifiable {
+//    let id: Int
+//    let parent: MenuItem
+//    let children: [MenuItem]
+//}
+//
+//struct Dashboard_Menu_Items: Identifiable, Equatable {
+//    let id: Int
+//    let title: String
+//    let imageName: String
+//    let itemCount: Int
+//    let children: [ChildItem]?
+//}
+//
+//struct ChildItem: Identifiable, Equatable {
+//    let id = UUID()
+//    let name: String
+//    let apiKey: String
+//    let imageName: String = "notes"
+//}
+
+
+import SwiftUI
 
 struct Dashboard_Menu_Items: Identifiable, Equatable {
-    let id: Int
+    let id = UUID()
     let title: String
-    let imageName: String
+    let imageName: String  // system or asset image name
     let itemCount: Int
     let children: [ChildItem]?
+}
+
+struct MenuGroup {
+    let parent: MenuItem
+    let children: [MenuItem]
 }
 
 struct ChildItem: Identifiable, Equatable {
     let id = UUID()
     let name: String
-    let apiKey: String
     let imageName: String = "notes"
+    let apiKey: String
 }
-
 

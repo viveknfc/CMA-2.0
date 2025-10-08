@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 extension Font {
     static func poppinsMedium(size: CGFloat) -> Font {
         return .custom("Poppins-Medium", size: size)
@@ -15,11 +17,14 @@ extension Font {
     static func poppinsRegular(size: CGFloat) -> Font {
         return .custom("Poppins-Regular", size: size)
     }
+    
+    static func poppinsLite(size: CGFloat) -> Font {
+        return .custom("Poppins-Light", size: size)
+    }
 
     static let titleFont = Font.poppinsMedium(size: 16)
     static let bodyFont = Font.poppinsRegular(size: 12)
+    static let menuFont = Font.poppinsLite(size: 10)
     static let buttonFont = Font.poppinsRegular(size: 14)
     static let size16RFont = Font.poppinsRegular(size: 16)
 }
-
-

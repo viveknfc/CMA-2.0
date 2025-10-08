@@ -16,12 +16,12 @@ struct Spalsh_Screen: View {
         if isActive {
             ContentView()
         } else {
-                Image("Splash")
+                Image("cma")
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.white)) //"Theme Color"
+                .background(Color.theme) //"Theme Color"
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                         withAnimation {

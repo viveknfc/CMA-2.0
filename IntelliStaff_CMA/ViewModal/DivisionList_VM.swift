@@ -10,7 +10,6 @@ import Foundation
 @MainActor
 @Observable
 class DivisionList_VM {
-    
     var divisions: [DivisionList] = []
     var isLoading: Bool = false
     var errorMessage: String?
@@ -25,8 +24,8 @@ class DivisionList_VM {
                 let params: [String: String] = ["email": userName, "password": password]
                 
                 let result = try await APIFunction.divisionListAPICalling(params: params)
-                print("the result of division list is: \(result)")
-                
+               // print("the result of division list is: \(result)")
+               
                 self.divisions = result
                 self.isLoading = false
                 
@@ -38,4 +37,6 @@ class DivisionList_VM {
             }
         }
     }
+    
+
 }

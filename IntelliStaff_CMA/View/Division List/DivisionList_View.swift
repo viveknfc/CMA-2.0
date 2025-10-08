@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct DivisionList_View: View {
     
     @Binding var path: [AppRoute]
@@ -14,7 +16,7 @@ struct DivisionList_View: View {
     @Bindable var viewModal: DivisionList_VM
     @EnvironmentObject var errorHandler: GlobalErrorHandler
     @State private var showRetryAlert = false
-
+    
     var filteredItems: [DivisionList] {
         if searchText.isEmpty {
             return viewModal.divisions
@@ -52,29 +54,31 @@ struct DivisionList_View: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Please select appropriate division")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.init(hex: "#198754"))
                         .padding(8)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.theme.opacity(0.9))
+                        .background(Color.init(hex: "#0dcaf0").opacity(0.2))
                         .cornerRadius(6)
 
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle")
+                            .foregroundColor(Color.init(hex: "#198754"))
                         Text("Note: You have rights to multiple divisions.")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(.black)
+                            .foregroundColor(Color.init(hex: "#198754"))
+                            
                     }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.mint.opacity(0.9))
+                    .background(Color.init(hex: "#0dcaf0").opacity(0.2))
                     .cornerRadius(6)
 
                     Text("Rows highlighted in blue indicate there are pending timeslip(s) for the division")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.init(hex: "#198754"))
                         .padding(8)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.brown)
+                        .background(Color.init(hex: "#0dcaf0").opacity(0.2))
                         .cornerRadius(6)
                 }
                 .padding(.horizontal)
@@ -87,7 +91,25 @@ struct DivisionList_View: View {
                         ForEach(filteredItems) { item in
                             Button(action: {
                                 
+                               
+                                
+//                             userDefaults.string(forKey: "cmaClientId") ?? "") ?? 95108,
+//                             userDefaults.string(forKey: "cmaDivisionId") ?? "") ?? 6,
+//                             userDefaults.string(forKey: "cmaDivisionName") ?? "On Call Counsel - Gov",
+//                            userDefaults.string(forKey: "cmaContactId") ?? "")
+//                            userDefaults.string(forKey: "cmaName") ?? "TemPositions IT",
+//                            userDefaults.string(forKey: "cmaClientName") ?? "Test - Office of Asylum Seeker Operations",
+//                            userDefaults.string(forKey: "cmaClientName") ?? "Test - Office of Asylum Seeker Operations",
+//
+                              
+                                let cwaDetails = makeCwaDictDetails(from: item)
+                                //makeCwaDetails(from: item)
+                                    
+                                    // Save the entire dictionary
+                                    UserDefaults.standard.set(cwaDetails, forKey: "cwaDetails")
+                                    UserDefaults.standard.synchronize()
                                 path.append(.dashboard(division: item))
+                               
                                 
                                 
                             }) {
@@ -122,6 +144,7 @@ struct DivisionList_View: View {
                 }
                 .onAppear {
                     viewModal.fetchDivisions(errorHandler: errorHandler)
+                    
                 }
                 .onChange(of: viewModal.divisions) { oldValue, newValue in
                     if newValue.isEmpty && !viewModal.isLoading {
@@ -209,12 +232,12 @@ private var mockViewModel: DivisionList_VM {
             contactID: 101,
             divisionName: "iOS Division",
             pendingTS: 0,
-            divisionId: 1,
+            divisionID: 1,
             showLogin: 1,
             showBreakminutes: 1,
             name: "John Appleseed",
             master: 1,
-            clientContactInfoId: 10
+            clientContactInfoID: 10
         ),
         DivisionList(
             clientName: "Google LLC",
@@ -222,12 +245,12 @@ private var mockViewModel: DivisionList_VM {
             contactID: 102,
             divisionName: "Android Division",
             pendingTS: 1,
-            divisionId: 2,
+            divisionID: 2,
             showLogin: 0,
             showBreakminutes: 0,
             name: "Sundar Pichai",
             master: 2,
-            clientContactInfoId: 20
+            clientContactInfoID: 20
         )
     ]
     return vm

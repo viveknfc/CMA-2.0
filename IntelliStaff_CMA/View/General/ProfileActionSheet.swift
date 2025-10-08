@@ -1,104 +1,84 @@
-//
-//  ProfileActionSheet.swift
-//  IntelliStaff_CMA
-//
-//  Created by ios on 12/09/25.
-//
-
 import SwiftUI
 
-struct ProfileActionSheetView: View {
+struct ProfileActionSheetOnlyView: View {
     @State private var showActionSheet = false
-    @State private var userName: String = ""
-    @State private var divisionName: String = ""
-    @Binding var path: [AppRoute]
-     private var showLogoutAlert = false
+    @State private var showLogoutAlert = false
+    @State private var userName: String = "John Doe"
+    @State private var divisionName: String = "Sales"
+    @Binding var path: [AppRoute] // For navigation
+
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("Main Content Here")
+        VStack {
+            Spacer()
+            
+            Button(action: {
+                showActionSheet.toggle()
+            }) {
+                Text("Show Profile Options")
+                    .font(.headline)
                     .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
             }
-            .navigationTitle("Dashboard")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showActionSheet.toggle()
-                    }) {
-                        Image("user_profile") // same image as in UIKit
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .clipShape(Circle())
-                    }
-                }
+
+            Spacer()
+        }
+        .confirmationDialog(
+            buildDialogTitle(),
+            isPresented: $showActionSheet,
+            titleVisibility: .visible
+        ) {
+            Button("Change Password") {
+                pushToChangePassword()
             }
-            .onAppear {
-                // Load values from UserDefaults
-                let defaults = UserDefaults.standard
-                userName = defaults.string(forKey: "CandName") ?? "Unknown User"
-                divisionName = defaults.string(forKey: "DivisionName") ?? ""
+            
+            Button("Logout", role: .destructive) {
+                showLogoutAlert = true
             }
-            .confirmationDialog(
-                "\(userName)\(divisionName.isEmpty ? "" : "\n\(divisionName)")",
-                isPresented: $showActionSheet,
-                titleVisibility: .visible
-            ) {
-                Button("Change Password") {
-                    pushToChangePassword()
-                }
-                Button("Logout", role: .destructive) {
-                    resetDefaults()
-                    // Navigation handling here
-                    print("Pop to root in SwiftUI")
-                }
-                Button("Cancel", role: .cancel) {}
+            
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("Logout", isPresented: $showLogoutAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("OK", role: .destructive) {
+                performLogout()
             }
+        } message: {
+            Text("Are you sure you want to logout?")
         }
     }
-    
-    // MARK: - Functions
-    
+
+    // MARK: - Helper Functions
+    private func buildDialogTitle() -> String {
+        if divisionName.isEmpty {
+            return userName
+        } else {
+            return "\(userName)\n\(divisionName)"
+        }
+    }
+
     private func pushToChangePassword() {
-        // Navigation action to ChangePassword screen
         print("Navigate to Change Password screen")
         path.append(.forgotPassword)
     }
-    
-    private  func resetDefaults() {
-        // Clear UserDefaults
-        if let bundleID = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
-        UserDefaults.standard.synchronize()
-        
-       // if showLogoutAlert {
-            Color.black.opacity(0.4) // dim background
-                .ignoresSafeArea()
-                .transition(.opacity)
 
-            AlertView(
-                image: Image(systemName: "exclamationmark.circle.fill"),
-                title: "Logout",
-                message: "Are you sure you want to logout?",
-                primaryButton: AlertButtonConfig(title: "OK", action: {
-                    // Clear stored tokens
-                    UserDefaults.standard.removeObject(forKey: "Username")
-                    UserDefaults.standard.removeObject(forKey: "Password")
-                    UserDefaults.standard.removeObject(forKey: "refreshToken")
-                    UserDefaults.standard.removeObject(forKey: "accessToken")
-                    UserDefaults.standard.removeObject(forKey: "expiresIn")
-                    UserDefaults.standard.removeObject(forKey: "userId")
-                    
-                    path.append(.login)
-                }),
-                secondaryButton: AlertButtonConfig(title: "Cancel", action: {}),
-                dismiss: {
-                   // showLogoutAlert = false
-                }
-            )
-            .frame(maxWidth: .infinity, maxHeight: .infinity) // ensures full screen
-            .transition(.opacity)
-        //}
+    private func performLogout() {
+        clearUserDefaults()
+        path = [.login] // Reset navigation stack
     }
+
+    private func clearUserDefaults() {
+        let defaults = UserDefaults.standard
+        let keysToRemove = [
+            "Username", "Password", "refreshToken", "accessToken",
+            "expiresIn", "userId", "CandName", "DivisionName"
+        ]
+        keysToRemove.forEach { defaults.removeObject(forKey: $0) }
+        defaults.synchronize()
+    }
+}
+
+#Preview {
+    ProfileActionSheetOnlyView(path: .constant([]))
 }

@@ -10,21 +10,24 @@ import SwiftUI
 struct DashboardWrapper_View: View {
     let division: DivisionList
     @Binding var path: [AppRoute]
-
+    var profileViewModel = ProfileList_VM()
+    var divViewModel = DivisionList_VM()
     @State private var dashboardVM = DashboardViewModel()
 
     var body: some View {
 
             CurveConcavePreview(
                 path: $path,
-                dashboardViewModel: dashboardVM,
-                division: division
+                dashboardViewModel: dashboardVM, division: division
             )
         
             
             .onAppear {
-                if let contactID = division.contactID, let clientid = division.clientID{
-                    dashboardVM.fetchDashboard(contactID: contactID, clientID: clientid)
+                if let contactID = division.contactID, let clientid = division.clientID, let divisionID = division.divisionID{
+                   
+                    dashboardVM.fetchDashboard(contactID: contactID, clientID: clientid, divisionid: divisionID)
+                    profileViewModel.fetchSubVendor(clientId: String(clientid), errorHandler: GlobalErrorHandler())
+                    
                 }
             }
         
@@ -39,11 +42,11 @@ struct DashboardWrapper_View: View {
         contactID: 202,
         divisionName: "Sales Division",
         pendingTS: 3,
-        divisionId: 301,
+        divisionID: 301,
         showLogin: 1,
         showBreakminutes: 0,
         name: "John Doe",
         master: 1,
-        clientContactInfoId: 404
+        clientContactInfoID: 404
     ), path: $path)
 }

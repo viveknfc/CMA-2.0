@@ -12,32 +12,40 @@ struct DivisionList: Codable, Identifiable, Hashable {
         contactID ?? -1  // or use a fallback like clientID or throw fatalError if you must
     }
     
+//    let clientName: String?
+//    let clientID: Int?
+//    let contactID: Int?
+//    let divisionName: String?
+//    let pendingTS: Int?
+//    let divisionId: Int?
+//    let showLogin: Int?
+//    let showBreakminutes: Int?
+//    let name: String?
+//    let master: Int?
+//    let clientContactInfoId: Int?
+    
     let clientName: String?
-    let clientID: Int?
-    let contactID: Int?
-    let divisionName: String?
-    let pendingTS: Int?
-    let divisionId: Int?
-    let showLogin: Int?
-    let showBreakminutes: Int?
-    let name: String?
-    let master: Int?
-    let clientContactInfoId: Int?
+        let clientID, contactID: Int?
+        let divisionName: String?
+        let pendingTS, divisionID, showLogin, showBreakminutes: Int?
+        let name: String?
+        let master: Int?
+        let clientContactInfoID: Int?
 
     // Coding keys to map JSON keys to Swift properties
     enum CodingKeys: String, CodingKey {
-        case clientName = "ClientName"
-        case clientID = "ClientID"
-        case contactID = "ContactID"
-        case divisionName = "DivisionName"
-        case pendingTS = "PendingTS"
-        case divisionId = "DivisionId"
-        case showLogin = "ShowLogin"
-        case showBreakminutes = "ShowBreakminutes"
-        case name = "Name"
-        case master = "Master"
-        case clientContactInfoId = "ClientContactInfoId"
-    }
+            case clientName = "ClientName"
+            case clientID = "ClientID"
+            case contactID = "ContactID"
+            case divisionName = "DivisionName"
+            case pendingTS = "PendingTS"
+            case divisionID = "DivisionId"
+            case showLogin = "ShowLogin"
+            case showBreakminutes = "ShowBreakminutes"
+            case name = "Name"
+            case master = "Master"
+            case clientContactInfoID = "ClientContactInfoId"
+        }
 }
 
 extension DivisionList {
@@ -48,13 +56,15 @@ extension DivisionList {
             contactID: 456,
             divisionName: "Mock Division",
             pendingTS: 0,
-            divisionId: 789,
+            divisionID: 789,
             showLogin: 1,
             showBreakminutes: 1,
             name: "Mock Name",
             master: 0,
-            clientContactInfoId: 111
+            clientContactInfoID: 111
         )
     }
 }
+
+
 
