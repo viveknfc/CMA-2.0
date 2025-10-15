@@ -35,13 +35,6 @@ struct APIFunction {
         return try await APIService.request(url: url, method: .post, parameters: params)
     }
     
-    //MARK: - Fetch Assignment Details
-    
-    static func fetchAssignmentDetails(params: [String: Any]) async throws -> AssignmentResponse {
-        let url = APIConstants.baseURL + APIConstants.GetAssignmentDetails
-        return try await APIService.request(url: url, method: .get, urlParams: params)
-    }
-    
     //MARK: - UpdatePassword API
     
     static func updatePasswordAPICalling(params: [String: Any]) async throws -> UpdatePasswordResponse {
@@ -57,7 +50,7 @@ struct APIFunction {
                                 .joined(separator: "&")
         
         let url = "\(APIConstants.baseURL)\(APIConstants.DivisionList)?\(queryString)"
-      //  let url = APIConstants.baseURL + APIConstants.DivisionList
+     
         print(url)
         return try await APIService.request(url: url, urlParams: params, token: APIConstants.accessToken)
     }
@@ -81,7 +74,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.CandidateDetailsAPI)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.CandidateDetailsAPI)?\(queryString)"
         print(urlString)
         return try await APIService.request(url: urlString, urlParams: params, headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
     }
@@ -92,7 +85,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let urlString = "\(APIConstants.uatBaseURL)\(APIConstants.demoGraphicDetailsAPI)?\(queryString)"
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.demoGraphicDetailsAPI)?\(queryString)"
         print(urlString)
         return try await APIService.request(url: urlString, urlParams: params, headers: ["Authorization": "Bearer \(APIConstants.accessToken)"])
     }

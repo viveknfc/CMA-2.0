@@ -129,28 +129,7 @@ class DashboardViewModel {
         }
     }
     
-    func fetchAssignmentDetails() async {
-        
-        guard let userId = UserDefaults.standard.value(forKey: "userId") as? Int else {
-            print("User ID not found or not an Int")
-            return
-        }
-        
-        let params: [String: Any] = [
-            "candidateId": userId,
-            "skip": 0,
-            "LimitRows": 4,
-            "jobType": 1
-        ]
-        do {
-            let result = try await APIFunction.fetchAssignmentDetails(params: params)
-            assignmentItems = result
-            print("the assignment response details is", result)
-        }
-        catch {
-            self.errorMessage = error.localizedDescription
-        }
-    }
+    
     
     
     func jsonStringToDictionary(_ jsonString: String) -> [String: Any]? {
@@ -287,7 +266,7 @@ class DashboardViewModel {
             "ClientId":95108,
             "DivisionClientId":0,
             "DivisionId":6,
-            "EndDate":"2025-10-05",
+            "EndDate":Date_Time_Formatter.utcDateFormat(from: Date()),
             "IsCwaShow":2,
             "IsDivisionSort":0,
             "IsNameSort":0,

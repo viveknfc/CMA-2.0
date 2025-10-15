@@ -111,6 +111,5 @@ enum APIConstants {
     static let subVendor = "Clientsapiuat/GetVendorType" //auth/api/
     static let clientInfo = "clientsapiuat/GetCwaClientDefaultDetails" //auth/api/
     static let scheduleDetails = "Orderapiuat/api/ViewSchedule/GetScheduleDetails" //auth/api/
-    static var GetAssignmentDetails = "candidateapiuat/api/Candidate/GetCandidateAssignmentsDetails"
 
 }

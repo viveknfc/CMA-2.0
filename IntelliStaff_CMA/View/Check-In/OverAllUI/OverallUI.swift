@@ -1,18 +1,12 @@
-//
-//  Echeckin_View.swift
-//  IntelliStaff_CMA
-//
-//  Created by ios on 14/08/25.
-//
 
 import SwiftUI
 import SSDateTimePicker
 
+// MARK: - Enums
 enum ActiveAlert {
     case feedback
     case info
 }
-
 
 enum ReasonType: String, CaseIterable {
     case leftEarly = "Left Early"
@@ -25,7 +19,20 @@ enum ReasonType: String, CaseIterable {
     var displayName: String {
         return self.rawValue
     }
+    
+    var reasonID: Int {
+        switch self {
+        case .leftEarly: return 1
+        case .arriveLate: return 2
+        case .replacement: return 3
+        case .askToWorkAdditional: return 4
+        case .sentHome: return 5
+        case .other: return 6
+        }
+    }
 }
+
+// MARK: - Extensions
 extension String {
     /// Converts "yyyy-MM-dd'T'HH:mm:ss" to time with AM/PM
     func toTimeAMPM(inputFormat: String = "yyyy-MM-dd'T'HH:mm:ss") -> String? {
@@ -36,57 +43,156 @@ extension String {
         guard let date = inputFormatter.date(from: self) else { return nil }
         
         let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "h:mm a"   // Example: "8:00 AM"
+        outputFormatter.dateFormat = "h:mm a"
         outputFormatter.amSymbol = "AM"
         outputFormatter.pmSymbol = "PM"
         
         return outputFormatter.string(from: date)
     }
+    
+    func convert12HourTo24Hour() -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+        
+        if let date = dateFormatter.date(from: self) {
+            dateFormatter.dateFormat = "HH:mm"
+            return dateFormatter.string(from: date)
+        }
+        return nil
+    }
 }
 
-// MARK: - Checkbox Manager
+// MARK: - Time Calculator Helper
+struct TimeCalculator {
+    static func addTimes(start: String, end: String, min: Bool) -> Int {
+        var startArray = start.components(separatedBy: ":")
+        var endArray = end.components(separatedBy: ":")
+        
+        // Clean AM/PM from components
+        for (index, component) in startArray.enumerated() {
+            startArray[index] = component.replacingOccurrences(of: "AM", with: "")
+                .replacingOccurrences(of: "PM", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        for (index, component) in endArray.enumerated() {
+            endArray[index] = component.replacingOccurrences(of: "AM", with: "")
+                .replacingOccurrences(of: "PM", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        guard startArray.count >= 2, endArray.count >= 2,
+              let startHour = Int(startArray[0]),
+              let startMin = Int(startArray[1]),
+              let endHour = Int(endArray[0]),
+              let endMin = Int(endArray[1]) else {
+            return 0
+        }
+        
+        let startMinutes = startHour * 60 + startMin
+        let endMinutes = endHour * 60 + endMin
+        
+        var timeDifference = min ? startMinutes - endMinutes : endMinutes - startMinutes
+        let day = 24 * 60
+        
+        if timeDifference < 0 {
+            timeDifference += day
+        }
+        
+        return timeDifference
+    }
+    
+    static func convertMinutesToHoursAndMinutes(minutes: Int) -> (hours: Int, minutes: Int) {
+        let hours = minutes / 60
+        let remainingMinutes = minutes % 60
+        return (hours, remainingMinutes)
+    }
+    
+    static func isIrregularHours(totalMinutes: Int) -> Bool {
+        return totalMinutes < 330 || totalMinutes > 810 // < 5.5h or > 13.5h
+    }
+}
+ 
+
+// MARK: - Enhanced Checkbox Manager
 class CheckboxManager: ObservableObject {
     @Published var selectedRecords: Set<Int> = []
     @Published var submissionArray: [[String: Any]] = []
-    var extraFields: [String: Any] = [:]
-    private let locationDataManager = LocationDataManager()
-    @State var startSelectedTime:String?
-    @State var endSelectedTime:String?
-    var clientid:Int = 0
-    var contactid:Int = 0
-    // let division: DivisionList
-//    func toggleRecord(_ record: ECheckInAllResponse) {
-//        if selectedRecords.contains(record.id) {
-//            // Remove from selection and submission array
-//            removeRecord(record)
-//        } else {
-//            // Add to selection and submission array
-//            addRecord(record, extraFields: extraFields)
-//        }
-//    }
+    @Published var validationErrors: [String] = []
     
-    private func addRecord(_ record: ECheckInAllResponse, extraFields: [String: Any])  {
+    var extraFields: [String: Any] = [:]
+    var clientid: Int = 0
+    var contactid: Int = 0
+    var selectedReasons: [Int: ReasonType] = [:]
+    var selectedStartTimes: [String: String] = [:]
+    var selectedEndTimes: [String: String] = [:]
+    @State var startSelectedTime: String?
+    @State var endSelectedTime: String?
+    
+    func configure(clientID: Int, contactID: Int, reasons: [Int: ReasonType],
+                  startTimes: [String: String], endTimes: [String: String]) {
+        self.clientid = clientID
+        self.contactid = contactID
+        self.selectedReasons = reasons
+        self.selectedStartTimes = startTimes
+        self.selectedEndTimes = endTimes
+        
+        self.extraFields = [
+            "clientId": clientID,
+            "contactId": contactID,
+            "startTimes": startTimes,
+            "endTimes": endTimes
+        ]
+    }
+    
+    func toggleRecord(_ record: ECheckInAllResponse) {
+        if selectedRecords.contains(record.id) {
+            removeRecord(record)
+        } else {
+            if record.canBeSelected && record.isSubmitted == 0 {
+                addRecord(record)
+            }
+        }
+    }
+    
+    func addRecord(_ record: ECheckInAllResponse) {
         selectedRecords.insert(record.id)
         
-        let ipAddress = MobileNetworkInfo.getLocalIPAddress()
+        let ipAddress = MobileNetworkInfo.getLocalIPAddress() ?? ""
+        let checkIn = selectedStartTimes[record.checkIn] ?? record.checkIn
+        let checkOut = selectedEndTimes[record.checkOut] ?? record.checkOut
         
-        do{
-            let checkReq = CheckInRequest(candId: record.candID, orderId: record.orderID, type: 3, weekEnd: record.weekEnd, clientId: clientid, timeOut: record.checkOut ?? "1900-01-01 00:00:00", totlaHours: Int(record.totalHours), recCode: "S", payForBreak: 0, latitude: String(locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0), endTime: record.endTime, breakMinutes: record.breakMinutes, address: "\(locationDataManager.currentAddress ?? "")", checkIn: startSelectedTime ?? record.checkIn, retry: 0, contactId: contactid, longitude: String(locationDataManager.locationManager.location?.coordinate.longitude ?? 0.0), billDate: record.billDate, startTime: record.startTime, ipAddress: ipAddress ?? "", checkOut: endSelectedTime ?? record.checkOut, routeName: "iOS", timeIn:record.checkIn ?? "1900-01-01 00:00:00", id: record.id, ReasonId: record.reasonID, OtherReason: "\(String(record.otherReason ?? ""))")
-            
-            
-            if let recordDict = checkReq.asDictionary() {
-                // 🔎 Log request for debugging
-                if let jsonData = try? JSONSerialization.data(withJSONObject: recordDict, options: .prettyPrinted),
-                   let jsonString = String(data: jsonData, encoding: .utf8) {
-                    print("📤 Request JSON:\n\(jsonString)")
-                    if record.isSubmitted == 0 {
-                        submissionArray.append(recordDict)
-                    }
-                    print("Added record \(record.id) to submission array. Total count: \(submissionArray.count)")
-                }
-            }
-        }catch{
-        }
+        let recordDict: [String: Any] = [
+            "CandId": record.candID,
+            "OrderId": record.orderID,
+            "WeekEnd": record.weekEnd,
+            "BillDate": record.billDate,
+            "StartTime": record.startTime,
+            "EndTime": record.endTime,
+            "CheckIn": checkIn,
+            "CheckOut": checkOut,
+            "Type": 3,
+            "RouteName": "iOS",
+            "ClientId": clientid,
+            "ContactId": contactid,
+            "timeOut": "1900-01-01 00:00:00",
+            "timeIn": "1900-01-01 00:00:00",
+            "breakMinutes": record.breakMinutes,
+            "totlaHours": record.totalHours,
+            "RecCode": record.recCode,
+            "PayforBreak": record.payforBreak ? 1 : 0,
+            "Id": record.id,
+            "longitude": 0.0,
+            "latitude": 0.0,
+            "Address": "Not Found",
+            "IPAddress": ipAddress,
+            "ReasonId": selectedReasons[record.id]?.reasonID ?? 0,
+            "OtherReason": record.otherReason ?? "",
+            "Retry": 0
+        ]
+        
+        submissionArray.append(recordDict)
+        print("✅ Added record \(record.id) to submission array. Total: \(submissionArray.count)")
     }
     
     func removeRecord(_ record: ECheckInAllResponse) {
@@ -97,65 +203,40 @@ class CheckboxManager: ObservableObject {
             }
             return false
         }
-        print("Removed record \(record.id) from selection. Total count: \(submissionArray.count)")
+        print("❌ Removed record \(record.id). Total: \(submissionArray.count)")
     }
     
-//    func isSelected(_ recordId: Int) -> Bool {
-//        return selectedRecords.contains(recordId)
-//    }
+    func validateSelection(records: [ECheckInAllResponse]) -> [String] {
+        var invalidRecords: [String] = []
+        
+        for id in selectedRecords {
+            if let record = records.first(where: { $0.id == id }) {
+                let totalMinutes = record.totalHours * 60
+                
+                if TimeCalculator.isIrregularHours(totalMinutes: Int(totalMinutes)) {
+                    if selectedReasons[record.id] == nil {
+                        invalidRecords.append(record.candidateName ?? "Unknown")
+                    }
+                }
+            }
+        }
+        
+        return invalidRecords
+    }
     
     func clearAll() {
         selectedRecords.removeAll()
         submissionArray.removeAll()
-        print("Cleared all selections")
+        validationErrors.removeAll()
+        print("🧹 Cleared all selections")
     }
     
-    func getSubmissionData() -> Data? {
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: submissionArray, options: .prettyPrinted)
-            print("Generated JSON data for \(submissionArray.count) records")
-            return jsonData
-        } catch {
-            print("Error creating JSON data: \(error)")
-            return nil
-        }
+    func isSelected(_ recordID: Int) -> Bool {
+        return selectedRecords.contains(recordID)
     }
     
     var hasSelectedRecords: Bool {
         return !selectedRecords.isEmpty
-    }
-    
-    var selectedCount: Int {
-        return selectedRecords.count
-    }
-}
-
-
-// 6. Make sure your CheckboxManager handles individual records correctly
-extension CheckboxManager {
-    func toggleRecord(_ record: ECheckInAllResponse) {
-        print("Toggling record: \(record.id)")
-        
-        if selectedRecords.contains(record.id) {
-            // Remove from selection
-            removeRecord(record)
-            print("Removed record \(record.id) from selection")
-        } else {
-            // Add to selection
-            if record.canBeSelected && record.isSubmitted == 0 {
-                addRecord(record, extraFields: extraFields)
-                print("Added record \(record.id) to selection")
-            }
-        }
-        
-        print("Current selected records: \(selectedRecords)")
-        print("Submission array count: \(submissionArray.count)")
-    }
-    
-    func isSelected(_ recordID: Int) -> Bool {
-        let isSelected = selectedRecords.contains(recordID)
-        print("Checking if record \(recordID) is selected: \(isSelected)")
-        return isSelected
     }
 }
 
@@ -177,8 +258,9 @@ struct ECheckinConfig {
         self.canSave = canSave
     }
 }
+
 struct RecordCardConfig {
-    let showStarValue:Int?
+    let showStarValue: Int?
     let showStarRating: Bool
     let showCheckbox: Bool
     let showReasonDropdown: Bool
@@ -197,9 +279,7 @@ struct RecordCardConfig {
     }
 }
 
-// MARK: - Reusable Components
-
-// 1. Header Component
+// MARK: - Header Components
 struct ECheckinHeaderView: View {
     @Binding var selectedDate: Date?
     @Binding var showDatePicker: Bool
@@ -245,7 +325,6 @@ struct ECheckinHeaderView: View {
     }
 }
 
-// 2. Date Picker Button Component
 struct DatePickerButton: View {
     @Binding var selectedDate: Date?
     @Binding var showDatePicker: Bool
@@ -281,7 +360,6 @@ struct DatePickerButton: View {
     }
 }
 
-// 3. Action Button Component
 struct ActionButton: View {
     let title: String
     var backgroundColor: Color = .blue
@@ -301,7 +379,6 @@ struct ActionButton: View {
     }
 }
 
-// 4. Info Button Component
 struct InfoButton: View {
     let action: () -> Void
     
@@ -314,18 +391,18 @@ struct InfoButton: View {
     }
 }
 
-// 5. Record Card Component
+// MARK: - Enhanced Record Card Component
 struct RecordCardView: View {
     let record: ECheckInAllResponse
     let index: Int
     let config: RecordCardConfig
     @ObservedObject var checkboxManager: CheckboxManager
     
-    // Individual state for this specific record
     @State private var individualRating: Int
     @State private var showInfoAlert = false
+    @State private var calculatedTotalHours: String
+    @State private var showReasonAlert = false
     
-    // Other bindings remain the same...
     @Binding var selectedStartTimes: [String: Time]
     @Binding var selectedEndTimes: [String: Time]
     @Binding var showReasonDropdown: [Int: Bool]
@@ -336,14 +413,12 @@ struct RecordCardView: View {
     @Binding var activeRecordKey: String
     @Binding var activeTime: Time
     
-    // Action callbacks
     let onTimePickerTap: (ECheckInAllResponse, TimeType) -> Void
     let onSave: (ECheckInAllResponse) -> Void
     let onDelete: (ECheckInAllResponse) -> Void
     let onFeedback: (ECheckInAllResponse, Int) -> Void
     let onReasonSave: (ECheckInAllResponse, ReasonType, String) -> Void
     
-    // Initialize with record's rating
     init(
         record: ECheckInAllResponse,
         index: Int,
@@ -383,57 +458,62 @@ struct RecordCardView: View {
         self.onFeedback = onFeedback
         self.onReasonSave = onReasonSave
         
-        // Initialize individual rating from record
         self._individualRating = State(initialValue: record.rating ?? 0)
+        
+        // Calculate initial total hours
+        let checkIn = record.checkIn.toTimeAMPM() ?? ""
+        let checkOut = record.checkOut.toTimeAMPM() ?? ""
+        let totalMinutes = TimeCalculator.addTimes(
+            start: checkOut.convert12HourTo24Hour() ?? "00:00",
+            end: checkIn.convert12HourTo24Hour() ?? "00:00",
+            min: true
+        )
+        let (hours, minutes) = TimeCalculator.convertMinutesToHoursAndMinutes(minutes: totalMinutes)
+        self._calculatedTotalHours = State(initialValue: "\(hours) H : \(minutes) M")
     }
     
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 4) {
             if config.showCheckbox {
-                RecordHeaderView(
-                    record: record,
-                    checkboxManager: checkboxManager
-                )
+                RecordHeaderView(record: record, checkboxManager: checkboxManager)
             } else {
                 BasicRecordHeader(record: record)
             }
             
-            RecordDetailsViewIndividual(
+            EnhancedRecordDetailsView(
                 record: record,
                 individualRating: $individualRating,
+                calculatedTotalHours: $calculatedTotalHours,
                 showStarRating: config.showStarRating,
-                onFeedback: { rating in
-                    onFeedback(record, rating)
-                },
-                onInfoTap: {
-                    showInfoAlert = true
-                }
+                onFeedback: { rating in onFeedback(record, rating) },
+                onInfoTap: { showInfoAlert = true }
             )
             
-            
-            if config.showTimePickers && config.isEditable {
-                TimePickersView(
+            if config.showTimePickers && config.isEditable && shouldShowTimePickers {
+                EnhancedTimePickersView(
                     record: record,
-                    selectedStartTimes: selectedStartTimes,
-                    selectedEndTimes: selectedEndTimes,
-                    onTimePickerTap: onTimePickerTap
+                    selectedStartTimes: $selectedStartTimes,
+                    selectedEndTimes: $selectedEndTimes,
+                    onTimePickerTap: onTimePickerTap,
+                    onTimeChanged: recalculateTotalHours
                 )
             }
             
-            if config.showReasonDropdown && config.isEditable {
-                ReasonDropdownView(
+            if config.showReasonDropdown && config.isEditable && shouldShowReasonDropdown {
+                EnhancedReasonDropdownView(
                     record: record,
                     showReasonDropdown: $showReasonDropdown,
                     selectedReasons: $selectedReasons,
                     reasonComments: $reasonComments,
+                    showReasonAlert: $showReasonAlert,
                     onReasonSave: onReasonSave
                 )
             }
             
             if config.showActions && config.isEditable {
-                RecordActionsView(
+                EnhancedRecordActionsView(
                     record: record,
+                    isSaveEnabled: isSaveButtonEnabled,
                     onSave: { onSave(record) },
                     onDelete: { onDelete(record) }
                 )
@@ -444,30 +524,77 @@ struct RecordCardView: View {
         .cornerRadius(12)
         .shadow(color: Color(.white).opacity(0.3), radius: 4, x: 0, y: 2)
         .alert("Remarks", isPresented: $showInfoAlert) {
-            Button("OK") {
-                showInfoAlert = false
-            }
+            Button("OK") { showInfoAlert = false }
         } message: {
-            Text("\(record.ratingComments ?? "No Rating Comments")")
+            Text(record.ratingComments ?? "No Rating Comments")
         }
-       
+        .alert("Enter Other Reason", isPresented: $showReasonAlert) {
+            TextField("Other Reason", text: Binding(
+                get: { reasonComments[record.id] ?? "" },
+                set: { reasonComments[record.id] = $0 }
+            ))
+            Button("Save") {
+                if let reason = selectedReasons[record.id] {
+                    onReasonSave(record, reason, reasonComments[record.id] ?? "")
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        
         DottedLine()
             .stroke(style: StrokeStyle(lineWidth: 1, dash: [2, 8]))
             .foregroundColor(.gray)
             .frame(height: 1)
             .padding(.horizontal, 10)
-            .padding(.bottom, 4)
-            .padding(.top, 4)
+            .padding(.vertical, 4)
+    }
+    
+    private var shouldShowTimePickers: Bool {
+        return record.isSubmitted == 0
+    }
+    
+    private var shouldShowReasonDropdown: Bool {
+        let totalMinutes = record.totalHours * 60
+        return TimeCalculator.isIrregularHours(totalMinutes: Int(totalMinutes)) && record.isSubmitted == 0
+    }
+    
+    private var isSaveButtonEnabled: Bool {
+        if record.isSubmitted == 1 { return false }
+        
+        let totalMinutes = record.totalHours * 60
+        if TimeCalculator.isIrregularHours(totalMinutes: Int(totalMinutes)) {
+            return selectedReasons[record.id] != nil
+        }
+        
+        return true
+    }
+    
+    private func recalculateTotalHours() {
+        let checkInTime = selectedStartTimes[record.checkIn]
+        let checkOutTime = selectedEndTimes[record.checkOut]
+        
+        let checkIn = checkInTime != nil ? Date_Time_Formatter.formatTime(checkInTime!) : record.checkIn.toTimeAMPM() ?? ""
+        let checkOut = checkOutTime != nil ? Date_Time_Formatter.formatTime(checkOutTime!) : record.checkOut.toTimeAMPM() ?? ""
+        
+        guard let checkIn24 = checkIn.convert12HourTo24Hour(),
+              let checkOut24 = checkOut.convert12HourTo24Hour() else {
+            return
+        }
+        
+        let totalMinutes = TimeCalculator.addTimes(start: checkOut24, end: checkIn24, min: true)
+        let (hours, minutes) = TimeCalculator.convertMinutesToHoursAndMinutes(minutes: totalMinutes)
+        calculatedTotalHours = "\(hours) H : \(minutes) M"
     }
 }
 
-
-struct RecordDetailsViewIndividual: View {
+// MARK: - Enhanced Record Details View
+struct EnhancedRecordDetailsView: View {
     let record: ECheckInAllResponse
     @Binding var individualRating: Int
+    @Binding var calculatedTotalHours: String
     let showStarRating: Bool
     let onFeedback: (Int) -> Void
-    let onInfoTap: () -> Void // Add this parameter
+    let onInfoTap: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -481,32 +608,24 @@ struct RecordDetailsViewIndividual: View {
             
             PositionView(record: record)
             ScheduleTimeView(record: record)
-            TotalHoursView(record: record)
+            
+            HStack {
+                Text("Total Hours:")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(.systemGray))
+                
+                Text(calculatedTotalHours)
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(.label))
+                
+                Spacer()
+            }
+            
             BreakMinutesView(record: record)
         }
     }
 }
-//struct StarRatingSectionIndividual: View {
-//    @Binding var rating: Int
-//    let onFeedback: (Int) -> Void
-//    
-//    var body: some View {
-//        HStack(spacing: 2) {
-//            StarRatingView(rating: $rating) { newRating in
-//                onFeedback(newRating)
-//            }
-//            
-//            Button {
-//                onFeedback(rating)
-//            } label: {
-//                Image(systemName: "info.circle")
-//                    .foregroundColor(.gray)
-//                    .padding(.leading, 4)
-//            }
-//        }
-//        .padding(.vertical, 2)
-//    }
-//}
+
 struct StarRatingSectionIndividual: View {
     @Binding var rating: Int
     let onFeedback: (Int) -> Void
@@ -515,11 +634,11 @@ struct StarRatingSectionIndividual: View {
     var body: some View {
         HStack(spacing: 2) {
             StarRatingView(rating: $rating) { newRating in
-                onFeedback(newRating) // This will trigger feedback alert in parent
+                onFeedback(newRating)
             }
             
             Button {
-                onInfoTap() // This will trigger info alert in parent
+                onInfoTap()
             } label: {
                 Image(systemName: "info.circle")
                     .foregroundColor(.gray)
@@ -530,28 +649,27 @@ struct StarRatingSectionIndividual: View {
     }
 }
 
-// 6. Record Header with Checkbox
+// MARK: - Record Header Components
 struct RecordHeaderView: View {
-        let record: ECheckInAllResponse
-        @ObservedObject var checkboxManager: CheckboxManager
-        
-        var body: some View {
-            HStack {
-                Text(record.candidateName ?? "Unknown")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
-                
-                StatusIndicator(isSubmitted: record.isSubmitted == 1)
-                
-                Spacer()
-                
-                CheckboxView(
-                    record: record,
-                    checkboxManager: checkboxManager
-                )
-            }
-        }
+    let record: ECheckInAllResponse
+    @ObservedObject var checkboxManager: CheckboxManager
     
+    var body: some View {
+        HStack {
+            Text(record.candidateName ?? "Unknown")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.primary)
+            
+            StatusIndicator(isSubmitted: record.isSubmitted == 1)
+            
+            Spacer()
+            
+            CheckboxView(
+                record: record,
+                checkboxManager: checkboxManager
+            )
+        }
+    }
 }
 
 struct CheckboxView: View {
@@ -560,17 +678,12 @@ struct CheckboxView: View {
     
     var body: some View {
         Button(action: {
-            print("Checkbox tapped for record ID: \(record.id)")
             checkboxManager.toggleRecord(record)
         }) {
-            HStack(spacing: 12) {
-                Image(systemName: checkboxIcon)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(checkboxColor)
-                    .animation(.easeInOut(duration: 0.2), value: isSelected)
-            }
-            .padding(.vertical, 8)
-            .contentShape(Rectangle())
+            Image(systemName: checkboxIcon)
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(checkboxColor)
+                .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
         .disabled(!record.canBeSelected)
         .opacity(record.canBeSelected ? 1.0 : 0.6)
@@ -595,8 +708,6 @@ struct CheckboxView: View {
     }
 }
 
-
-// 7. Basic Record Header (without checkbox)
 struct BasicRecordHeader: View {
     let record: ECheckInAllResponse
     
@@ -613,7 +724,6 @@ struct BasicRecordHeader: View {
     }
 }
 
-// 8. Status Indicator Component
 struct StatusIndicator: View {
     let isSubmitted: Bool
     
@@ -624,71 +734,7 @@ struct StatusIndicator: View {
     }
 }
 
-// 9. Checkbox Button Component
-struct CheckboxButton: View {
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                .font(.system(size: 20))
-                .foregroundColor(isSelected ? .blue : Color(.systemGray3))
-        }
-    }
-}
-
-// 10. Record Details Component
-struct RecordDetailsView: View {
-    let record: ECheckInAllResponse
-    @Binding var userRating: Int
-    let showStarRating: Bool
-    let onFeedback: (Int) -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if showStarRating {
-                StarRatingSection(
-                    rating: $userRating,
-                    onFeedback: onFeedback
-                )
-            }
-            
-            PositionView(record: record)
-            ScheduleTimeView(record: record)
-            TotalHoursView(record: record)
-            BreakMinutesView(record: record)
-        }
-    }
-}
-
-// 11. Star Rating Section
-struct StarRatingSection: View {
-    @Binding var rating: Int
-    let onFeedback: (Int) -> Void
-    
-    var body: some View {
-        HStack(spacing: 2) {
-            StarRatingView(rating: $rating) { newRating in
-                if newRating <= 2 {
-                    onFeedback(newRating)
-                }
-            }
-            
-            Button {
-                // onFeedback(rating)
-                
-            } label: {
-                Image(systemName: "info.circle")
-                    .foregroundColor(.gray)
-                    .padding(.leading, 4)
-            }
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-// 12. Position View Component
+// MARK: - Record Info Components
 struct PositionView: View {
     let record: ECheckInAllResponse
     
@@ -711,7 +757,6 @@ struct PositionView: View {
     }
 }
 
-// 13. Schedule Time View Component
 struct ScheduleTimeView: View {
     let record: ECheckInAllResponse
     
@@ -730,7 +775,6 @@ struct ScheduleTimeView: View {
     }
 }
 
-// 14. Total Hours View Component
 struct TotalHoursView: View {
     let record: ECheckInAllResponse
     
@@ -749,7 +793,6 @@ struct TotalHoursView: View {
     }
 }
 
-// 15. Break Minutes View Component
 struct BreakMinutesView: View {
     let record: ECheckInAllResponse
     
@@ -768,12 +811,13 @@ struct BreakMinutesView: View {
     }
 }
 
-// 16. Time Pickers View Component
-struct TimePickersView: View {
+// MARK: - Enhanced Time Pickers View
+struct EnhancedTimePickersView: View {
     let record: ECheckInAllResponse
-    let selectedStartTimes: [String: Time]
-    let selectedEndTimes: [String: Time]
+    @Binding var selectedStartTimes: [String: Time]
+    @Binding var selectedEndTimes: [String: Time]
     let onTimePickerTap: (ECheckInAllResponse, TimeType) -> Void
+    let onTimeChanged: () -> Void
     
     var body: some View {
         HStack(spacing: 12) {
@@ -782,7 +826,12 @@ struct TimePickersView: View {
                 timeType: .start,
                 placeholder: record.checkIn.toTimeAMPM() ?? "1:22 AM",
                 selectedTime: selectedStartTimes[record.checkIn],
-                onTap: { onTimePickerTap(record, .start) }
+                onTap: {
+                    onTimePickerTap(record, .start)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        onTimeChanged()
+                    }
+                }
             )
             
             TimePickerButton(
@@ -790,13 +839,17 @@ struct TimePickersView: View {
                 timeType: .end,
                 placeholder: record.checkOut.toTimeAMPM() ?? "1:27 AM",
                 selectedTime: selectedEndTimes[record.checkOut],
-                onTap: { onTimePickerTap(record, .end) }
+                onTap: {
+                    onTimePickerTap(record, .end)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        onTimeChanged()
+                    }
+                }
             )
         }
     }
 }
 
-// 17. Time Picker Button Component
 struct TimePickerButton: View {
     let record: ECheckInAllResponse
     let timeType: TimeType
@@ -835,12 +888,13 @@ struct TimePickerButton: View {
     }
 }
 
-// 18. Reason Dropdown Component
-struct ReasonDropdownView: View {
+// MARK: - Enhanced Reason Dropdown View
+struct EnhancedReasonDropdownView: View {
     let record: ECheckInAllResponse
     @Binding var showReasonDropdown: [Int: Bool]
     @Binding var selectedReasons: [Int: ReasonType]
     @Binding var reasonComments: [Int: String]
+    @Binding var showReasonAlert: Bool
     let onReasonSave: (ECheckInAllResponse, ReasonType, String) -> Void
     
     var body: some View {
@@ -859,6 +913,7 @@ struct ReasonDropdownView: View {
                 
                 SaveReasonButton(
                     record: record,
+                    isEnabled: selectedReasons[record.id] != nil,
                     onSave: {
                         if let selectedReason = selectedReasons[record.id] {
                             onReasonSave(record, selectedReason, reasonComments[record.id] ?? "")
@@ -867,18 +922,33 @@ struct ReasonDropdownView: View {
                 )
             }
             
+            if let otherReason = record.otherReason, !otherReason.isEmpty {
+                HStack {
+                    Text("Other Reason:")
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                    Text(otherReason)
+                        .font(.system(size: 12))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(6)
+            }
+            
             if showReasonDropdown[record.id] == true && record.isSubmitted == 0 {
-                ReasonOptionsView(
+                EnhancedReasonOptionsView(
                     record: record,
                     selectedReasons: $selectedReasons,
-                    showReasonDropdown: $showReasonDropdown
+                    showReasonDropdown: $showReasonDropdown,
+                    showReasonAlert: $showReasonAlert
                 )
             }
         }
     }
 }
 
-// 19. Dropdown Button Component
 struct DropdownButton: View {
     let record: ECheckInAllResponse
     let showDropdown: Bool
@@ -911,9 +981,9 @@ struct DropdownButton: View {
     }
 }
 
-// 20. Save Reason Button Component
 struct SaveReasonButton: View {
     let record: ECheckInAllResponse
+    let isEnabled: Bool
     let onSave: () -> Void
     
     var body: some View {
@@ -923,23 +993,23 @@ struct SaveReasonButton: View {
             }
         }) {
             Image(systemName: record.isSubmitted == 1 ? "lock.fill" : "square.and.arrow.down")
-                .foregroundColor(record.isSubmitted == 1 ? .gray : .green)
+                .foregroundColor(record.isSubmitted == 1 ? .gray : (isEnabled ? .green : .gray))
                 .font(.system(size: 16))
                 .frame(width: 32, height: 32)
                 .background(
-                    (record.isSubmitted == 1 ? Color.gray.opacity(0.2) : Color.green.opacity(0.1))
+                    (record.isSubmitted == 1 ? Color.gray.opacity(0.2) : (isEnabled ? Color.green.opacity(0.1) : Color.gray.opacity(0.1)))
                 )
                 .cornerRadius(6)
         }
-        .disabled(record.isSubmitted == 1)
+        .disabled(record.isSubmitted == 1 || !isEnabled)
     }
 }
 
-// 21. Reason Options View Component
-struct ReasonOptionsView: View {
+struct EnhancedReasonOptionsView: View {
     let record: ECheckInAllResponse
     @Binding var selectedReasons: [Int: ReasonType]
     @Binding var showReasonDropdown: [Int: Bool]
+    @Binding var showReasonAlert: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -948,6 +1018,13 @@ struct ReasonOptionsView: View {
                     selectedReasons[record.id] = reason
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showReasonDropdown[record.id] = false
+                    }
+                    
+                    // Auto-trigger alert for "Other"
+                    if reason == .other {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showReasonAlert = true
+                        }
                     }
                 }) {
                     HStack {
@@ -982,9 +1059,10 @@ struct ReasonOptionsView: View {
     }
 }
 
-// 22. Record Actions View Component
-struct RecordActionsView: View {
+// MARK: - Enhanced Record Actions View
+struct EnhancedRecordActionsView: View {
     let record: ECheckInAllResponse
+    let isSaveEnabled: Bool
     let onSave: () -> Void
     let onDelete: () -> Void
     
@@ -997,16 +1075,22 @@ struct RecordActionsView: View {
             
             Spacer()
             
-            SaveButton(
-                isEnabled: record.isSubmitted == 0,
-                onSave: onSave
-            )
+            Button(action: onSave) {
+                Text("Save")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 8)
+                    .background(isSaveEnabled ? Color(hex: "#111184") : Color(.systemGray4))
+                    .cornerRadius(8)
+            }
+            .disabled(!isSaveEnabled)
+            .opacity(isSaveEnabled ? 1.0 : 0.5)
         }
         .padding(.top, 8)
     }
 }
 
-// 23. Delete Button Component
 struct DeleteButton: View {
     let isEnabled: Bool
     let onDelete: () -> Void
@@ -1025,42 +1109,21 @@ struct DeleteButton: View {
     }
 }
 
-// 24. Save Button Component
-struct SaveButton: View {
-    let isEnabled: Bool
-    let onSave: () -> Void
-    
-    var body: some View {
-        Button(action: onSave) {
-            Text("Save")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.white)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 8)
-                .background(isEnabled ? Color(hex: "#111184") : Color(.systemGray4))
-                .cornerRadius(8)
-        }
-        .disabled(!isEnabled)
-        .opacity(isEnabled ? 1.0 : 0.5)
-    }
-}
-
-
-// MARK: - Fixed OverAllUI Implementation
+// MARK: - Main OverAllUI View
 struct OverAllUI: View {
-    // Configuration
     private let config: ECheckinConfig
     private let recordConfig: RecordCardConfig
     @StateObject private var checkboxManager = CheckboxManager()
-    // Alert States - Properly organized
+    
     @State private var showDeleteAlert = false
-    @State private var activeRecordForDeletion: ECheckInAllResponse? = nil
+    @State private var activeRecordForDeletion: ECheckInAllResponse?
     @State private var deleteCandidateName: String = ""
-    @State private var textFieldAlert: TextFieldAlert? = nil
-    @State private var activeRecordForSave: ECheckInAllResponse? = nil
-    @State private var recordRatings: [String: Int] = [:] // recordID -> rating
-   
-    // Time and Date States
+    @State private var textFieldAlert: TextFieldAlert?
+    @State private var activeRecordForSave: ECheckInAllResponse?
+    @State private var recordRatings: [String: Int] = [:]
+    @State private var showValidationAlert = false
+    @State private var validationMessage = ""
+    
     @State private var showTimePicker = false
     @State private var selectedDate: Date = Date()
     @State private var startDate: Date? = Date()
@@ -1072,17 +1135,14 @@ struct OverAllUI: View {
     @State private var selectedStartTimes: [String: Time] = [:]
     @State private var selectedEndTimes: [String: Time] = [:]
     
-    // Rating and Feedback States
     @State private var userRating = 0
     @State private var feedbackText = ""
     @State private var savedRemark: String = ""
     
-    // Reason States
     @State private var showReasonDropdown: [Int: Bool] = [:]
     @State private var selectedReasons: [Int: ReasonType] = [:]
     @State private var reasonComments: [Int: String] = [:]
     
-    // UI States
     @State private var showAlert = false
     @State private var startSelectedTime: String? = ""
     @State private var endSelectedTime: String? = ""
@@ -1090,12 +1150,12 @@ struct OverAllUI: View {
     @State var viewModel = OverallVM()
     @EnvironmentObject var errorHandler: GlobalErrorHandler
     
-    // Computed properties
+    @Environment(\.scenePhase) private var scenePhase
+    
     var isSubmitEnabled: Bool {
         !checkboxManager.selectedRecords.isEmpty
     }
     
-    // Initializer
     init(clientID: Int?, contactID: Int?, config: ECheckinConfig? = nil, recordConfig: RecordCardConfig? = nil) {
         self.config = config ?? ECheckinConfig(clientID: clientID, contactID: contactID)
         self.recordConfig = recordConfig ?? RecordCardConfig()
@@ -1103,11 +1163,9 @@ struct OverAllUI: View {
     
     var body: some View {
         ZStack {
-            Color(.white)
-                .ignoresSafeArea()
-                
+            Color(.white).ignoresSafeArea()
+            
             VStack(spacing: 0) {
-                // Header
                 ECheckinHeaderView(
                     selectedDate: $startDate,
                     showDatePicker: $showDatePicker,
@@ -1117,15 +1175,11 @@ struct OverAllUI: View {
                     isSubmitEnabled: isSubmitEnabled
                 )
                 
-                // Records list
                 recordsScrollView
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 90) // extra safe space for last element
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 90)
             }
             
-          
-            
-            // Loading indicator
             if viewModel.isLoading {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
@@ -1133,9 +1187,9 @@ struct OverAllUI: View {
                 TriangleLoader()
             }
             
-            if viewModel.echeckallData.isEmpty {
+            if viewModel.echeckallData.isEmpty && !viewModel.isLoading {
                 VStack {
-                    Text(viewModel.noDataMessage ?? "No over all data available")
+                    Text(viewModel.noDataMessage ?? "No overall data available")
                         .foregroundColor(.gray)
                         .font(.buttonFont)
                         .padding(.top, 150)
@@ -1151,21 +1205,19 @@ struct OverAllUI: View {
                         message: message,
                         primaryButton: AlertButtonConfig(title: "OK") {
                             viewModel.showAlert = false
+                            refreshData()
                         },
                         dismiss: {
                             viewModel.showAlert = false
+                            refreshData()
                         },
                         alertType: .success
                     )
-                }else {
+                } else {
                     AlertView(
                         title: "EMA 2.0",
                         message: message,
                         primaryButton: AlertButtonConfig(title: "Retry") {
-                            //                           if let firstItem = viewModel.echeckallData.first,
-                            //                              let clientID = clientID,
-                            //                              let contactID = contactID {
-                            //                           }
                             viewModel.showAlert = false
                         },
                         secondaryButton: AlertButtonConfig(title: "Cancel") {
@@ -1178,11 +1230,28 @@ struct OverAllUI: View {
                     )
                 }
             }
-            // Overlays
+            
+            // Validation Alert
+            if showValidationAlert {
+                AlertView(
+                    title: "Validation Error",
+                    message: validationMessage,
+                    primaryButton: AlertButtonConfig(title: "OK") {
+                        showValidationAlert = false
+                    },
+                    dismiss: {
+                        showValidationAlert = false
+                    },
+                    alertType: .error
+                )
+            }
+            
             overlayViews
         }
         .onAppear(perform: handleViewAppear)
-        // Alert modifiers
+        .onChange(of: scenePhase) { newPhase in
+            handleScenePhaseChange(newPhase)
+        }
         .alert("Delete Record", isPresented: $showDeleteAlert) {
             Button("Delete", role: .destructive) {
                 if let record = activeRecordForDeletion {
@@ -1196,28 +1265,18 @@ struct OverAllUI: View {
             Text("Are you sure you want to delete this record for \(deleteCandidateName)?")
         }
         .background(
-            // TextFieldAlert handling
             TextFieldWrapper(alert: $textFieldAlert)
                 .frame(width: 0, height: 0)
                 .opacity(0)
         )
-        // ViewModel alerts
-        .onChange(of: viewModel.showAlert) { showAlert in
-            if showAlert {
-                handleViewModelAlert()
-            }
-        }
-        
-        
     }
     
     // MARK: - Records ScrollView
-    // 7. Update your main ScrollView in OverAllUI to use the fixed components
     private var recordsScrollView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 ForEach(Array(viewModel.echeckallData.enumerated()), id: \.element.id) { index, record in
-                    RecordCardView( // Use the fixed version with individual rating
+                    RecordCardView(
                         record: record,
                         index: index,
                         config: recordConfig,
@@ -1234,9 +1293,7 @@ struct OverAllUI: View {
                         onTimePickerTap: handleTimePickerTap,
                         onSave: handleSaveRecord,
                         onDelete: handleDeleteRecord,
-                        onFeedback: { record, rating in
-                            handleFeedback(for: record, rating: rating)
-                        },
+                        onFeedback: handleFeedback,
                         onReasonSave: handleReasonSave
                     )
                 }
@@ -1273,6 +1330,11 @@ struct OverAllUI: View {
         
         if let startDate = tappedDate {
             viewModel.echeckallData.removeAll()
+            checkboxManager.clearAll()
+            selectedReasons.removeAll()
+            selectedStartTimes.removeAll()
+            selectedEndTimes.removeAll()
+            
             viewModel.fetchOverallDetails(
                 contactId: "\(contactID)",
                 clientId: "\(clientID)",
@@ -1283,32 +1345,59 @@ struct OverAllUI: View {
     }
     
     private func handleSubmitTap() {
+        // Validate before submitting
+        let invalidRecords = checkboxManager.validateSelection(records: viewModel.echeckallData)
+        
+        if !invalidRecords.isEmpty {
+            validationMessage = "Enter Irregular Hours Reason for:\n\(invalidRecords.joined(separator: ",\n"))"
+            showValidationAlert = true
+            checkboxManager.clearAll()
+            return
+        }
+        
+        // Convert selected times to strings
+        var startTimesString: [String: String] = [:]
+        var endTimesString: [String: String] = [:]
+        
+        for (key, time) in selectedStartTimes {
+            startTimesString[key] = Date_Time_Formatter.formatTime(time)
+        }
+        
+        for (key, time) in selectedEndTimes {
+            endTimesString[key] = Date_Time_Formatter.formatTime(time)
+        }
+        
+        // Update checkbox manager configuration
+        checkboxManager.configure(
+            clientID: config.clientID ?? 0,
+            contactID: config.contactID ?? 0,
+            reasons: selectedReasons,
+            startTimes: startTimesString,
+            endTimes: endTimesString
+        )
+        
+        // Rebuild submission array with latest data
+        checkboxManager.submissionArray.removeAll()
+        for id in checkboxManager.selectedRecords {
+            if let record = viewModel.echeckallData.first(where: { $0.id == id }) {
+                checkboxManager.addRecord(record)
+            }
+        }
+        
         Task {
             do {
                 try await viewModel.overallSubmit(
                     params: checkboxManager.submissionArray,
                     errorHandler: errorHandler
                 )
-
-                // After submit, refresh data
-                try await refreshData()
+                
+                checkboxManager.clearAll()
+                try await refreshDataAsync()
             } catch {
                 errorHandler.showError(message: error.localizedDescription, mode: .toast)
             }
         }
     }
-
-    private func refreshData() async throws {
-        guard let clientID = config.clientID,
-              let contactID = config.contactID else {
-            throw NSError(domain: "ConfigError", code: -1,
-                          userInfo: [NSLocalizedDescriptionKey: "Missing clientID or contactID"])
-        }
-
-        try await viewModel.fetchOverallDetails(contactId: String(contactID), clientId: String(clientID), weekEnd: Date_Time_Formatter.APIformatDate(Date()), errorHandler: errorHandler)
-    }
-
-
     
     private func handleInfoTap() {
         withAnimation {
@@ -1327,10 +1416,7 @@ struct OverAllUI: View {
         showTimePicker = true
     }
     
-    // MARK: - Fixed Save Handler
     private func handleSaveRecord(_ record: ECheckInAllResponse) {
-        print("Save button tapped for record: \(record.candidateName ?? "Unknown")")
-        
         activeRecordForSave = record
         
         textFieldAlert = TextFieldAlert(
@@ -1339,30 +1425,36 @@ struct OverAllUI: View {
             placeholder: "Enter note..."
         ) { note in
             let noteText = note ?? ""
+            let checkIn = selectedStartTimes[record.checkIn] != nil ?
+                Date_Time_Formatter.formatTime(selectedStartTimes[record.checkIn]!) : record.checkIn
+            let checkOut = selectedEndTimes[record.checkOut] != nil ?
+                Date_Time_Formatter.formatTime(selectedEndTimes[record.checkOut]!) : record.checkOut
             
             viewModel.saveRecordDetails(
                 response: record,
                 contactId: String(config.contactID ?? 0),
                 clientId: String(config.clientID ?? 0),
-                checkin: record.checkIn,
-                checkout: record.checkOut,
+                checkin: checkIn,
+                checkout: checkOut,
                 note: noteText,
                 errorHandler: errorHandler
             )
             
-            refreshData()
             activeRecordForSave = nil
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                refreshData()
+            }
         }
     }
     
-
     private func handleFeedback(for record: ECheckInAllResponse, rating: Int) {
         recordRatings["\(record.id)"] = rating
         
         if rating <= 2 {
             textFieldAlert = TextFieldAlert(
                 title: "Enter Feedback",
-                message: "",
+                message: "Please provide your feedback for rating \(rating) stars",
                 placeholder: "Enter your feedback..."
             ) { feedback in
                 let feedbackText = feedback ?? ""
@@ -1373,14 +1465,13 @@ struct OverAllUI: View {
             submitFeedback(record: record, rating: rating, feedback: "Good rating: \(rating)/5")
         }
     }
-
     
     private func submitFeedback(record: ECheckInAllResponse, rating: Int, feedback: String) {
         viewModel.fetchFeedbackDeatils(
             clientId: "\(config.clientID ?? 0)",
             weekEnd: record.weekEnd,
             rating: String(rating),
-            source: String(rating),
+            source: "2",
             CandId: "\(record.candID)",
             OrderId: "\(record.orderID)",
             comments: feedback,
@@ -1388,7 +1479,6 @@ struct OverAllUI: View {
             errorHandler: errorHandler
         )
     }
-
     
     private func handleDeleteRecord(_ record: ECheckInAllResponse) {
         activeRecordForDeletion = record
@@ -1406,19 +1496,26 @@ struct OverAllUI: View {
         
         checkboxManager.removeRecord(record)
         activeRecordForDeletion = nil
-        refreshData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            refreshData()
+        }
     }
     
     private func handleReasonSave(_ record: ECheckInAllResponse, _ reason: ReasonType, _ comment: String) {
         viewModel.selectReasonDetails(
             responseData: record,
-            reasonID: record.id,
+            reasonID: reason.reasonID,
             reasonType: reason.rawValue,
             reasonComment: comment,
             ClientId: config.clientID ?? 0,
             ContactId: config.contactID ?? 0,
             errorHandler: errorHandler
         )
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            refreshData()
+        }
     }
     
     private func handleViewAppear() {
@@ -1435,16 +1532,32 @@ struct OverAllUI: View {
             errorHandler: errorHandler
         )
         
-        
-        
-        
-        // Configure checkbox manager
         checkboxManager.configure(
             clientID: clientID,
             contactID: contactID,
-            startTime: startSelectedTime,
-            endTime: endSelectedTime
+            reasons: selectedReasons,
+            startTimes: [:],
+            endTimes: [:]
         )
+    }
+    
+    private func handleScenePhaseChange(_ newPhase: ScenePhase) {
+        switch newPhase {
+        case .active:
+            print("📱 App became active - refreshing data")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                refreshData()
+            }
+            
+        case .background:
+            print("📱 App entered background")
+            
+        case .inactive:
+            break
+            
+        @unknown default:
+            break
+        }
     }
     
     private func refreshData() {
@@ -1459,11 +1572,19 @@ struct OverAllUI: View {
         )
     }
     
-    private func handleViewModelAlert() {
-        // Handle ViewModel alerts if needed
-        if let message = viewModel.alertMessage {
-            print("ViewModel Alert: \(message)")
+    private func refreshDataAsync() async throws {
+        guard let clientID = config.clientID,
+              let contactID = config.contactID else {
+            throw NSError(domain: "ConfigError", code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Missing clientID or contactID"])
         }
+        
+        try await viewModel.fetchOverallDetails(
+            contactId: String(contactID),
+            clientId: String(clientID),
+            weekEnd: Date_Time_Formatter.APIformatDate(Date()),
+            errorHandler: errorHandler
+        )
     }
     
     // MARK: - Overlay Implementations
@@ -1501,13 +1622,15 @@ struct OverAllUI: View {
                 showTimePicker: $showTimePicker,
                 selectedTime: $activeTime
             ) { time in
+                let timeString = Date_Time_Formatter.formatTime(time)
+                
                 switch activeTimeType {
                 case .start:
                     selectedStartTimes[activeRecordKey] = time
-                    startSelectedTime = Date_Time_Formatter.dateToApiString(time).toTimeAMPM() ?? ""
+                    startSelectedTime = timeString
                 case .end:
                     selectedEndTimes[activeRecordKey] = time
-                    endSelectedTime = Date_Time_Formatter.dateToApiString(time).toTimeAMPM() ?? ""
+                    endSelectedTime = timeString
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -1516,150 +1639,10 @@ struct OverAllUI: View {
     }
 }
 
-// MARK: - Fixed RecordCardView with Star Rating
-struct RecordCardViewFixed: View {
-    let record: ECheckInAllResponse
-    let index: Int
-    let config: RecordCardConfig
-    @ObservedObject var checkboxManager: CheckboxManager
-    
-    // Bindings for interactive elements
-    @Binding var selectedStartTimes: [String: Time]
-    @Binding var selectedEndTimes: [String: Time]
-    @Binding var showReasonDropdown: [Int: Bool]
-    @Binding var selectedReasons: [Int: ReasonType]
-    @Binding var reasonComments: [Int: String]
-    @Binding var userRating: Int
-    @Binding var showTimePicker: Bool
-    @Binding var activeTimeType: TimeType
-    @Binding var activeRecordKey: String
-    @Binding var activeTime: Time
-    
-    // Action callbacks
-    let onTimePickerTap: (ECheckInAllResponse, TimeType) -> Void
-    let onSave: (ECheckInAllResponse) -> Void
-    let onDelete: (ECheckInAllResponse) -> Void
-    let onFeedback: (Int) -> Void
-    let onReasonSave: (ECheckInAllResponse, ReasonType, String) -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if config.showCheckbox {
-                RecordHeaderView(
-                    record: record,
-                    checkboxManager: checkboxManager
-                )
-            } else {
-                BasicRecordHeader(record: record)
-            }
-            
-            // Fixed Record Details with Star Rating
-            RecordDetailsViewFixed(
-                record: record,
-                userRating: $userRating,
-                showStarRating: config.showStarRating,
-                onFeedback: { rating in
-                        onFeedback(rating)
-                    }
-            )
-            
-            if config.showTimePickers && config.isEditable {
-                TimePickersView(
-                    record: record,
-                    selectedStartTimes: selectedStartTimes,
-                    selectedEndTimes: selectedEndTimes,
-                    onTimePickerTap: onTimePickerTap
-                )
-            }
-            
-            if config.showReasonDropdown && config.isEditable {
-                ReasonDropdownView(
-                    record: record,
-                    showReasonDropdown: $showReasonDropdown,
-                    selectedReasons: $selectedReasons,
-                    reasonComments: $reasonComments,
-                    onReasonSave: onReasonSave
-                )
-            }
-            
-            if config.showActions && config.isEditable {
-                RecordActionsView(
-                    record: record,
-                    onSave: { onSave(record) },
-                    onDelete: { onDelete(record) }
-                )
-            }
-        }
-        .padding(16)
-        .background(.white)
-        .cornerRadius(12)
-        .shadow(color: Color(.systemGray4).opacity(0.3), radius: 4, x: 0, y: 2)
-    }
-}
+// MARK: - Supporting Components
 
-// MARK: - Fixed Record Details with Star Rating
-struct RecordDetailsViewFixed: View {
-    let record: ECheckInAllResponse
-    @Binding var userRating: Int
-    let showStarRating: Bool
-    let onFeedback: (Int) -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if showStarRating {
-                StarRatingSectionFixed(
-                    rating: $userRating,
-                    onFeedback: onFeedback
-                )
-            }
-            
-            PositionView(record: record)
-            ScheduleTimeView(record: record)
-            TotalHoursView(record: record)
-            BreakMinutesView(record: record)
-        }
-    }
-}
 
-// MARK: - Fixed Star Rating Section
-struct StarRatingSectionFixed: View {
-    @Binding var rating: Int
-    let onFeedback: (Int) -> Void
-    
-    var body: some View {
-        HStack(spacing: 2) {
-            StarRatingView(rating: $rating) { newRating in
-                onFeedback(newRating)
-            }
-            
-            Button {
-                onFeedback(rating)
-            } label: {
-                Image(systemName: "info.circle")
-                    .foregroundColor(.gray)
-                    .padding(.leading, 4)
-            }
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-// MARK: - Enhanced CheckboxManager Configuration
-extension CheckboxManager {
-    func configure(clientID: Int, contactID: Int, startTime: String?, endTime: String?) {
-        self.clientid = clientID
-        self.contactid = contactID
-        self.startSelectedTime = startTime
-        self.endSelectedTime = endTime
-        self.extraFields = [
-            "clientId": clientID,
-            "contactId": contactID,
-            "startSelectedTime": startTime ?? "",
-            "endSelectedTime": endTime ?? ""
-        ]
-    }
-}
-
+// MARK: - Preview
 #Preview {
     PreviewWrapper()
 }
@@ -1679,33 +1662,32 @@ private struct PreviewWrapper: View {
             orderID: 101,
             weekEnd: "09/22/2025",
             billDate: "09/22/2025",
-            startTime: "09:00 AM",
-            endTime: "05:00 PM",
-            checkIn: "09:05 AM",
-            checkOut: "04:55 PM",
+            startTime: "2025-09-22T09:00:00",
+            endTime: "2025-09-22T17:00:00",
+            checkIn: "2025-09-22T09:05:00",
+            checkOut: "2025-09-22T16:55:00",
             txnType: 1,
             routeName: "Morning Route",
             totalHours: 8,
             roundedTotalHours: 8,
-            breakMinutes: 0,
-            recCode: "4",
+            breakMinutes: 30,
+            recCode: "S",
             payforBreak: true,
-            position: "",
+            position: "Warehouse Associate",
             isAdminUser: 0,
             status: 1,
-            id: 0,
+            id: 1,
             reasonID: 0,
             reasonForTimeChange: "",
             additionalComments: "",
             isSubmitted: 0,
             otherReason: "",
-            positionLabelColor: "",
-            reportTo: "",
+            positionLabelColor: "#4A90E2",
+            reportTo: "Manager",
             rating: 0,
             ratingComments: ""
         )
 
-        // ✅ Inject mock data into the VM
         view.viewModel.echeckallData = [mockRecord]
     }
 

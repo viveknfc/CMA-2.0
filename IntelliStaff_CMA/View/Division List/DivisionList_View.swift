@@ -38,18 +38,18 @@ struct DivisionList_View: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Please select appropriate division")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(Color.init(hex: "#198754"))
+                        .foregroundColor(Color.init(hex: "#212529"))
                         .padding(8)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.init(hex: "#0dcaf0").opacity(0.2))
+                        .background(Color.init(hex: "#FFFFFF").opacity(0.2))
                         .cornerRadius(6)
 
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle")
-                            .foregroundColor(Color.init(hex: "#198754"))
+                            .foregroundColor(Color.init(hex: "#OB4E5A"))
                         Text("Note: You have rights to multiple divisions.")
                             .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(Color.init(hex: "#198754"))
+                            .foregroundColor(Color.init(hex: "#OB4E5A"))
                             
                     }
                     .padding(8)
@@ -59,7 +59,7 @@ struct DivisionList_View: View {
 
                     Text("Rows highlighted in blue indicate there are pending timeslip(s) for the division")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(Color.init(hex: "#198754"))
+                        .foregroundColor(Color.init(hex: "#OB4E5A"))
                         .padding(8)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.init(hex: "#0dcaf0").opacity(0.2))
