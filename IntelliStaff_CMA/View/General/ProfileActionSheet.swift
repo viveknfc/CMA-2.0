@@ -65,7 +65,7 @@ struct ProfileActionSheetOnlyView: View {
 
     private func performLogout() {
         clearUserDefaults()
-        path = [.login] // Reset navigation stack
+        path.append(.login)
     }
 
     private func clearUserDefaults() {

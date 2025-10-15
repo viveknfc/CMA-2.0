@@ -34,23 +34,7 @@ struct DivisionList_View: View {
         ZStack {
             
             VStack {
-                
-//                VStack(alignment: .leading, spacing: 8) {
-//                    Text("Please select appropriate division")
-//                        .padding()
-//                    HStack {
-//                        Image(systemName: "info.circle")
-//                        Text("Note: You have rights to multiple divisions.")
-//                    }
-//                    .padding(10)
-//                    .background(Color.blue.opacity(0.1)) // first background color
-//                    .cornerRadius(8)
-//                    Text("Rows highlighting in blue indicate there are pending time slip(s) for the division")
-//                        .padding(10)
-//                        .background(Color.blue.opacity(0.2)) // second background color
-//                        .cornerRadius(8)
-//                }
-//                .font(.bodyFont)
+
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Please select appropriate division")
                         .font(.system(size: 13, weight: .bold))
@@ -90,28 +74,12 @@ struct DivisionList_View: View {
                     VStack(spacing: 12) {
                         ForEach(filteredItems) { item in
                             Button(action: {
-                                
-                               
-                                
-//                             userDefaults.string(forKey: "cmaClientId") ?? "") ?? 95108,
-//                             userDefaults.string(forKey: "cmaDivisionId") ?? "") ?? 6,
-//                             userDefaults.string(forKey: "cmaDivisionName") ?? "On Call Counsel - Gov",
-//                            userDefaults.string(forKey: "cmaContactId") ?? "")
-//                            userDefaults.string(forKey: "cmaName") ?? "TemPositions IT",
-//                            userDefaults.string(forKey: "cmaClientName") ?? "Test - Office of Asylum Seeker Operations",
-//                            userDefaults.string(forKey: "cmaClientName") ?? "Test - Office of Asylum Seeker Operations",
-//
-                              
                                 let cwaDetails = makeCwaDictDetails(from: item)
-                                //makeCwaDetails(from: item)
                                     
                                     // Save the entire dictionary
                                     UserDefaults.standard.set(cwaDetails, forKey: "cwaDetails")
                                     UserDefaults.standard.synchronize()
                                 path.append(.dashboard(division: item))
-                               
-                                
-                                
                             }) {
                                 DivisionRow_View(item: item)
                             }
@@ -151,6 +119,7 @@ struct DivisionList_View: View {
                         showRetryAlert = true
                     }
                 }
+                
             }
             
             if showLogoutAlert {

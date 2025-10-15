@@ -7,168 +7,47 @@
 
 import SwiftUI
 
-//struct Dashboard_Menu_Card: View {
-//    let assignment: Dashboard_Menu_Items
-//
-//    var body: some View {
-//        ZStack(alignment: .topTrailing) {
-//            VStack(spacing: 8) {
-//                Image(systemName: assignment.imageName)
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 25, height: 25)
-//                    .foregroundColor(.theme)
-//                    .padding(.top, 12)
-//
-//                Text(assignment.title)
-//                    .font(.bodyFont)
-//                    .fontWeight(.medium)
-//                    .multilineTextAlignment(.center)
-//                    .foregroundColor(.theme)
-//                    .padding([.horizontal, .bottom, .top], 8)
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .aspectRatio(1, contentMode: .fill) // ✅ Makes square
-//            .background(
-//                RoundedRectangle(cornerRadius: 12)
-//                    .fill(Color.white) // Or any fill color you want
-//            )
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 12)
-//                    .stroke(Color.theme, lineWidth: 0.5) // ✅ Very thin border
-//            )
-//            .shadow(color: .theme.opacity(0.1), radius: 2, x: 0, y: 1)
-//
-//            // Badge
-//            if assignment.itemCount > 0 {
-//                Text("\(assignment.itemCount)")
-//                    .font(.caption)
-//                    .foregroundColor(.white)
-//                    .padding(6)
-//                    .background(.white)
-//                    .clipShape(Circle())
-//                    .offset(x: -8, y: 8)
-//            }
-//        }
-//    }
-//}
-
-
-//#Preview {
-//    let sampleChildren = [
-//        ChildItem(name: "Algebra",  apiKey: "link"),
-//        ChildItem(name: "Geometry",  apiKey: "link"),
-//        ChildItem(name: "Trigonometry", apiKey: "link")
-//    ]
-//    let menu = Dashboard_Menu_Items(id: 4, title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren)
-//    Dashboard_Menu_Card(assignment: menu)
-//}
-//struct Dashboard_Menu_Card: View {
-//    let assignment: Dashboard_Menu_Items
-//
-//    var body: some View {
-//        ZStack(alignment: .topTrailing) {
-//            VStack(spacing: 8) {
-//                Image(systemName: assignment.imageName)
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 20, height: 20)
-//                    .foregroundColor(.theme)
-//                    .padding(.top, 12)
-//
-//                Text(assignment.title)
-//                    .font(.bodyFont)
-//                    .fontWeight(.medium)
-//                    .multilineTextAlignment(.center)
-//                    .foregroundColor(.theme)
-//                    .padding([.horizontal, .bottom, .top], 6)
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .aspectRatio(1, contentMode: .fill) // ✅ Makes square
-//            .overlay(
-//                         RoundedRectangle(cornerRadius: 0)
-//                            .stroke(Color.theme, lineWidth: 0.5) // Stroke border only
-//                     )
-//            .background(Color.clear)
-//            .cornerRadius(0)
-//            .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
-//
-//            // Badge
-////            if assignment.itemCount > 0 {
-////                Text("\(assignment.itemCount)")
-////                    .font(.bodyFont)
-////                    .foregroundColor(.white)
-////                    .padding(5)
-////                    .background(.theme)
-////                    .clipShape(Circle())
-////                    .offset(x: -8, y: 8)
-////            }
-//        }
-//    }
-//}
-//
-//
-//#Preview {
-//    let sampleChildren = [
-//        ChildItem(name: "Algebra", apiKey: "link"),
-//        ChildItem(name: "Geometry", apiKey: "link"),
-//        ChildItem(name: "Trigonometry", apiKey: "link")
-//    ]
-//    let menu = Dashboard_Menu_Items(id: 123, title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren)
-//    Dashboard_Menu_Card(assignment: menu)
-//}
 struct Dashboard_Menu_Card: View {
     let assignment: Dashboard_Menu_Items
 
     var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .topTrailing) {
-                VStack(spacing: 8) {
-                    Image(systemName: assignment.imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.theme)
-                        .padding(.top, 12)
+        VStack(spacing: 8) {
+            // Image inside a box
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 0.5) // Border
+                    .background(Color.white) // Fill
+                    //.cornerRadius(10)
+                    .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
 
-                    Text(assignment.title)
-                        .font(.bodyFont)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.theme)
-                        .padding([.horizontal, .bottom], 6)
-                        .fixedSize(horizontal: false, vertical: true) // ✅ allows wrapping
-                        .lineLimit(nil) // optional: allow unlimited lines
-                }
-                .frame(width: geo.size.width, height: geo.size.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 0)
-                        .stroke(Color.theme, lineWidth: 0.5)
-                )
-                .background(Color.clear)
-                .cornerRadius(0)
-                .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
-
-                // Badge
-                if assignment.itemCount > 0 {
-                    Text("\(assignment.itemCount)")
-                        .font(.bodyFont)
-                        .foregroundColor(.clear)
-                        .padding(5)
-                        .background(Color.clear)
-                        .clipShape(Circle())
-                        .offset(x: -8, y: 8)
-                }
+                Image(systemName: assignment.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.theme)
             }
+            .frame(width: 90, height: 90) // square box size
+
+            // Title below the box
+            Text(assignment.title)
+                .font(.menuFont)
+//                .fontWeight(.medium)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.black)
+                .lineLimit(2)
+                .frame(height: 40)
         }
-        .aspectRatio(1, contentMode: .fit) // ✅ ensures square card
+        .frame(maxWidth: .infinity)
     }
 }
+
+
+
 #Preview {
     let sampleChildren = [
-        ChildItem(name: "Algebra",  apiKey: "link"),
-        ChildItem(name: "Geometry",  apiKey: "link"),
-        ChildItem(name: "Trigonometry",  apiKey: "link")
+        ChildItem(name: "Algebra", imageName: "banknote", apiKey: "link"),
+        ChildItem(name: "Geometry", imageName: "banknote", apiKey: "link"),
+        ChildItem(name: "Trigonometry", imageName: "banknote", apiKey: "link")
     ]
     let menu = Dashboard_Menu_Items(title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren)
     Dashboard_Menu_Card(assignment: menu)

@@ -595,14 +595,12 @@ struct CurveConcavePreview: View {
         .animation(.easeInOut, value: radius)
         .animation(.easeInOut, value: concaveDepth)
         .animation(.easeInOut(duration: 0.3), value: selectedAssignment)
-        .navigationTitle("Tempositions")
+        .navigationTitle("TemPositions")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    showLogoutAlert = true
-                }) {
+                Button(action: { showLogoutAlert = true }) {
                     Image(systemName: "rectangle.portrait.and.arrow.forward")
                         .font(.system(size: 14))
                         .foregroundColor(.white)
@@ -610,21 +608,25 @@ struct CurveConcavePreview: View {
             }
         }
     }
+
     
     // MARK: - TabView
     private var tabView: some View {
         TabView(selection: $selection) {
             Dashboard_Screen(
-                viewModel: dashboardViewModel,
+                path: $path, viewModel: dashboardViewModel,
                 selectedAssignment: $selectedAssignment,
                 showSheet: $showSheet,
-                path: $path
+                showAlert: $showSheet,
+                alertMessage:$alertMessage,
+                diviisionImage: "",
+                clientName: division.clientName ?? ""
             )
             .tabItem { Image(systemName: "house.fill"); Text("Home") }
             .tag(0)
             
             Top_TabView(division: division)
-                .tabItem { Image(systemName: "plus.circle.fill"); Text("") }
+                .tabItem { Image(systemName: "plus.circle.fill"); Text("Add On") }
                 .tag(2)
             
             Profile_Screen(
@@ -712,8 +714,8 @@ struct CurveConcavePreview: View {
             message: "No data available. Please retry?",
             primaryButton: AlertButtonConfig(title: "Retry", action: {
                 emptyDashboardAlert = false
-                if let contactID = division.contactID, let clientId = division.clientID, let divisionId = division.divisionID {
-                    dashboardViewModel.fetchDashboard(contactID: contactID, clientID: clientId, divisionid: divisionId)
+                if let contactID = division.contactID, let clientId = division.clientID, let divisionId = division.divisionID, let clientName = division.clientName {
+                    dashboardViewModel.fetchDashboard(contactID: contactID, clientID: clientId, divisionid: divisionId, clientName: clientName)
                 }
             }),
             dismiss: { emptyDashboardAlert = false }
@@ -727,7 +729,7 @@ struct CurveConcavePreview: View {
         UserDefaults.standard.removeObject(forKey: "isRemembered")
         UserDefaults.standard.removeObject(forKey: "savedUsername")
         UserDefaults.standard.removeObject(forKey: "savedPassword")
-        path = [.login]
+        path.append(.login)
     }
 }
 
@@ -737,9 +739,9 @@ struct CurveConcavePreviewWrapper: View {
 
     var body: some View {
         let sampleChildren = [
-            ChildItem(name: "Algebra",  apiKey: "link"),
-            ChildItem(name: "Geometry",  apiKey: "link"),
-            ChildItem(name: "Trigonometry",  apiKey: "link")
+            ChildItem(name: "Algebra", imageName: "notes", apiKey: "link"),
+            ChildItem(name: "Geometry", imageName: "notes", apiKey: "link"),
+            ChildItem(name: "Trigonometry", imageName: "notes", apiKey: "link")
         ]
 
         let sampleAssignments: [Dashboard_Menu_Items] = [

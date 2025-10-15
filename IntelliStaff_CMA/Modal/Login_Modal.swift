@@ -25,15 +25,7 @@ struct LoginResponse: Decodable, Hashable {
     let username: String?
 }
 
-//struct LoginResponse: Decodable, Hashable {
-//    let isPasswordChange: Bool
-//    let expiresIn: Int
-//    let refreshToken: String
-//    let accessToken: String
-//    let requestingPartyToken: String
-//    let message: String
-//    let username: String
-//}
+
 
 struct SendOTPResponse: Decodable{
     let code, message, ttl: String

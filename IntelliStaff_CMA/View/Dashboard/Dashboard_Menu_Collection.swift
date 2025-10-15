@@ -14,18 +14,26 @@ struct Dashboard_Menu_Collection: View {
     @Binding var toastMessage: String
     @Binding var selectedAssignment: Dashboard_Menu_Items?
     @Binding var showSheet: Bool
+    @Binding var path: [AppRoute]
 
-    let columns = Array(repeating: GridItem(.flexible(), spacing: 30), count: 3)
+    let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 3)
 
     var body: some View {
-     
         ZStack {
-            
-            LazyVGrid(columns: columns, spacing: 30) {
-                
+            Color.init(hex: "#")
+            LazyVGrid(columns: columns, spacing: 6) {
                 ForEach(assignments) { assignment in
                     Button {
-                        if let children = assignment.children, !children.isEmpty {
+                        if assignment.title == "Site" {
+                            // ✅ Navigate back to previous screen
+                            if !path.isEmpty {
+                                path.append(.divisionList)
+                                print("✅ Navigated back, path count: \(path.count)")
+                            } else {
+                                print("⚠️ Path is already empty, cannot navigate back")
+                            }
+                        }
+                        else if let children = assignment.children, !children.isEmpty {
                             withAnimation {
                                 selectedAssignment = assignment
                             }
@@ -36,7 +44,6 @@ struct Dashboard_Menu_Collection: View {
                                 }
                             }
                         } else {
-//                            APIFunction.sendTestNotification()
                             toastMessage = "No sub-categories for this item"
                             if !showToast {
                                 withAnimation {
@@ -55,135 +62,45 @@ struct Dashboard_Menu_Collection: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
-            .padding(.horizontal, 30)
-
+            .padding(.horizontal, 6)
         }
-        
     }
 }
-
 
 #Preview {
     DashboardMenuCollectionPreviewWrapper()
 }
+
 
 struct DashboardMenuCollectionPreviewWrapper: View {
     @State private var showToast = false
     @State private var toastMessage = ""
     @State private var selectedAssignment: Dashboard_Menu_Items? = nil
     @State private var showSheet = false
+    @State private var path: [AppRoute] = [.divisionList] // simulate navigation stack
 
     var body: some View {
-        
         let sampleChildren = [
-            ChildItem(name: "Algebra",  apiKey: "algebra123"),
-            ChildItem(name: "Geometry",  apiKey: "geometry456"),
-            ChildItem(name: "Trigonometry",  apiKey: "trig789")
+            ChildItem(name: "Algebra", imageName: "banknote", apiKey: "link"),
+            ChildItem(name: "Geometry", imageName: "banknote", apiKey: "link"),
+            ChildItem(name: "Trigonometry", imageName: "banknote", apiKey: "link")
         ]
 
         let assignments: [Dashboard_Menu_Items] = [
             Dashboard_Menu_Items(title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren),
             Dashboard_Menu_Items(title: "Science", imageName: "flask.fill", itemCount: 2, children: sampleChildren),
-            Dashboard_Menu_Items(title: "History", imageName: "clock", itemCount: 0, children: nil),
-            Dashboard_Menu_Items(title: "Art", imageName: "paintbrush", itemCount: 5, children: sampleChildren),
-            Dashboard_Menu_Items(title: "PE", imageName: "figure.walk", itemCount: 3, children: sampleChildren),
-            Dashboard_Menu_Items(title: "Music", imageName: "music.note", itemCount: 1, children: sampleChildren)
+            Dashboard_Menu_Items(title: "Site", imageName: "house", itemCount: 0, children: nil) // ✅ Back test button
         ]
-        
-       return Dashboard_Menu_Collection(
+
+        return Dashboard_Menu_Collection(
             assignments: assignments,
             showToast: $showToast,
             toastMessage: $toastMessage,
             selectedAssignment: $selectedAssignment,
-            showSheet: $showSheet
+            showSheet: $showSheet,
+            path: $path
         )
     }
 }
 
 
-
-
-
-//#Preview {
-//    DashboardMenuCollectionPreviewWrapper()
-//}
-//
-//struct DashboardMenuCollectionPreviewWrapper: View {
-//    @State private var showToast = false
-//    @State private var toastMessage = ""
-//    @State private var selectedAssignment: Dashboard_Menu_Items? = nil
-//    @State private var showSheet = false
-//
-//    var body: some View {
-//        
-//        let sampleChildren = [
-//            ChildItem(name: "Algebra", imageName: "banknote", apiKey: "link"),
-//            ChildItem(name: "Geometry", imageName: "banknote", apiKey: "link"),
-//            ChildItem(name: "Trigonometry", imageName: "banknote", apiKey: "link")
-//        ]
-//
-//        let assignments: [Dashboard_Menu_Items] = [
-//            Dashboard_Menu_Items(title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren),
-//            Dashboard_Menu_Items(title: "Science", imageName: "flask.fill", itemCount: 2, children: sampleChildren),
-//            Dashboard_Menu_Items(title: "History", imageName: "clock", itemCount: 0, children: nil),
-//            Dashboard_Menu_Items(title: "Art", imageName: "paintbrush", itemCount: 5, children: sampleChildren),
-//            Dashboard_Menu_Items(title: "PE", imageName: "figure.walk", itemCount: 3, children: sampleChildren),
-//            Dashboard_Menu_Items(title: "Music", imageName: "music.note", itemCount: 1, children: sampleChildren)
-//        ]
-//        
-//       return Dashboard_Menu_Collection(
-//            assignments: assignments,
-//            showToast: $showToast,
-//            toastMessage: $toastMessage,
-//            selectedAssignment: $selectedAssignment,
-//            showSheet: $showSheet
-//        )
-//    }
-//}
-//
-//
-//
-//
-//
-//#Preview {
-//    DashboardMenuCollectionPreviewWrapper()
-//}
-//
-//struct DashboardMenuCollectionPreviewWrapper: View {
-//    @State private var showToast = false
-//    @State private var toastMessage = ""
-//    @State private var selectedAssignment: Dashboard_Menu_Items? = nil
-//    @State private var showSheet = false
-//    @State private var dummyPath: [AppRoute] = []
-//
-//    var body: some View {
-//        
-//        let sampleChildren = [
-//            ChildItem(name: "Algebra", apiKey: "link"),
-//            ChildItem(name: "Geometry", apiKey: "link"),
-//            ChildItem(name: "Trigonometry", apiKey: "link")
-//        ]
-//
-//        let assignments: [Dashboard_Menu_Items] = [
-//            Dashboard_Menu_Items(id: 1, title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren),
-//            Dashboard_Menu_Items(id: 2, title: "Science", imageName: "flask.fill", itemCount: 2, children: sampleChildren),
-//            Dashboard_Menu_Items(id: 3, title: "History", imageName: "clock", itemCount: 0, children: nil),
-//            Dashboard_Menu_Items(id: 4, title: "Art", imageName: "paintbrush", itemCount: 5, children: sampleChildren),
-//            Dashboard_Menu_Items(id: 5, title: "PE", imageName: "figure.walk", itemCount: 3, children: sampleChildren),
-//            Dashboard_Menu_Items(id: 6, title: "Music", imageName: "music.note", itemCount: 1, children: sampleChildren)
-//        ]
-//        
-//        
-//        
-//       return Dashboard_Menu_Collection(
-//            assignments: assignments,
-//            path: $dummyPath, showToast: $showToast,
-//            toastMessage: $toastMessage,
-//            selectedAssignment: $selectedAssignment,
-//            showSheet: $showSheet
-//        )
-//    }
-//}
-//
-//
-//

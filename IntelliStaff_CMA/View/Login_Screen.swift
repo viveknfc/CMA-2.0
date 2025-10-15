@@ -71,7 +71,7 @@ struct Login_Screen: View {
                         }
                     }
                     .padding(.top, 40)
-                    .padding([.leading, .trailing], 50)
+                    .padding([.leading, .trailing], 0)
                     
                     Button("Forgot password?") {
                         path.append(.forgotPassword)
@@ -136,3 +136,11 @@ struct Login_Screen: View {
     return LoginScreenPreviewWrapper()
 }
 
+extension Array where Element == AppRoute {
+    func containsDivisionList() -> Bool {
+        return self.contains { route in
+            if case .divisionList = route { return true }
+            return false
+        }
+    }
+}

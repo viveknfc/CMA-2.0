@@ -58,8 +58,6 @@ struct MenuItem: Identifiable, Decodable {
 //}
 
 
-import SwiftUI
-
 struct Dashboard_Menu_Items: Identifiable, Equatable {
     let id = UUID()
     let title: String
@@ -76,7 +74,6 @@ struct MenuGroup {
 struct ChildItem: Identifiable, Equatable {
     let id = UUID()
     let name: String
-    let imageName: String = "notes"
+    let imageName: String
     let apiKey: String
 }
-

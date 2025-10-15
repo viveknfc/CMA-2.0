@@ -103,8 +103,6 @@
 		33CC1E342E520F8700380806 /* BreakMin_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E332E520F7F00380806 /* BreakMin_VM.swift */; };
 		33CC1E362E52201600380806 /* BreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E352E52201600380806 /* BreakItem.swift */; };
 		33CC1E382E5230AE00380806 /* Break_Min.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC1E372E5230AE00380806 /* Break_Min.swift */; };
-		449BAD0C2E72AEFF00F6D687 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449BAD0B2E72AEFF00F6D687 /* BottomView.swift */; };
-		449BAEF02E74516A00F6D687 /* ProfileActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */; };
 		449C85422E714CB0006DE44E /* Forget_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449C85412E714CB0006DE44E /* Forget_VM.swift */; };
 		449C86232E7160BB006DE44E /* UpdatePassword_VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449C86222E7160B1006DE44E /* UpdatePassword_VM.swift */; };
 		449CB6EB2E794871005505F5 /* ClientInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449CB6EA2E794869005505F5 /* ClientInfo.swift */; };
@@ -116,7 +114,6 @@
 		44CFCCBC2E66F42200C63FC3 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */; };
 		44CFCCBE2E66F74E00C63FC3 /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */; };
 		44D00B5A2E8D300B001354CF /* HalfCurve_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D00B592E8D2FF5001354CF /* HalfCurve_View.swift */; };
-		44D00B5C2E8D306F001354CF /* AssignmentList_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D00B5B2E8D304C001354CF /* AssignmentList_View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,8 +212,6 @@
 		33CC1E332E520F7F00380806 /* BreakMin_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakMin_VM.swift; sourceTree = "<group>"; };
 		33CC1E352E52201600380806 /* BreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakItem.swift; sourceTree = "<group>"; };
 		33CC1E372E5230AE00380806 /* Break_Min.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Break_Min.swift; sourceTree = "<group>"; };
-		449BAD0B2E72AEFF00F6D687 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
-		449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSheet.swift; sourceTree = "<group>"; };
 		449C85412E714CB0006DE44E /* Forget_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forget_VM.swift; sourceTree = "<group>"; };
 		449C86222E7160B1006DE44E /* UpdatePassword_VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePassword_VM.swift; sourceTree = "<group>"; };
 		449CB6EA2E794869005505F5 /* ClientInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientInfo.swift; sourceTree = "<group>"; };
@@ -228,7 +223,6 @@
 		44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = "<group>"; };
 		44D00B592E8D2FF5001354CF /* HalfCurve_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfCurve_View.swift; sourceTree = "<group>"; };
-		44D00B5B2E8D304C001354CF /* AssignmentList_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentList_View.swift; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -319,7 +313,6 @@
 			isa = PBXGroup;
 			children = (
 				3335099B2E3CD1BE007FFAE8 /* Children_BottomSheet_View.swift */,
-				44D00B5B2E8D304C001354CF /* AssignmentList_View.swift */,
 				44D00B592E8D2FF5001354CF /* HalfCurve_View.swift */,
 				3335099C2E3CD1BE007FFAE8 /* Dashboard_Menu_Card.swift */,
 				3335099D2E3CD1BE007FFAE8 /* Dashboard_Menu_Collection.swift */,
@@ -346,7 +339,6 @@
 				333509A52E3CD1BE007FFAE8 /* AlertView.swift */,
 				44CFCCB92E66F40600C63FC3 /* StarView.swift */,
 				33B292D42E4C85C10062696B /* Custom_Calendar.swift */,
-				449BAEEF2E74515800F6D687 /* ProfileActionSheet.swift */,
 				44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */,
 				333509A62E3CD1BE007FFAE8 /* Capsule_Button.swift */,
 				333509A72E3CD1BE007FFAE8 /* Rectangle_Container.swift */,
@@ -424,7 +416,6 @@
 		333509C42E3CD1BE007FFAE8 /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
-				449BAD0A2E72AEE500F6D687 /* Bottom Bar */,
 				333509B42E3CD1BE007FFAE8 /* Constants */,
 				333509C12E3CD1BE007FFAE8 /* TableView */,
 				333509C22E3CD1BE007FFAE8 /* CurveConcavePreview.swift */,
@@ -549,14 +540,6 @@
 				33577F832E590ADC001AFE5A /* BreakTime.swift */,
 			);
 			path = "Break Minutes";
-			sourceTree = "<group>";
-		};
-		449BAD0A2E72AEE500F6D687 /* Bottom Bar */ = {
-			isa = PBXGroup;
-			children = (
-				449BAD0B2E72AEFF00F6D687 /* BottomView.swift */,
-			);
-			path = "Bottom Bar";
 			sourceTree = "<group>";
 		};
 		44CFCCB12E66F28000C63FC3 /* OverAllUI */ = {
@@ -739,11 +722,9 @@
 				336CBFAB2E4B17FA00EF9AF0 /* Profile_Row.swift in Sources */,
 				33034BC32E544E55007A31E0 /* Location_Support.swift in Sources */,
 				33350A032E3CD1BE007FFAE8 /* Forgot_Screen.swift in Sources */,
-				449BAD0C2E72AEFF00F6D687 /* BottomView.swift in Sources */,
 				33350A042E3CD1BE007FFAE8 /* Extensions.swift in Sources */,
 				33350A052E3CD1BE007FFAE8 /* CurveConcavePreview.swift in Sources */,
 				33350A062E3CD1BE007FFAE8 /* UnderlinedTF.swift in Sources */,
-				44D00B5C2E8D306F001354CF /* AssignmentList_View.swift in Sources */,
 				33350A072E3CD1BE007FFAE8 /* ATTabState.swift in Sources */,
 				33350A082E3CD1BE007FFAE8 /* API_Call.swift in Sources */,
 				33034B112E543F7B007A31E0 /* No_Data_Response.swift in Sources */,
@@ -765,7 +746,6 @@
 				33350A152E3CD1BE007FFAE8 /* ATTabItem.swift in Sources */,
 				333800C72E50A387007F19E3 /* ECheckoutModal.swift in Sources */,
 				449C85422E714CB0006DE44E /* Forget_VM.swift in Sources */,
-				449BAEF02E74516A00F6D687 /* ProfileActionSheet.swift in Sources */,
 				33577F842E590ADC001AFE5A /* BreakTime.swift in Sources */,
 				33350A162E3CD1BE007FFAE8 /* NetworkError.swift in Sources */,
 			);
@@ -908,8 +888,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

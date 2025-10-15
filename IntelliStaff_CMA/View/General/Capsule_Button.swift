@@ -25,7 +25,7 @@ struct Capsule_Button: View {
                 .foregroundColor(textColor)
                 .frame(maxWidth: width ?? .infinity, minHeight: height)
                 .background(backgroundColor)
-                .clipShape(Capsule())
+               // .clipShape(Capsule())
         }
     }
 }

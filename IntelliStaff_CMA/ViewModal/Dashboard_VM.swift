@@ -17,6 +17,7 @@ class DashboardViewModel {
 //    var escapedCandidateJSONString: String?
 //    var escapedDemographicsJSONString: String?
     var divisionImage: String = ""
+    var clientName: String = ""
     var dashboardData: DashboardResponse?
    
     var assignmentItems: AssignmentResponse?
@@ -28,32 +29,31 @@ class DashboardViewModel {
     
     var escapedCandidateJSONString: String?
     var escapedDemographicsJSONString: String?
-   // var dashboardMenuItems: [Dashboard_Menu_Items] = []
+    var dashboardMenuItems: [Dashboard_Menu_Items] = []
     var candidateID: Int?
     var ssn: String?
     var clientId: Int?
     var lastName: String?
     
-    var dashboardMenuItems: [Dashboard_Menu_Items] {
-        return menuGroups.map { group in
-            Dashboard_Menu_Items(
-               // id: group.id,
-                title: group.parent.linkText,
-                imageName: imageName(for: group.parent.linkText),
-                itemCount: group.children.count,
-                children: group.children.map {
-                    ChildItem(
-                        name: $0.linkText,
-                        //imageName: $0.url,
-                        apiKey: $0.apiKey ?? "",
-                       // imageName: imageName(for: $0.linkText)
-                    )
-                }
-            )
-        }
-    }
+//    var dashboardMenuItems: [Dashboard_Menu_Items] {
+//        return menuGroups.map { group in
+//            Dashboard_Menu_Items(
+//               // id: group.id,
+//                title: group.parent.linkText,
+//                imageName: imageName(for: group.parent.linkText),
+//                itemCount: group.children.count,
+//                children: group.children.map {
+//                    ChildItem(
+//                        name: $0.linkText,
+//                        //imageName: $0.url,
+//                        imageName: imageName(for: $0.linkText), apiKey: $0.apiKey ?? ""
+//                    )
+//                }
+//            )
+//        }
+//    }
 
-    func fetchDashboard(contactID: Int, clientID: Int, divisionid: Int) {
+    func fetchDashboard(contactID: Int, clientID: Int, divisionid: Int, clientName:String) {
         Task {
             isLoading = true
             do {
@@ -62,20 +62,32 @@ class DashboardViewModel {
                     return
                 }
                 let params: [String: Any] = [
-                    "ContactId": contactID
+                    "ContactId": contactID,
+                    "divisionId": divisionid,
+                    "Name":clientName,
+                    "clientId":clientID
                 ]
                 let result = try await APIFunction.dashboardAPICalling(params: params)
-//                getDiVisionTheme(divisionID: divisionid, clientID: clientID) { logo in
-//                   print("division logo is \(logo)")
-//                    self.divisionImage = logo
-//               }
-                self.menuGroups = groupMenus(from: result)
+
                 await candidateIDAPI(contactId: clientID, clientId: contactID)
                 await demographicAPI(candidateId: userId)
                 await getScheduleDetails()
-               
-//                print("the menu group is \(self.menuGroups)")
-                
+
+                await MainActor.run {
+                    self.menuGroups = self.groupMenuItems(result)
+                    self.dashboardMenuItems = self.menuGroups.map { group in
+                        let children: [ChildItem] = group.children.map {
+                            ChildItem(name: $0.linkText ?? "", imageName: "notes", apiKey: $0.apiKey ?? "")
+                        }
+                        
+                        return Dashboard_Menu_Items(
+                            title: group.parent.linkText ?? "",
+                            imageName: self.imageName(for: group.parent.linkText ?? ""),
+                            itemCount: group.children.count,
+                            children: children
+                        )
+                    }
+                }
                 
                 self.isLoading = false
             } catch {
@@ -109,11 +121,11 @@ class DashboardViewModel {
         }
     }
     
-    private func groupMenuItems(_ items: [MenuItem]) -> [MenuGroup] {
-        let parents = items.filter { $0.parentMenuId == nil }
+    func groupMenuItems(_ items: [MenuItem]) -> [MenuGroup] {
+        let parents = items.filter { $0.parentMenuId == 0 }
         return parents.map { parent in
             let children = items.filter { $0.parentMenuId == parent.id }
-            return MenuGroup( parent: parent, children: children)
+            return MenuGroup(parent: parent, children: children)
         }
     }
     
@@ -207,21 +219,8 @@ class DashboardViewModel {
             if let jsonString = String(data: data, encoding: .utf8) {
                 let doubleEncoded = "\"\(jsonString)\"" // 👈 wraps JSON string in quotes
                 DashboardViewModel.escapedCandidateJSONString = escapeForJavaScript(doubleEncoded)
-//                if let dict = jsonStringToDictionary(escapedCandidateJSON) {
-//                  
-//                    print(dict)  // ["name": John, "age": 30, "isEmployee": 1]
-//                    
-//
-//                   // DashboardViewModel.escapedCandidateJSONString = dict
-//                    
-//                }
                
             }
-            
-//            if let dict = result.toDictionary() {
-//                print(dict) // ✅ Full dictionary representation
-//               escapedCandidateJSONString = dict
-//            }
     } catch let decodingError as DecodingError {
         switch decodingError {
         case .keyNotFound(let key, let context):

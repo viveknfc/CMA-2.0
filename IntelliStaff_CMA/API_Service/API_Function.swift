@@ -56,7 +56,7 @@ struct APIFunction {
         let queryString = params.map { "\($0.key)=\($0.value)" }
                                 .joined(separator: "&")
         
-        let url = "\(APIConstants.uatBaseURL)\(APIConstants.DivisionList)?\(queryString)"
+        let url = "\(APIConstants.baseURL)\(APIConstants.DivisionList)?\(queryString)"
       //  let url = APIConstants.baseURL + APIConstants.DivisionList
         print(url)
         return try await APIService.request(url: url, urlParams: params, token: APIConstants.accessToken)
@@ -66,8 +66,12 @@ struct APIFunction {
     
     static func dashboardAPICalling(params: [String: Any]) async throws -> [MenuItem] {
         print("Calling dashboard API with params: \(params)")
-        let url = APIConstants.baseURL + APIConstants.CMADashboardDetails
-        return try await APIService.request(url: url, urlParams: params)
+        let queryString = params.map { "\($0.key)=\($0.value)" }
+                                .joined(separator: "&")
+        print(queryString)
+        let urlString = "\(APIConstants.baseURL)\(APIConstants.CMADashboardDetails)?\(queryString)"
+        print(urlString)
+        return try await APIService.request(url: urlString, urlParams: params)
     }
     
     //MARK: - Candidate Id API
@@ -97,11 +101,6 @@ struct APIFunction {
     
     static func eCheckInAPICalling(params: [String: Any]) async throws -> ([ECheckinModal_Nw], String?) {
         print("Calling E-Check In API with params: \(params)")
-//        
-//        let queryString = params.map { "\($0.key)=\($0.value)" }
-//                                .joined(separator: "&")
-//        
-//        let urlString = "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)?\(queryString)"
         var components = URLComponents(string: "\(APIConstants.baseURL)\(APIConstants.ECheckInAPI)")
         components?.queryItems = params.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
 
@@ -109,8 +108,6 @@ struct APIFunction {
             throw NetworkError.invalidURL
         }
         
-       // let jsonData = try JSONSerialization.data(withJSONObject: params, options: [])
-        // Ask APIService to just give us Data (raw response)
         let data: Data = try await APIService.request(
             url: urlString,
             method: .get,

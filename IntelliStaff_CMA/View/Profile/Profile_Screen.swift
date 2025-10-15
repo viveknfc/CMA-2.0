@@ -17,66 +17,7 @@ struct Profile_Screen: View {
     @State var viewModel = DivisionList_VM()
     @State private var dashboardVM = DashboardViewModel()
     
-//    var body: some View {
-//        GeometryReader { proxy in
-//            ZStack {
-//                ScrollView {
-//                    VStack(spacing: 12) {
-//                        List(viewModal.profileList, id: \.title) { item in
-//                                    HStack {
-//                                        Image(systemName: item.imageName)
-//                                            .foregroundColor(.primary)
-//                                        Text(item.title)
-//                                        Spacer()
-//                                    }
-//                                    .padding(.vertical, 4)
-//                                
-////                        ForEach(viewModal.profileList) { item in
-//                            Button(action: {
-//                                
-//                                print("row clicked: \(item.title)")
-//                                
-//                                if item.title == "Edit Your Information" {
-//                                    path.append(.webView(apiKey: "Cwa2dev/EditYourInformation"))
-//                                }
-//                                
-//                                if item.title == "Verify Billing Information" {
-//                                    path.append(.webView(apiKey: "Cwa2dev/VerifyBillingInformation"))
-//                                }
-//                                
-//                                if item.title == "Your Client Rep" {
-//                                    path.append(.webView(apiKey: "ManageProfile/UploadCredentials"))
-//                                }
-//                                
-//                                if item.title == "Change Password" {
-//                                    path.append(.forgotPassword)
-//                                }
-//                                
-//                                if item.title == "Logout" {
-//                                    showLogoutAlert = true
-//                                }
-//                               
-//                                
-//                            }) {
-//                                Profile_Row(item: item)
-//                            }
-//                            .buttonStyle(PlainButtonStyle())
-//                        }
-//                        
-//                    }
-//                    .padding(.top, 100)
-//                    .padding(.horizontal, 0)
-//                }
-//                onAppear {
-//                    viewModal.fetchSubVendor(clientId: "\(clientID)", errorHandler: errorHandler)
-//                    viewModal.getMenuItems()
-//                    print("Profile list count: \(viewModal.profileList.count)")
-//                }
-//            }
-//            
-//        }
-//    }
-    
+
     var body: some View {
         GeometryReader { proxy in
             ZStack {
@@ -135,25 +76,6 @@ struct Profile_Screen: View {
         }
     }
 }
-
-//#Preview {
-//    var vm = ProfileList_VM()
-//   // vm.getMenuItems() // so preview has sample rows
-//    Profile_Screen(
-//        viewModal: vm,
-//        clientID: 0, showLogoutAlert: .constant(false), path: .constant([]) // ✅ use constant for preview
-//    )
-//}
-//#Preview {
-//    let vm = ProfileList_VM()
-//    vm.fetchProfileList() // load dummy/sample data
-//    
-//    return Profile_Screen(
-//        viewModal: vm,
-//        showLogoutAlert: .constant(false),
-//        path: .constant([])
-//    )
-//}
 
 #Preview {
     // Mock environment object

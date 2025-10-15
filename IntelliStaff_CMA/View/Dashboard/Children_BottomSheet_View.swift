@@ -88,9 +88,9 @@ struct Children_BottomSheet_View: View {
             Children_BottomSheet_View(
                 parentTitle: "Math Subjects",
                 children: [
-                    ChildItem(name: "Algebra",  apiKey: "algebra123"),
-                    ChildItem(name: "Geometry",  apiKey: "geometry456"),
-                    ChildItem(name: "Trigonometry",  apiKey: "trig789")
+                    ChildItem(name: "Algebra", imageName: "notes", apiKey: "link"),
+                    ChildItem(name: "Geometry", imageName: "notes", apiKey: "link"),
+                    ChildItem(name: "Trigonometry", imageName: "notes", apiKey: "link")
                 ],             division: DivisionList(
                     clientName: "Acme Corp",
                     clientID: 101,

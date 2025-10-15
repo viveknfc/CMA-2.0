@@ -66,7 +66,7 @@ struct Forgot_Screen: View {
                             }
                         }
                         .padding(.top, 30)
-                        .padding([.leading, .trailing], 50)
+                        .padding([.leading, .trailing], 0)
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 20)
