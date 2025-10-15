@@ -83,7 +83,7 @@ struct Dashboard_Screen: View {
                                 .onChange(of: geo.size.height) { _, newValue in
                                     withAnimation(.easeInOut(duration: 0.3)) {
                                         // Add some vertical padding + curve buffer
-                                        headerHeight = max(newValue + 100, 125)
+                                        headerHeight = max(newValue + 90, 100)
                                     }
                                 }
                         }
