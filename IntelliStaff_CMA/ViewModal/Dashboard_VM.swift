@@ -16,7 +16,7 @@ class DashboardViewModel {
     static var escapedDemographicsJSONString: String?
 //    var escapedCandidateJSONString: String?
 //    var escapedDemographicsJSONString: String?
-    var divisionImage: String = ""
+    var divisionImage: String? = ""
     var clientName: String = ""
     var dashboardData: DashboardResponse?
    
@@ -67,9 +67,11 @@ class DashboardViewModel {
                     "Name":clientName,
                     "clientId":clientID
                 ]
+                let logo = await getDiVisionTheme(divisionID: divisionid, clientID: clientID)
+                self.divisionImage = logo
                 let result = try await APIFunction.dashboardAPICalling(params: params)
-
                 await candidateIDAPI(contactId: clientID, clientId: contactID)
+                
                 await demographicAPI(candidateId: userId)
                 await getScheduleDetails()
 
@@ -98,28 +100,20 @@ class DashboardViewModel {
     }
     
     
-    func getDiVisionTheme(
-        divisionID: Int,
-        clientID: Int,
-        completion: @escaping (String) -> Void
-    ) {
-        isLoading = true
-        Task {
-            do {
-                let params: [String: Any] = [
-                    "clientId": clientID,
-                    "DivisionID": divisionID
-                ]
-                let result = try await APIFunction.clientThemeAPICalling(params: params)
-                print("the theme group is \(result)")
-                completion(result.first?.divisionLogo ?? "")
-            } catch {
-                self.errorMessage = error.localizedDescription
-                completion("")
-            }
-            self.isLoading = false
+    func getDiVisionTheme(divisionID: Int, clientID: Int) async -> String {
+        do {
+            let params: [String: Any] = [
+                "clientId": clientID,
+                "DivisionID": divisionID
+            ]
+            let result = try await APIFunction.clientThemeAPICalling(params: params)
+            return result.first?.divisionLogo ?? ""
+        } catch {
+            self.errorMessage = error.localizedDescription
+            return ""
         }
     }
+
     
     func groupMenuItems(_ items: [MenuItem]) -> [MenuGroup] {
         let parents = items.filter { $0.parentMenuId == 0 }

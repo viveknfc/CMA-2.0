@@ -18,35 +18,84 @@ struct Dashboard_Screen: View {
     @Binding var alertMessage: String
     var diviisionImage: String
     var clientName: String
-
+    
+    // Dynamic header height
+    @State private var headerHeight: CGFloat = 140
+    
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .top) {
                 
-                CurvedHeader(rectHeight: 125, curveHeight: 110)
+                // ✅ Dynamic Curved Header
+                CurvedHeader(rectHeight: headerHeight, curveHeight: headerHeight - 25)
+                    .animation(.easeInOut(duration: 0.3), value: headerHeight)
                 
-                VStack(spacing: 5) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        
-                        // ✅ Change VStack to HStack for side-by-side alignment
-                        HStack(spacing: 8) {
-                            Image(systemName: "person.crop.circle")
+                // ✅ Centered Header Content
+                VStack {
+                    Spacer()
+                    HStack(alignment: .center, spacing: 10) {
+                        // Profile image (with fallback)
+                        if let urlString = viewModel.divisionImage,
+                           let url = URL(string: urlString),
+                           !urlString.isEmpty {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .frame(width: 45, height: 45)
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white.opacity(0.8), lineWidth: 1))
+                                        .shadow(radius: 3)
+                                default:
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(.white.opacity(0.9))
+                                }
+                            }
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                            
-                            Text("\(clientName)")
-                                .font(.bodyFont)
-                                .foregroundColor(.white)
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.leading)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.white.opacity(0.9))
                         }
-                        .padding(.top, 13)
+                        
+                        // Client name text
+                        Text(clientName)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    
-                    Spacer().frame(height: 80)
+                    .padding(.horizontal)
+                    .background(
+                        GeometryReader { geo in
+                            Color.clear
+                                .onChange(of: geo.size.height) { _, newValue in
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        // Add some vertical padding + curve buffer
+                                        headerHeight = max(newValue + 100, 125)
+                                    }
+                                }
+                        }
+                    )
+                    Spacer()
+                }
+                .frame(height: headerHeight)
+                .padding(.top, -45)
+                
+                // ✅ Main Scroll Content
+                VStack {
+                    Spacer().frame(height: headerHeight + 35)
                     
                     ScrollView {
                         Dashboard_Menu_Collection(
@@ -55,20 +104,20 @@ struct Dashboard_Screen: View {
                             toastMessage: $toastMessage,
                             selectedAssignment: $selectedAssignment,
                             showSheet: $showSheet,
-                            path: $path // ✅ FIXED: pass actual path binding
+                            path: $path
                         )
                         .padding(.top, 10)
                         .padding(.bottom, 88)
                     }
                 }
                 
+                // ✅ Toast Overlay
                 if showToast {
                     Toast_View(message: toastMessage)
                         .zIndex(1)
                         .position(x: geo.size.width / 2, y: geo.size.height - 60)
                 }
             }
-            .animation(.easeInOut, value: selectedAssignment)
             .onChange(of: viewModel.showAlert) { _, newValue in
                 if newValue {
                     showAlert = true
@@ -76,11 +125,11 @@ struct Dashboard_Screen: View {
                     viewModel.showAlert = false
                 }
             }
-            .background(Color(#colorLiteral(red: 0.9254901961, green: 0.9254901961, blue: 0.9254901961, alpha: 1)))
+            .background(Color(#colorLiteral(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)))
         }
-        .animation(.easeInOut, value: selectedAssignment)
     }
 }
+
 
 #Preview {
     struct DashboardScreenPreviewWrapper: View {
