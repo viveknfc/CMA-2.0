@@ -102,11 +102,11 @@ struct CurveConcavePreview: View {
                 diviisionImage: "",
                 clientName: division.clientName ?? ""
             )
-            .tabItem { Image(systemName: "house.fill"); Text("Home") }
+            .tabItem { Image(systemName: "house.fill"); Text("") }
             .tag(0)
             
             Top_TabView(division: division)
-                .tabItem { Image(systemName: "plus.circle.fill"); Text("Add On") }
+                .tabItem { Image(systemName: "plus.circle.fill"); Text("") }
                 .tag(2)
             
             Profile_Screen(
@@ -116,7 +116,7 @@ struct CurveConcavePreview: View {
                 showLogoutAlert: $showLogoutAlert,
                 path: $path
             )
-            .tabItem { Image(systemName: "person.fill"); Text("Profile") }
+            .tabItem { Image(systemName: "person.fill"); Text("") }
             .tag(4)
         }
     }
@@ -219,32 +219,25 @@ struct CurveConcavePreviewWrapper: View {
 
     var body: some View {
         let sampleChildren = [
-            ChildItem(name: "Algebra", imageName: "notes", apiKey: "link"),
-            ChildItem(name: "Geometry", imageName: "notes", apiKey: "link"),
-            ChildItem(name: "Trigonometry", imageName: "notes", apiKey: "link")
+            ChildItem(name: "Algebra", imageName: "book", apiKey: "link1"),
+            ChildItem(name: "Geometry", imageName: "book.closed", apiKey: "link2"),
+            ChildItem(name: "Trigonometry", imageName: "book.pages", apiKey: "link3")
         ]
 
         let sampleAssignments: [Dashboard_Menu_Items] = [
-            Dashboard_Menu_Items(title: "Math", imageName: "book.closed", itemCount: 4, children: sampleChildren),
-            Dashboard_Menu_Items(title: "Science", imageName: "flask.fill", itemCount: 2, children: sampleChildren)
+            Dashboard_Menu_Items(title: "Math", imageName: "book.closed", itemCount: 3, children: sampleChildren),
+            Dashboard_Menu_Items(title: "Science", imageName: "flask.fill", itemCount: 2, children: sampleChildren),
+            Dashboard_Menu_Items(title: "History", imageName: "scroll.fill", itemCount: 5, children: sampleChildren)
         ]
 
-        //let viewModel = DashboardViewModel()
-        //viewModel.dashboardMenuItems = sampleAssignments
         let viewModel = DashboardViewModel.mock(with: sampleAssignments)
 
         let sampleDivision = DivisionList(
-            clientName: "Acme Corp",
+            clientName: "Test - Office of Asylum Seeker Operations",
             clientID: 1,
             contactID: 1,
             divisionName: "Division A",
-            pendingTS: 0,
-            divisionID: 1,
-            showLogin: 0,
-            showBreakminutes: 0,
-            name: "",
-            master: 0,
-            clientContactInfoID: 0
+            pendingTS: 0, divisionID: 1, showLogin: 0, showBreakminutes: 0, name: "", master: 0, clientContactInfoID: 0
         )
 
         return CurveConcavePreview(
@@ -253,4 +246,9 @@ struct CurveConcavePreviewWrapper: View {
             division: sampleDivision
         )
     }
+}
+
+#Preview {
+    CurveConcavePreviewWrapper()
+        .environmentObject(GlobalErrorHandler())
 }

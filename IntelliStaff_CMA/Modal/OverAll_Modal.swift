@@ -255,26 +255,25 @@ struct SubVendorResponse: Codable {
     }
 }
 
-struct ClientResponse:Codable{
-
-var name, companyName, repName, repPhone: String
-    var repEmail, title, phone, ext: String
-    var fax, addETo: String
-    let master: Int
-    let contactAddress: String
+struct ClientResponse: Codable {
+    var name, companyName, repName, repPhone: String?
+    var repEmail, title, phone, ext: String?
+    var fax, addETo: String?
+    let master: Int?
+    let contactAddress: String?
     let fl: JSONNull?
-    let city, state, codeZip: String
-    let noTsApproveConf, rosAuthorized, cwaTs, cwaInvoice: Int
-    let cwaRpt, cwaEditBilling: Int
-    let division, children: StringOrInt
-    let office: Int
-    let compName, companyAddress, companyCity, mainTelPhone: String
-    let clientRepID: Int
+    let city, state, codeZip: String?
+    let noTsApproveConf, rosAuthorized, cwaTs, cwaInvoice: Int?
+    let cwaRpt, cwaEditBilling: Int?
+    let division, children: StringOrInt?
+    let office: Int?
+    let compName, companyAddress, companyCity, mainTelPhone: String?
+    let clientRepID: Int?
     let suite: JSONNull?
-    let companyState, companyCodeZip: String
-    let consolidateMaster, hideIbInvoice, eTimeClock, noIbClient: Int
-    let customType, billContactID, invFileType, invoiceType: Int
-    let doNotServ, invoiceSendType, payByCompany: Int
+    let companyState, companyCodeZip: String?
+    let consolidateMaster, hideIbInvoice, eTimeClock, noIbClient: Int?
+    let customType, billContactID, invFileType, invoiceType: Int?
+    let doNotServ, invoiceSendType, payByCompany: Int?
 
     enum CodingKeys: String, CodingKey {
         case name = "Name"
@@ -323,6 +322,7 @@ var name, companyName, repName, repPhone: String
         case payByCompany = "PayByCompany"
     }
 }
+
 
 struct GetDivisionThemeModel:Codable{
    let divisionID: Int

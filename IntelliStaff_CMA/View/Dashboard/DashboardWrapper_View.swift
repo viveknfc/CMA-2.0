@@ -50,7 +50,7 @@ struct DashboardWrapper_View: View {
     @Previewable @State var path: [AppRoute] = []
     DashboardWrapper_View(
         division: DivisionList(
-            clientName: "Acme Corp",
+            clientName: "Test - Office of Asylum Seeker Operations",
             clientID: 101,
             contactID: 202,
             divisionName: "Sales Division",

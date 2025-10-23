@@ -56,7 +56,7 @@ class LoginViewModel {
         do {
             let response = try await APIFunction.loginAPICalling(params: params)
 //            print("Login success: the response is \n \(response)")
-            APIConstants.accessToken = response.accessToken //added for UAT
+            APIConstants.accessToken = response.accessToken ?? "" //added for UAT
             self.loginResponse = response
             self.isLoginSuccess = true 
             // Handle navigation, token storage, etc.

@@ -681,7 +681,7 @@ struct CheckboxView: View {
             checkboxManager.toggleRecord(record)
         }) {
             Image(systemName: checkboxIcon)
-                .font(.system(size: 20, weight: .medium))
+                .font(.system(size: 18, weight: .medium))
                 .foregroundColor(checkboxColor)
                 .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
@@ -704,7 +704,7 @@ struct CheckboxView: View {
         if !record.canBeSelected {
             return .gray
         }
-        return isSelected ? .blue : .gray
+        return isSelected ? .theme : .gray
     }
 }
 
@@ -1192,7 +1192,7 @@ struct OverAllUI: View {
                     Text(viewModel.noDataMessage ?? "No overall data available")
                         .foregroundColor(.gray)
                         .font(.buttonFont)
-                        .padding(.top, 150)
+                        .padding(.top)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
@@ -1249,8 +1249,8 @@ struct OverAllUI: View {
             overlayViews
         }
         .onAppear(perform: handleViewAppear)
-        .onChange(of: scenePhase) { newPhase in
-            handleScenePhaseChange(newPhase)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+                   handleScenePhaseChange(newPhase)
         }
         .alert("Delete Record", isPresented: $showDeleteAlert) {
             Button("Delete", role: .destructive) {
@@ -1638,8 +1638,6 @@ struct OverAllUI: View {
         .zIndex(10)
     }
 }
-
-// MARK: - Supporting Components
 
 
 // MARK: - Preview

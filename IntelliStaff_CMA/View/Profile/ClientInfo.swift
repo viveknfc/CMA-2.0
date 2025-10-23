@@ -70,6 +70,15 @@ struct ClientRepView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 20)
+                
+                
+                if viewModel.isLoading {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+
+                    TriangleLoader()
+                }
+                
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .navigationTitle(" Your Client Rep")
@@ -85,9 +94,14 @@ struct ClientRepView: View {
             }
            
         
+        
         .onAppear {
-            viewModel.fetchclient(clientId: String(clientID ?? 0), contactID:  String(contactID ?? 0), errorHandler: GlobalErrorHandler())
+//            if viewModel.clientList?.name.isEmpty{
+                viewModel.fetchclient(clientId: String(clientID), contactID:  String(contactID), errorHandler: GlobalErrorHandler())
+//            }
         }
+        
+        
     }
 }
 

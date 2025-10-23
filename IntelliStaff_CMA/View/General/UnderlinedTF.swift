@@ -5,6 +5,84 @@
 //  Created by Vivek Lakshmanan on 14/07/25.
 //
 
+//import SwiftUI
+//
+//struct UnderlinedTF: View {
+//    
+//    let title: String
+//    @Binding var text: String
+//    var isSecure: Bool = false
+//    @State private var isPasswordVisible = false
+//    var borderColor: Color = .gray
+//    var textColor: Color = .black // default text color
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 4) {
+//            Text(title)
+//                .font(.titleFont)
+//                .foregroundColor(.gray)
+//            
+//            HStack {
+//                if isSecure && !isPasswordVisible {
+//                    SecureField("Enter \(title.lowercased())", text: $text)
+//                        .padding(.vertical, 4)
+//                        .font(.bodyFont)
+//                        .foregroundColor(textColor)
+//                        .onChange(of: text) {
+//                            text = text.replacingOccurrences(of: " ", with: "")
+//                        }
+//                    
+//                } else {
+//                    TextField("Enter \(title.lowercased())", text: $text)
+//                        .padding(.vertical, 4)
+//                        .font(.bodyFont)
+//                        .foregroundColor(textColor)
+//                        .onChange(of: text) {
+//                            text = text.replacingOccurrences(of: " ", with: "")
+//                        }
+//                    
+//                }
+//                
+//                if isSecure {
+//                    Button(action: {
+//                        isPasswordVisible.toggle()
+//                    }) {
+//                        Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+//                            .foregroundColor(.gray)
+//                            .padding(.horizontal, 8)
+//                    }
+//                }
+//            }
+//            
+//            Rectangle()
+//                .frame(height: 1)
+//                .foregroundColor(borderColor)
+//        }
+//    }
+//}
+//
+//
+//#Preview {
+//    struct UnderlinePreviewWrapper: View {
+//        @State private var text = "Enter Name"
+//
+//        var body: some View {
+//            UnderlinedTF(title: "User Name", text: $text)
+//                .padding()
+//        }
+//    }
+//
+//    return UnderlinePreviewWrapper()
+//}
+//
+//
+//
+//  UnderlinedTF.swift
+//  IntelliStaff_EMA
+//
+//  Created by Vivek Lakshmanan on 14/07/25.
+//
+
 import SwiftUI
 
 struct UnderlinedTF: View {
@@ -47,7 +125,7 @@ struct UnderlinedTF: View {
                     Button(action: {
                         isPasswordVisible.toggle()
                     }) {
-                        Image(systemName: isPasswordVisible ? "eye.slash.fill" : "eye.fill")
+                        Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                             .foregroundColor(.gray)
                             .padding(.horizontal, 8)
                     }
@@ -64,15 +142,13 @@ struct UnderlinedTF: View {
 
 #Preview {
     struct UnderlinePreviewWrapper: View {
-        @State private var text = "Enter Name"
+        @State private var text = ""
 
         var body: some View {
-            UnderlinedTF(title: "User Name", text: $text)
+            UnderlinedTF(title: "Password", text: $text, isSecure: true)
                 .padding()
         }
     }
 
     return UnderlinePreviewWrapper()
 }
-
-

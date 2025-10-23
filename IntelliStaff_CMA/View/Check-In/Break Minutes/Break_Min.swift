@@ -59,7 +59,7 @@ struct Break_Min: View {
                     Text(viewModel.noDataMessage ?? "No Break time data available")
                         .foregroundColor(.gray)
                         .font(.buttonFont)
-                        .padding(.top, 150)
+                        .padding(.top)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }

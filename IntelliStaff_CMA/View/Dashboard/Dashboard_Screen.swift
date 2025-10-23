@@ -27,54 +27,36 @@ struct Dashboard_Screen: View {
             ZStack(alignment: .top) {
                 
                 // ✅ Dynamic Curved Header
-                CurvedHeader(rectHeight: headerHeight, curveHeight: headerHeight - 25)
-                    .animation(.easeInOut(duration: 0.3), value: headerHeight)
+                CurvedHeader(rectHeight: headerHeight, curveHeight: headerHeight)
                 
                 // ✅ Centered Header Content
                 VStack {
                     Spacer()
-                    HStack(alignment: .center, spacing: 10) {
+                    VStack(alignment: .center, spacing: 10) {
                         // Profile image (with fallback)
-                        if let urlString = viewModel.divisionImage,
-                           let url = URL(string: urlString),
-                           !urlString.isEmpty {
-                            AsyncImage(url: url) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                        .frame(width: 45, height: 45)
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.white.opacity(0.8), lineWidth: 1))
-                                        .shadow(radius: 3)
-                                default:
-                                    Image(systemName: "person.crop.circle.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(.white.opacity(0.9))
-                                }
-                            }
-                        } else {
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.white.opacity(0.9))
-                        }
-                        
-                        // Client name text
-                        Text(clientName)
-                            .font(.headline)
+                        // Simulated image
+                        URLImageView(
+                            imageURL: viewModel.divisionImage,
+                            contentMode: .fit  // Changed from .fill to .fit
+                        )
+                        .frame(width: 30, height: 30)  // Changed to fixed size instead of maxWidth/maxHeight
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(radius: 2)
+
+                           
+                       
+                       // Client name that wraps even for long single words
+                        Text(insertZeroWidthSpace(in: clientName))
+                            .font(.system(size: 12, weight: .bold)) // Set your desired size and weight
                             .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.8)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(4)
                             .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: 150) // limit width to allow wrapping
+                           
+                                   
+                        
+                      
                     }
                     .padding(.horizontal)
                     .background(
@@ -91,7 +73,7 @@ struct Dashboard_Screen: View {
                     Spacer()
                 }
                 .frame(height: headerHeight)
-                .padding(.top, -45)
+                .padding(.top, -10)
                 
                 // ✅ Main Scroll Content
                 VStack {
@@ -125,8 +107,13 @@ struct Dashboard_Screen: View {
                     viewModel.showAlert = false
                 }
             }
-            .background(Color(#colorLiteral(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)))
         }
+        .background(Color(#colorLiteral(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)))
+    }
+
+// Helper: insert zero-width space between letters to allow wrap
+    func insertZeroWidthSpace(in text: String) -> String {
+        return text.map { String($0) }.joined(separator: "\u{200B}")
     }
 }
 
@@ -167,10 +154,56 @@ struct Dashboard_Screen: View {
                 showAlert: $showAlert,
                 alertMessage: $alertMessage,
                 diviisionImage: "",
-                clientName: "Sample Client"
+                clientName: "Test - Office of Asylum Seeker Operations"
             )
         }
     }
 
     return DashboardScreenPreviewWrapper()
 }
+
+
+// Replace your URLImageView with this improved version:
+
+struct URLImageView: View {
+    let imageURL: String?
+    var contentMode: ContentMode = .fit
+    var fallbackSystemImage: String = "person.circle.fill"
+
+    var body: some View {
+        if let urlString = imageURL,
+           let url = URL(string: urlString),
+           !urlString.isEmpty {
+            
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: contentMode)
+                        .clipped()
+                case .failure(_):
+                    Image(systemName: fallbackSystemImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.gray.opacity(0.8))
+                @unknown default:
+                    Image(systemName: fallbackSystemImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.gray.opacity(0.8))
+                }
+            }
+        } else {
+            Image(systemName: fallbackSystemImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.gray.opacity(0.8))
+        }
+    }
+}
+
+// And update the usage in your Dashboard_Screen to:
+

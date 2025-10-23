@@ -299,9 +299,35 @@ struct CWAWebView: UIViewRepresentable {
         return ["jsMessage": jsMessage, "storage": webViewStorage]
     }
     
-    private func buildInjectionScript(from merged: [String: Any]) -> String {
-        let pdfHelper = """
-        // PDF Download Helper
+    private func buildInjectionScript(from merged: [String: Any]) -> String
+    {
+        let jsMessage = merged["jsMessage"] as? [String: Any] ?? [:]
+        let storage = merged["storage"] as? [String: Any] ?? [:]
+        
+        // Helper function to convert dictionary to escaped JSON string
+        func toJSONString(_ dict: [String: Any]) -> String {
+            guard let data = try? JSONSerialization.data(withJSONObject: dict, options: []),
+                  let jsonStr = String(data: data, encoding: .utf8) else {
+                return "{}"
+            }
+            // Escape for JavaScript - must escape backslashes first, then quotes
+            return jsonStr
+                .replacingOccurrences(of: "\\", with: "\\\\")
+                .replacingOccurrences(of: "\"", with: "\\\"")
+        }
+        
+        // Convert each section to JSON string
+        let cwaDetailsStr = toJSONString(jsMessage["cwaDetails"] as? [String: Any] ?? [:])
+        let currentUserStr = toJSONString(jsMessage["currentUser"] as? [String: Any] ?? [:])
+        let cwaCredentialsStr = toJSONString(jsMessage["cwaCredentials"] as? [String: Any] ?? [:])
+        
+        // Get storage values
+        let keyname = (storage["keyname"] as? String) ?? ""
+        let keygaurd = (storage["keygaurd"] as? String) ?? ""
+        let isSubvendor = storage["isSubvendor"] as? Int ?? 0
+        let isHeadless = (storage["isHeadless"] as? Bool ?? false) ? "true" : "false"
+        
+        let pdfHelper = allowPDFDownload ? """
         window.downloadPDF = function(url, filename) {
             const a = document.createElement('a');
             a.href = url;
@@ -310,12 +336,9 @@ struct CWAWebView: UIViewRepresentable {
             a.click();
             document.body.removeChild(a);
         };
-        
-        // Detect PDF links
         document.addEventListener('click', function(e) {
             const target = e.target.closest('a');
             if (target && target.href && target.href.toLowerCase().endsWith('.pdf')) {
-                console.log('📄 PDF link detected:', target.href);
                 window.webkit.messageHandlers.cwaData.postMessage({
                     type: 'pdfLinkClicked',
                     url: target.href,
@@ -323,11 +346,57 @@ struct CWAWebView: UIViewRepresentable {
                 });
             }
         }, true);
-        """
+        """ : ""
         
         return """
-        console.log('✅ JS injected with payload:', \(merged));
-        \(allowPDFDownload ? pdfHelper : "")
+        (function() {
+            console.log('🚀 Starting injection...');
+            
+            try {
+                // CRITICAL: Store in localStorage (matching Android behavior)
+                localStorage.setItem('keyname', "\(keyname)");
+                localStorage.setItem('keygaurd', "\(keygaurd)");
+                localStorage.setItem('isSubvendor', "\(isSubvendor)");
+                localStorage.setItem('isHeadless', "\(isHeadless)");
+                
+                // Store currentUser in localStorage (as stringified JSON)
+                const currentUserData = "\(currentUserStr)";
+                localStorage.setItem('currentUser', currentUserData);
+                
+                // Store cwaDetails in sessionStorage (as stringified JSON)
+                const cwaDetailsData = "\(cwaDetailsStr)";
+                sessionStorage.setItem('cwaDetails', cwaDetailsData);
+                
+                // Optional: Also store credentials if needed
+                const cwaCredentialsData = "\(cwaCredentialsStr)";
+                sessionStorage.setItem('cwaCredentials', cwaCredentialsData);
+                
+                // Set on window for compatibility
+                window.cwaData = {
+                    jsMessage: {
+                        cwaDetails: JSON.parse(cwaDetailsData),
+                        currentUser: JSON.parse(currentUserData),
+                        cwaCredentials: JSON.parse(cwaCredentialsData)
+                    },
+                    storage: {
+                        keyname: "\(keyname)",
+                        keygaurd: "\(keygaurd)",
+                        isSubvendor: \(isSubvendor),
+                        isHeadless: \(isHeadless)
+                    }
+                };
+                
+                console.log('✅ Injection complete!');
+                console.log('localStorage.keyname:', localStorage.getItem('keyname'));
+                console.log('localStorage.currentUser:', localStorage.getItem('currentUser'));
+                console.log('sessionStorage.cwaDetails:', sessionStorage.getItem('cwaDetails'));
+                
+            } catch (error) {
+                console.error('❌ Injection failed:', error);
+                console.error('Error details:', error.message, error.stack);
+            }
+        })();
+        \(pdfHelper)
         """
     }
 
@@ -364,6 +433,14 @@ struct CWAWebView: UIViewRepresentable {
             startTime = CFAbsoluteTimeGetCurrent()
             DispatchQueue.main.async { self.isLoading?.wrappedValue = true }
             print("⏳ [\(self.parent.url.absoluteString)] Start loading at \(Date())")
+        }
+        
+        func webViewDidFinishLoad(_ webView: WKWebView) {
+            webView.frame.size.height = 1
+            webView.frame.size = webView.sizeThatFits(.zero)
+            webView.scrollView.isScrollEnabled=false;
+            webView.frame.size.height = webView.scrollView.contentSize.height
+            webView.sizeThatFits(CGSize(width: webView.frame.width, height: webView.frame.height))
         }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -417,38 +494,6 @@ struct CWAWebView: UIViewRepresentable {
             }
             decisionHandler(.allow)
         }
-    }
-}
-
-// MARK: - Native PDF Viewer (Alternative)
-struct NativePDFView: UIViewRepresentable {
-    let pdfDocument: PDFDocument
-    var displayMode: PDFDisplayMode = .singlePageContinuous
-    var autoScales: Bool = true
-    
-    init(url: URL, displayMode: PDFDisplayMode = .singlePageContinuous, autoScales: Bool = true) {
-        self.pdfDocument = PDFDocument(url: url) ?? PDFDocument()
-        self.displayMode = displayMode
-        self.autoScales = autoScales
-    }
-    
-    init(data: Data, displayMode: PDFDisplayMode = .singlePageContinuous, autoScales: Bool = true) {
-        self.pdfDocument = PDFDocument(data: data) ?? PDFDocument()
-        self.displayMode = displayMode
-        self.autoScales = autoScales
-    }
-    
-    func makeUIView(context: Context) -> PDFView {
-        let pdfView = PDFView()
-        pdfView.document = pdfDocument
-        pdfView.displayMode = displayMode
-        pdfView.autoScales = autoScales
-        pdfView.displayDirection = .vertical
-        return pdfView
-    }
-    
-    func updateUIView(_ uiView: PDFView, context: Context) {
-        uiView.document = pdfDocument
     }
 }
 

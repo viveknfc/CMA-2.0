@@ -20,7 +20,7 @@ struct Dashboard_Menu_Collection: View {
 
     var body: some View {
         ZStack {
-            Color.init(hex: "#")
+            
             LazyVGrid(columns: columns, spacing: 6) {
                 ForEach(assignments) { assignment in
                     Button {
