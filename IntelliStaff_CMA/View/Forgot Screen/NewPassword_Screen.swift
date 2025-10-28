@@ -210,7 +210,7 @@ import SwiftUI
 
 import SwiftUI
 
-struct NewPassword_Screen: View {
+struct ResetPassword_Screen: View {
     @State private var currentPassword: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""

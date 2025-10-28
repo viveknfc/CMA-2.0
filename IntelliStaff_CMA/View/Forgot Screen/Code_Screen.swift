@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct Code_Screen: View {
@@ -83,7 +82,10 @@ struct Code_Screen: View {
                                         print("New OTP fetched: \(viewModel.otpCode ?? "nil")")
                                         // Clear the input fields when new OTP is sent
                                         inputs = Array(repeating: "", count: 6)
-                                        focusIndex = 0
+                                        // Delay focus to ensure inputs are cleared first
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            focusIndex = 0
+                                        }
                                     }
                                 }
                                 
@@ -136,13 +138,19 @@ struct Code_Screen: View {
                             showAlert = false
                             // Clear inputs when wrong code is entered
                             inputs = Array(repeating: "", count: 6)
-                            focusIndex = 0
+                            // Delay focus to ensure inputs are cleared first
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                focusIndex = 0
+                            }
                         }),
                         dismiss: {
                             showAlert = false
                             // Clear inputs when alert is dismissed
                             inputs = Array(repeating: "", count: 6)
-                            focusIndex = 0
+                            // Delay focus to ensure inputs are cleared first
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                focusIndex = 0
+                            }
                         }
                     )
                     .transition(.opacity)

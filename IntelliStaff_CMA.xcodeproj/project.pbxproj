@@ -114,6 +114,7 @@
 		44CFCCBC2E66F42200C63FC3 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */; };
 		44CFCCBE2E66F74E00C63FC3 /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */; };
 		44D00B5A2E8D300B001354CF /* HalfCurve_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D00B592E8D2FF5001354CF /* HalfCurve_View.swift */; };
+		44DF7F392EAF8EA300919530 /* ResetPassword_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DF7F382EAF8EA300919530 /* ResetPassword_Screen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -223,6 +224,7 @@
 		44CFCCBB2E66F42200C63FC3 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		44CFCCBD2E66F74E00C63FC3 /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = "<group>"; };
 		44D00B592E8D2FF5001354CF /* HalfCurve_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfCurve_View.swift; sourceTree = "<group>"; };
+		44DF7F382EAF8EA300919530 /* ResetPassword_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPassword_Screen.swift; sourceTree = "<group>"; };
 		F567CFA62E24CC3800A05CE7 /* IntelliStaff_CMA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntelliStaff_CMA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -329,6 +331,7 @@
 				333509A12E3CD1BE007FFAE8 /* Forgot_Screen.swift */,
 				333509A22E3CD1BE007FFAE8 /* Input_View.swift */,
 				333509A32E3CD1BE007FFAE8 /* NewPassword_Screen.swift */,
+				44DF7F382EAF8EA300919530 /* ResetPassword_Screen.swift */,
 			);
 			path = "Forgot Screen";
 			sourceTree = "<group>";
@@ -687,6 +690,7 @@
 				333509F52E3CD1BE007FFAE8 /* Candidate_Modal.swift in Sources */,
 				333509F62E3CD1BE007FFAE8 /* NavBar_Appearence.swift in Sources */,
 				33B2938D2E4C9D800062696B /* Rectangular_Rounded_Button.swift in Sources */,
+				44DF7F392EAF8EA300919530 /* ResetPassword_Screen.swift in Sources */,
 				33B2938F2E4CC7AA0062696B /* Custom_Timer.swift in Sources */,
 				333509F72E3CD1BE007FFAE8 /* ContentView.swift in Sources */,
 				333509F82E3CD1BE007FFAE8 /* ATStateViewModel.swift in Sources */,

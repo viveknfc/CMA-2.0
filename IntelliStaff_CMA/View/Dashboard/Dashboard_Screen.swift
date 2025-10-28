@@ -37,12 +37,11 @@ struct Dashboard_Screen: View {
                         // Simulated image
                         URLImageView(
                             imageURL: viewModel.divisionImage,
-                            contentMode: .fit  // Changed from .fill to .fit
+                            contentMode: .fit
                         )
-                        .frame(width: 30, height: 30)  // Changed to fixed size instead of maxWidth/maxHeight
+                        .frame(width: 50, height: 50)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .shadow(radius: 2)
-
                            
                        
                        // Client name that wraps even for long single words
@@ -165,45 +164,164 @@ struct Dashboard_Screen: View {
 
 // Replace your URLImageView with this improved version:
 
+import SwiftUI
+
+/// Enhanced URL Image View with caching and error handling
 struct URLImageView: View {
     let imageURL: String?
     var contentMode: ContentMode = .fit
     var fallbackSystemImage: String = "person.circle.fill"
-
+    
     var body: some View {
-        if let urlString = imageURL,
-           let url = URL(string: urlString),
-           !urlString.isEmpty {
-            
-            AsyncImage(url: url) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: contentMode)
-                        .clipped()
-                case .failure(_):
-                    Image(systemName: fallbackSystemImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.gray.opacity(0.8))
-                @unknown default:
-                    Image(systemName: fallbackSystemImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.gray.opacity(0.8))
+        Group {
+            if let urlString = imageURL?.trimmingCharacters(in: .whitespaces),
+               !urlString.isEmpty,
+               let url = URL(string: urlString) {
+                
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        // Loading state
+                        ZStack {
+                            Color.gray.opacity(0.1)
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+                        }
+                        
+                    case .success(let image):
+                        // Successfully loaded image
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: contentMode)
+                        
+                    case .failure(_):
+                        // Failed to load - show fallback
+                        fallbackView
+                        
+                    @unknown default:
+                        fallbackView
+                    }
                 }
+            } else {
+                // No URL provided - show fallback
+                fallbackView
             }
-        } else {
+        }
+    }
+    
+    private var fallbackView: some View {
+        ZStack {
+            Color.gray.opacity(0.1)
             Image(systemName: fallbackSystemImage)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.gray.opacity(0.8))
+                .foregroundColor(.gray.opacity(0.6))
+                .padding(8)
         }
     }
 }
 
-// And update the usage in your Dashboard_Screen to:
+// MARK: - Alternative with Custom Placeholder
+struct URLImageViewWithPlaceholder: View {
+    let imageURL: String?
+    var contentMode: ContentMode = .fit
+    var placeholder: AnyView? = nil
+    var fallbackSystemImage: String = "person.circle.fill"
+    
+    var body: some View {
+        Group {
+            if let urlString = imageURL?.trimmingCharacters(in: .whitespaces),
+               !urlString.isEmpty,
+               let url = URL(string: urlString) {
+                
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        if let placeholder = placeholder {
+                            placeholder
+                        } else {
+                            defaultLoadingView
+                        }
+                        
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: contentMode)
+                        
+                    case .failure(_):
+                        fallbackView
+                        
+                    @unknown default:
+                        fallbackView
+                    }
+                }
+            } else {
+                fallbackView
+            }
+        }
+    }
+    
+    private var defaultLoadingView: some View {
+        ZStack {
+            Color.gray.opacity(0.1)
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+        }
+    }
+    
+    private var fallbackView: some View {
+        ZStack {
+            Color.gray.opacity(0.1)
+            Image(systemName: fallbackSystemImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.gray.opacity(0.6))
+                .padding(8)
+        }
+    }
+}
 
+// MARK: - Usage Examples
+struct URLImageView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 20) {
+            // Example 1: Basic usage
+            URLImageView(
+                imageURL: "https://picsum.photos/200",
+                contentMode: .fit
+            )
+            .frame(width: 100, height: 100)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            // Example 2: Circle profile image
+            URLImageView(
+                imageURL: "https://picsum.photos/200",
+                contentMode: .fill,
+                fallbackSystemImage: "person.circle.fill"
+            )
+            .frame(width: 60, height: 60)
+            .clipShape(Circle())
+            
+            // Example 3: With custom placeholder
+            URLImageViewWithPlaceholder(
+                imageURL: "https://picsum.photos/200",
+                contentMode: .fit,
+                placeholder: AnyView(
+                    Text("Loading...")
+                        .foregroundColor(.gray)
+                )
+            )
+            .frame(width: 100, height: 100)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            // Example 4: Invalid URL (shows fallback)
+            URLImageView(
+                imageURL: nil,
+                contentMode: .fit
+            )
+            .frame(width: 100, height: 100)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .padding()
+    }
+}

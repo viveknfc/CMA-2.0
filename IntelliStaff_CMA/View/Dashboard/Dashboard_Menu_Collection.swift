@@ -19,6 +19,7 @@ struct Dashboard_Menu_Collection: View {
     let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 3)
 
     var body: some View {
+        
         ZStack {
             
             LazyVGrid(columns: columns, spacing: 6) {
@@ -63,8 +64,11 @@ struct Dashboard_Menu_Collection: View {
                 }
             }
             .padding(.horizontal, 6)
+            
         }
+        
     }
+     
 }
 
 #Preview {

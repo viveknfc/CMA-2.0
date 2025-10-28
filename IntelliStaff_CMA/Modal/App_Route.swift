@@ -12,6 +12,7 @@ enum AppRoute: Hashable {
     case forgotPassword
     case codeScreen(email: String, otpResponse: String)
     case newPassword(email: String)
+    case resetPassword(email: String)
     case divisionList
     case dashboard(division: DivisionList)
   //  case webView(apiKey: String, division: DivisionList)
@@ -33,6 +34,8 @@ extension AppRoute {
             Code_Screen(path: path, email: email, code: otp)
         case .newPassword(let email):
             NewPassword_Screen(path: path, email: email)
+        case .resetPassword(let email):
+            ResetPassword_Screen(path: path, email: email)
         case .divisionList:
             DivisionList_View(path: path, viewModal: DivisionList_VM())
         case .dashboard(let division):

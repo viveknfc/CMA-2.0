@@ -47,8 +47,10 @@ struct Profile_Screen: View {
             
             
             .onAppear {
-                viewModal.fetchSubVendor(clientId: "\(clientID)", errorHandler: errorHandler)
-                viewModal.getMenuItems()
+                if viewModal.vendorList?.isSubVendor == nil{
+                    viewModal.fetchSubVendor(clientId: "\(clientID)", errorHandler: errorHandler)
+                    viewModal.getMenuItems()
+                }
             }
         }
     }
